@@ -1,0 +1,33 @@
+/* style.qss */
+QHeaderView::section {
+    font-weight: bold;
+    font-family: Georgia;
+    color:blue
+}
+
+QScrollBar:vertical {
+    width: 30px;
+}
+
+QScrollBar:horizontal {
+    height: 30px;
+}
+
+QLabel,
+QComboBox,
+QPushButton {
+    font-family: Georgia;
+    font-size: 16px;
+}
+
+QLabel#lbl_expInfo {
+    font-weight: bold;
+}
+
+QPushButton#btn_deleteCurrentTemplate {
+    color: red;
+}
+
+QPushButton#btn_deleteCurrentTemplate:disabled{
+    color: gray;
+}

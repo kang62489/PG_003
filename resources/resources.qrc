@@ -1,0 +1,11 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="icons">
+        <file alias="copy.png">icons\blue-document-copy.png</file>
+        <file alias="delete.png">icons\cross-script.png</file>
+        <file alias="save.png">icons\disk-return.png</file>
+        <file alias="remove.png">icons\minus.png</file>
+        <file alias="add.png">icons\plus.png</file>
+        <file alias="properties.png">icons\property-blue.png</file>
+    </qresource>
+</RCC>
