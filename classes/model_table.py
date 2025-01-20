@@ -1,10 +1,8 @@
 ## Author: Kang
-## Last Update: 2024-Jan-18
+## Last Update: 2025-Jan-20
 ## Usage: A class for build a customized model for QTableView
 
-from networkx import is_empty
 import pendulum
-from itertools import count
 from PySide6.QtCore import Qt, QAbstractTableModel
 from datetime import datetime
 import pandas as pd

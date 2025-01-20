@@ -1,13 +1,11 @@
 ## Author: Kang
-## Last Update: 2024-Jan-18
+## Last Update: 2025-Jan-20
 ## Usage: A gui interface for generating metadata tag which will be pasted to each recording file (.rec)
 
 ## Modules
 import os
 import sys
 import json
-from numpy import size
-from tabulate import tabulate
 from pathlib import Path
 import glob
 from rich import print

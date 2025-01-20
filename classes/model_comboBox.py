@@ -1,5 +1,5 @@
 ## Author: Kang
-## Last Update: 2024-Jan-15
+## Last Update: 2025-Jan-20
 ## Usage: A class for build a customized model for QComboBox
 
 from PySide6.QtCore import Qt, QAbstractListModel

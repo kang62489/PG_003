@@ -1,13 +1,11 @@
 ## Author: Kang
-## Last Update: 2024-Jan-19
+## Last Update: 2025-Jan-20
 ## Usage: To produce a markdown format of experimental conditions for obsidian
 
 ## Modules
 import os
-import pandas as pd
 from datetime import datetime
 from PySide6.QtWidgets import QFileDialog
-from pyparsing import col
 
 class ExportMD(QFileDialog):
     def __init__(self, dataframe, caption='Please choose a directory to generate a metadata common_terms file'):
@@ -36,5 +34,5 @@ class ExportMD(QFileDialog):
         else:
             print("Export cancelled!")
 
-    
+
 

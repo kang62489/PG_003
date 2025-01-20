@@ -1,9 +1,9 @@
 ## Author: Kang
-## Last Update: 2024-Jan-19
+## Last Update: 2025-Jan-20
 ## Usage: A class for creating an inputing window for QTableView
 
 import pandas as pd
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
