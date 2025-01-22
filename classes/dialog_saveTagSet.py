@@ -3,10 +3,11 @@
 ## Usage: A class for build a dialog to open directory and save the file
 
 import os
+import json
 from PySide6.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout, QLabel, QLineEdit
 from classes.dialog_confirm import Confirm
 
-class SaveTemplate(QDialog):
+class SaveTagSet(QDialog):
     def __init__(self, caption="Saving..."):
         super().__init__()
         self.setWindowTitle(caption)
@@ -29,18 +30,20 @@ class SaveTemplate(QDialog):
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
         
-    def savefile(self, path, currentTemplate):
+    def savefile(self, path, currentTagSet):
         if self.exec():
-            filePath = os.path.join(path, 'template_' + self.filename.text() +'.json')
+            filePath = os.path.join(path, 'tagSet_' + self.filename.text() +'.json')
             if os.path.isfile(filePath):
-                self.overwriteCheck = Confirm(title="Warning", msg="Warning! Template name is exist, continue overwritting?")
+                self.overwriteCheck = Confirm(title="Warning", msg="Warning! Tag set name is exist, continue overwritting?")
                 if self.overwriteCheck.exec():
-                    currentTemplate.to_json(filePath, orient='columns', indent=4)
+                    with open(filePath, 'w') as f:
+                        json.dump(currentTagSet, f, indent=4)
                 else:
                     print("File saving cancelled!")
             else:
-                currentTemplate.to_json(filePath, orient='columns', indent=4)
+                with open(filePath, 'w') as f:
+                    json.dump(currentTagSet, f, indent=4)
             
-            print("Template Saved!!")
+            print("Tag set saved!!")
         else:
             print("File saving cancelled!")

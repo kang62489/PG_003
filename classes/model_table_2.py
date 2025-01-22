@@ -1,5 +1,5 @@
 ## Author: Kang
-## Last Update: 2025-Jan-20
+## Last Update: 2025-Jan-22
 ## Usage: A class for build a customized model for QTableView
 
 import pendulum
@@ -57,7 +57,6 @@ class TableModel(QAbstractTableModel):
     def setData(self, index, value, role=Qt.EditRole):
         if index.isValid() and role == Qt.EditRole:
             self._data.iloc[index.row(), index.column()] = value
-            self.autoCalc()
             self.dataChanged.emit(index, index, [Qt.DisplayRole, Qt.EditRole])
             return True
         return False        
@@ -88,13 +87,11 @@ class TableModel(QAbstractTableModel):
         
     def addRows(self, SourceParent, rowNumber, addData):
         count = addData.shape[0]
-        if addData.shape[1] > self._data.shape[1]:
-            self.addCols(SourceParent, self._data.shape[1]-1, (addData.shape[1] - self._data.shape[1]))
         
         self.beginInsertRows(SourceParent, rowNumber, rowNumber + count - 1)
         rowNames = self._data.index.tolist()
-        self._data = pd.concat([self._data.iloc[:rowNumber+1], addData, self._data.iloc[rowNumber-1:]]).reset_index(drop=True)
-        self._data.index = rowNames[:rowNumber+1] + addData.index.tolist() + rowNames[rowNumber-1:]
+        self._data = pd.concat([self._data.iloc[:rowNumber+1], addData, self._data.iloc[rowNumber+1:]]).reset_index(drop=True)
+        self._data.index = rowNames[:rowNumber+1] + addData.index.tolist() + rowNames[rowNumber+1:]
         self.endInsertRows()
         self.selfClean()
         self.layoutChanged.emit()
@@ -129,51 +126,3 @@ class TableModel(QAbstractTableModel):
         
     def selfClean(self):
        self._data.fillna('', inplace=True)
-       
-    def autoCalc(self):
-        properties = self._data.index.tolist()
-        iloc_0 = self._data.index.get_loc("Date of Recording")
-        iloc_1 = self._data.index.get_loc("Date of Birth")
-        iloc_2 = self._data.index.get_loc("Date of Injection")
-        iloc_3 = self._data.index.get_loc("Ages(weeks)")
-        iloc_4 = self._data.index.get_loc("Incubated(weeks)")
-        iloc_5 = self._data.index.get_loc("Animal ID")
-        iloc_6 = self._data.index.get_loc("Numbers of Animals")
-        
-        if "Date of Recording" in properties:
-            if self._data.iloc[iloc_0, 0] != "":
-                self.DOR = datetime.strptime(self._data.iloc[iloc_0][0], '%Y-%m-%d')
-            else:
-                self.DOR = datetime.today()
-                self._data.iloc[iloc_0, 0] = self.DOR.strftime('%Y-%m-%d')
-                
-        if "Numbers of Animals" in properties:
-            ani_id_list = [val for val in self._data.iloc[iloc_5] if val != ""]
-            self._data.iloc[iloc_6, 0] = len(ani_id_list)
-        
-        if "Date of Birth" in properties:
-            self.DOB = [val for val in self._data.iloc[iloc_1].values if val != ""]
-            
-        if "Date of Injection" in properties:
-            self.DOI = [val for val in self._data.iloc[iloc_2].values if val != ""]
-            
-        if (hasattr(self, 'DOB') and self.DOB) and (hasattr(self, 'DOI') and self.DOI):
-            self.AGE = []
-            self.INCU = []
-            
-
-            # Calculation of ages of and incubated weeks of the animals
-            for dob, doi in zip(self.DOB, self.DOI):
-                dor = pendulum.instance(self.DOR.date())
-                self.AGE.append((dor - pendulum.instance(datetime.strptime(dob, '%Y-%m-%d').date())).in_weeks())
-                self.INCU.append((dor - pendulum.instance(datetime.strptime(doi, '%Y-%m-%d').date())).in_weeks())
-            
-            for idx, val in enumerate(self.AGE):
-                self._data.iloc[iloc_3, idx] = val
-            
-            for idx, val in enumerate(self.INCU):
-                self._data.iloc[iloc_4, idx] = val
-            
-            print("Data Updated!!")
-            self.layoutChanged.emit()
-

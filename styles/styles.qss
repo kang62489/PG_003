@@ -1,8 +1,12 @@
+/* Author: Kang */
+/* Last Update: 2025-Jan-22 */
+/* Usage: to set the stylesheet of UIs in metadata generator */
 /* style.qss */
 QHeaderView::section {
     font-weight: bold;
-    font-family: Georgia;
-    color:blue
+    font-family: "Arial";
+    font-size: 16px;
+    color:blue;
 }
 
 QScrollBar:vertical {
@@ -12,22 +16,76 @@ QScrollBar:vertical {
 QScrollBar:horizontal {
     height: 30px;
 }
+QLabel {
+    font-family: "Arial";
+    font-size: 14px;
+    font-weight: bold;
+}
 
-QLabel,
+
 QComboBox,
 QPushButton {
-    font-family: Georgia;
-    font-size: 16px;
+    font-family: "Arial";
+    font-size: 14px;
 }
 
 QLabel#lbl_expInfo {
     font-weight: bold;
 }
 
+QPushButton#btn_deleteTagSet,
 QPushButton#btn_deleteCurrentTemplate {
     color: red;
 }
 
+QPushButton#btn_deleteTagSet:disabled,
 QPushButton#btn_deleteCurrentTemplate:disabled{
     color: gray;
+}
+
+QGroupBox {
+    font-family: "Arial";
+    font-size: 12px;
+    font-weight: bold;
+}
+
+QTableView {
+    font-family: "Arial";
+    font-size: 14px;
+}
+
+QPushButton#btn_loadTemplate,
+QPushButton#btn_saveTemplate,
+QPushButton#btn_deleteCurrentTemplate,
+QPushButton#btn_exportExpInfo,
+QPushButton#btn_addNewRows,
+QPushButton#btn_removeSelectedRows,
+QPushButton#btn_moveUp,
+QPushButton#btn_moveDown {
+    font-family: "Arial";
+    font-size: 18px;
+    font-weight: bold;
+}
+
+QLineEdit#le_serialName {
+    font-family: "Arial";
+    font-size: 24px;
+    font-weight: bold;
+    font-style: italic;
+    color: purple;
+}
+
+QTextEdit#te_clipboard {
+    font-family: "Arial";
+    font-size: 16px;
+    font-weight: bold;
+    font-style: italic;
+    color: purple;
+}
+
+QPushButton#btn_copySerial,
+QPushButton#btn_copyTag {
+    font-family: "Arial";
+    font-weight: bold;
+    color: purple;
 }

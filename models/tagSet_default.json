@@ -1,0 +1,41 @@
+{
+    "Config_0": {
+        "VALUE": {
+            "OBJ": "10X",
+            "EXC": "LED",
+            "LEVEL": "",
+            "EMI": "IR",
+            "SLICE": "",
+            "SAMPLE": "",
+            "FRAMES": "",
+            "FPS": "",
+            "CAM.TRIG.MODE": ""
+        }
+    },
+    "Config_1": {
+        "VALUE": {
+            "OBJ": "10X",
+            "EXC": "HLG",
+            "LEVEL": "",
+            "EMI": "IR",
+            "SLICE": "",
+            "SAMPLE": "",
+            "FRAMES": "",
+            "FPS": "",
+            "CAM.TRIG.MODE": ""
+        }
+    },
+    "Config_2": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "HLG",
+            "LEVEL": "",
+            "EMI": "IR",
+            "SLICE": "",
+            "SAMPLE": "",
+            "FRAMES": "",
+            "FPS": "",
+            "CAM.TRIG.MODE": ""
+        }
+    }
+}
