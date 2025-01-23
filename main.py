@@ -42,6 +42,8 @@ from classes import (
 
 loader = QUiLoader()
 basedir = os.path.dirname(__file__)
+qssdir = Path(__file__).parent / "styles"
+modeldir = Path(__file__).parent / "models"
 
 class MainPanel:
     def __init__(self):
@@ -49,7 +51,7 @@ class MainPanel:
         self.ui = loader.load(os.path.join(basedir, "ui/metadata_generator.ui"), None)
         self.ui.setWindowTitle("Metadata Generator")
         self.ui.show()
-        with open("styles/styles.qss", "r") as f:
+        with open(qssdir / "styles.qss", "r") as f:
             self.ui.setStyleSheet(f.read())
         
         # Set Models
@@ -62,8 +64,6 @@ class MainPanel:
         # List object names of tab_0, tab_1
         self.tab0_objs = self.list_objs(self.ui.tab_0)
         self.tab1_objs = self.list_objs(self.ui.tab_1)
-        print("Objects in Tab_0: ",self.tab0_objs)
-        print("Objects in Tab_1: ",self.tab1_objs)
         
         # Set default tag set saving mode
         self.createModeSave = False
@@ -228,7 +228,7 @@ class MainPanel:
         self.serial = 0
         self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.serial:04d}.tif")
     # Set the attributes of status bar
-        self.ui.statusbar.showMessage("Metadata Generator 1.1, Author: Kang, Last Update: 2025-Jan-23, Made in OIST")
+        self.ui.statusbar.showMessage("Metadata Generator 1.1.2, Author: Kang, Last Update: 2025-Jan-23, Made in OIST")
     
     def setModels(self):
         # Set the model displays in QTableView (tv_expInfo)
@@ -244,11 +244,11 @@ class MainPanel:
         self.ui.cb_recTagSet.setModel(self.model_cb_02)
         
     def loadMenuList(self):
-        with open("models/cb_list_01.json", "r") as f:
+        with open(modeldir / "cb_list_01.json", "r") as f:
             saved_cb_list_01= json.load(f)
         pass
         
-        with open("models/cb_list_02.json", "r") as f:
+        with open(modeldir / "cb_list_02.json", "r") as f:
             saved_cb_list_02= json.load(f)
         pass
     
@@ -259,14 +259,14 @@ class MainPanel:
         tagSetList = [Path(tempName.replace("tagSet_","")).stem for tempName in tagSetFiles]
         
         if saved_cb_list_01 != templateList:
-            with open("models/cb_list_01.json", "w") as f:
+            with open(modeldir / "cb_list_01.json", "w") as f:
                 json.dump(templateList, f)
                 self.model_cb_01.selections=templateList
         else:
             self.model_cb_01.selections = saved_cb_list_01
     
         if saved_cb_list_02 != tagSetList:
-            with open("models/cb_list_02.json", "w") as f:
+            with open(modeldir / "cb_list_02.json", "w") as f:
                 json.dump(tagSetList, f)
                 self.model_cb_02.selections=tagSetList
         else:
@@ -276,7 +276,7 @@ class MainPanel:
         # cb_01
         templateFiles = [os.path.basename(i) for i in glob.glob(os.path.join(basedir,"models",'template_*.json'))]
         templateList = [Path(tempName.replace("template_","")).stem for tempName in templateFiles]
-        with open("models/cb_list_01.json", "w") as f:
+        with open(modeldir / "cb_list_01.json", "w") as f:
             json.dump(templateList, f)
         
         self.model_cb_01.updateList(templateList)
@@ -285,7 +285,7 @@ class MainPanel:
         #cb_02
         tagSetFiles = [os.path.basename(i) for i in glob.glob(os.path.join(basedir,"models",'tagSet_*.json'))]
         tagSetList = [Path(tempName.replace("tagSet_","")).stem for tempName in tagSetFiles]
-        with open("models/cb_list_02.json", "w") as f:
+        with open(modeldir / "cb_list_02.json", "w") as f:
             json.dump(tagSetList, f)
         
         self.model_cb_02.updateList(tagSetList)
@@ -299,7 +299,7 @@ class MainPanel:
         else:
             self.ui.btn_deleteCurrentTemplate.setEnabled(True)
         
-        with open("models/template_{}.json".format(filename), "r") as f:
+        with open(modeldir / "template_{}.json".format(filename), "r") as f:
             template = pd.read_json(f, dtype=str)
         pass
                  
@@ -461,7 +461,7 @@ class MainPanel:
         else:
             self.ui.btn_deleteTagSet.setEnabled(True)
             
-        with open("models/tagSet_{}.json".format(filename), "r") as f:
+        with open(modeldir / "tagSet_{}.json".format(filename), "r") as f:
             tagSet = json.load(f)
         pass
         

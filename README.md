@@ -24,9 +24,25 @@ Here are some useful concepts which applied to this program
 - Import classes from files in other folders
 - Clear widgets in a layout
 - Clear layout from a widget
+- Use Path to read files in the relative directory
+- Use .bat file to activate venv and run the script
 
 > [!caution]
 > Wrongly connect the EnterPressed signal to the function of save file caused TypeError
 > 	Fixed by reconnecting to self.accept()
 > In f"" string expression, be careful not to put double quotation marks in side double quotationmarks to avoid unmatched "("
 
+> [!info]
+> The code of .bat file
+
+```batch
+SET dirPath=%CD%
+SET venv=\.venv\Scripts\activate.bat
+SET py=\main.py
+SET venvPath=%dirPath%%venv%
+SET pyPath=%dirPath%%py%
+
+CALL %venvPath%
+python %pyPath%
+
+```
