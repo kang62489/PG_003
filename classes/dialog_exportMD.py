@@ -1,5 +1,5 @@
 ## Author: Kang
-## Last Update: 2025-Jan-20
+## Last Update: 2025-Jan-23
 ## Usage: To produce a markdown format of experimental conditions for obsidian
 
 ## Modules
@@ -19,8 +19,7 @@ class ExportMD(QFileDialog):
             values = [[item for item in value if item != ""] for value in dataframe.values]
             if "Date of Recording" in props:
                 dateStr = dataframe.loc["Date of Recording"][0]
-                print(dateStr)
-                prefix = datetime.strptime(dateStr, '%Y-%m-%d')
+                prefix = datetime.strptime(dateStr, '%Y-%m-%d').strftime('%Y_%m_%d')
             else:
                 prefix = datetime.today().strftime('%Y_%m_%d')
             

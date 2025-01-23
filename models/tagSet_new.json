@@ -1,0 +1,54 @@
+{
+    "Config_0": {
+        "VALUE": {
+            "OBJ": "",
+            "EXC": "",
+            "LEVEL": "",
+            "EMI": "",
+            "SLICE": "",
+            "SAMPLE": "",
+            "FRAMES": "",
+            "FPS": "",
+            "CAM.TRIG.MODE": ""
+        }
+    },
+    "Config_1": {
+        "VALUE": {
+            "OBJ": "",
+            "EXC": "",
+            "LEVEL": "",
+            "EMI": "",
+            "SLICE": "",
+            "SAMPLE": "",
+            "FRAMES": "",
+            "FPS": "",
+            "CAM.TRIG.MODE": ""
+        }
+    },
+    "Config_2": {
+        "VALUE": {
+            "OBJ": "",
+            "EXC": "",
+            "LEVEL": "",
+            "EMI": "",
+            "SLICE": "",
+            "SAMPLE": "",
+            "FRAMES": "",
+            "FPS": "",
+            "CAM.TRIG.MODE": ""
+        }
+    },
+    "Config_3": {
+        "VALUE": {
+            "OBJ": "",
+            "EXC": "",
+            "LEVEL": "",
+            "EMI": "",
+            "SLICE": "",
+            "SAMPLE": "",
+            "FRAMES": "",
+            "FPS": "",
+            "CAM.TRIG.MODE": ""
+        }
+    }
+}

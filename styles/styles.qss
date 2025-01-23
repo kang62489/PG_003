@@ -1,5 +1,5 @@
 /* Author: Kang */
-/* Last Update: 2025-Jan-22 */
+/* Last Update: 2025-Jan-23 */
 /* Usage: to set the stylesheet of UIs in metadata generator */
 /* style.qss */
 QHeaderView::section {
@@ -83,9 +83,20 @@ QTextEdit#te_clipboard {
     color: purple;
 }
 
-QPushButton#btn_copySerial,
 QPushButton#btn_copyTag {
     font-family: "Arial";
     font-weight: bold;
     color: purple;
+}
+
+QPushButton#btn_copySerial:enabled {
+    font-family: "Arial";
+    font-weight: bold;
+    color: green;
+}
+
+QPushButton#btn_copySerial:disabled {
+    font-family: "Arial";
+    font-weight: bold;
+    color: gray;
 }

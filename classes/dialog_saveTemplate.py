@@ -1,5 +1,5 @@
 ## Author: Kang
-## Last Update: 2025-Jan-22
+## Last Update: 2025-Jan-23
 ## Usage: A class for build a dialog to open directory and save the file
 
 import os
@@ -21,7 +21,7 @@ class SaveTemplate(QDialog):
         self.filename = QLineEdit()
         self.filename.setMaxLength(30)
         self.filename.setPlaceholderText('Enter your filename here.')
-        self.filename.returnPressed.connect(self.savefile)
+        self.filename.returnPressed.connect(self.accept)
         
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.message)

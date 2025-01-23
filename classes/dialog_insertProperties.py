@@ -1,5 +1,5 @@
 ## Author: Kang
-## Last Update: 2025-Jan-22
+## Last Update: 2025-Jan-23
 ## Usage: A class for creating an inputing window for QTableView
 
 import pandas as pd
@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
     QDialog
 )
 
-class AddProp(QDialog):
+class InsertProp(QDialog):
     def __init__(self, parent=None, propertyNum=1, valueNum=1):
         super().__init__(parent)
         self.layout_main = QVBoxLayout()
