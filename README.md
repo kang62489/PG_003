@@ -37,12 +37,11 @@ Here are some useful concepts which applied to this program
 
 ```batch
 SET dirPath=%CD%
-SET venv=\.venv\Scripts\activate.bat
-SET py=\main.py
-SET venvPath=%dirPath%%venv%
-SET pyPath=%dirPath%%py%
+SET venvPath="%dirPath%\.venv\Scripts\activate.bat"
+SET pyPath="%dirPath%\.venv\Scripts\python.exe"
+SET progPath="%dirPath%\main.py"
 
 CALL %venvPath%
-python %pyPath%
+%pyPath% %progPath%
 
 ```
