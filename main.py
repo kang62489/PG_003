@@ -193,7 +193,7 @@ class MainPanel:
         
         #label text
         self.date = datetime.today()
-        self.ui.lbl_date.setText(f"{self.date.strftime("%Y-%m-%d")}")
+        self.ui.lbl_date.setText(f"{self.date.strftime('%Y-%m-%d')}")
         
     # Set the attributes of QTableView
         #Tab_0
@@ -226,7 +226,7 @@ class MainPanel:
         self.ui.le_serialName.setValidator(None)
         
         self.serial = 0
-        self.ui.le_serialName.setText(f"{self.date.strftime("%Y%m%d")}-{self.serial:04d}.tif")
+        self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.serial:04d}.tif")
     # Set the attributes of status bar
         self.ui.statusbar.showMessage("Metadata Generator 1.1, Author: Kang, Last Update: 2025-Jan-23, Made in OIST")
     
@@ -583,7 +583,7 @@ class MainPanel:
         self.reloadMenuList()
     
     def saveTagSet(self):
-        if self.ui.sw_tags.widget(0).layout() is not None:
+        if self.ui.sw_tags.widget(0) is not None:
             self.saveCheck = dialog_confirm.Confirm(title="Checking...", msg="Save current tag set?")
             if self.saveCheck.exec():
                 toBeSavedTagSet = {}
@@ -713,24 +713,24 @@ class MainPanel:
         self.Serial = int(latest_value)
         if self.Serial < 9999:
             self.Serial += 1
-            self.ui.le_serialName.setText(f"{self.date.strftime("%Y%m%d")}-{self.Serial:04d}.tif")
+            self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.Serial:04d}.tif")
         elif self.Serial == 9999:
             self.Serial = 0
-            self.ui.le_serialName.setText(f"{self.date.strftime("%Y%m%d")}-{self.Serial:04d}.tif")
+            self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.Serial:04d}.tif")
             
     def minus(self):
         latest_value = (self.ui.le_serialName.text().split("-")[1].split(".")[0])
         self.Serial = int(latest_value)
         if self.Serial > 0:
             self.Serial -= 1
-            self.ui.le_serialName.setText(f"{self.date.strftime("%Y%m%d")}-{self.Serial:04d}.tif")
+            self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.Serial:04d}.tif")
         elif self.Serial == 0:
             self.Serial = 0
-            self.ui.le_serialName.setText(f"{self.date.strftime("%Y%m%d")}-{self.Serial:04d}.tif")
+            self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.Serial:04d}.tif")
     
     def resetSerial(self):
         self.Serial = 0
-        self.ui.le_serialName.setText(f"{self.date.strftime("%Y%m%d")}-{self.Serial:04d}.tif")
+        self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.Serial:04d}.tif")
     
     def validate_serial(self):
         self.ui.le_serialName.setValidator(self.validator)

@@ -25,4 +25,8 @@ Here are some useful concepts which applied to this program
 - Clear widgets in a layout
 - Clear layout from a widget
 
+> [!caution]
+> Wrongly connect the EnterPressed signal to the function of save file caused TypeError
+> 	Fixed by reconnecting to self.accept()
+> In f"" string expression, be careful not to put double quotation marks in side double quotationmarks to avoid unmatched "("
 

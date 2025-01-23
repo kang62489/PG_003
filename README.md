@@ -1,5 +1,5 @@
 ---
-Established: 2025-01-23
+Established: 2025-01-22
 Last Updated: 2025-01-23
 Description: A Python GUI made by myself to assist recording metadata during the experiment
 tags:
@@ -25,4 +25,8 @@ Here are some useful concepts which applied to this program
 - Clear widgets in a layout
 - Clear layout from a widget
 
+> [!caution]
+> Wrongly connect the EnterPressed signal to the function of save file caused TypeError
+> 	Fixed by reconnecting to self.accept()
+> In f"" string expression, be careful not to put double quotation marks in side double quotationmarks to avoid unmatched "("
 
