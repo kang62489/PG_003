@@ -1,5 +1,5 @@
 ## Author: Kang
-## Last Update: 2025-Jan-23
+## Last Update: 2025-Jan-26
 ## Usage: To produce a markdown format of experimental conditions for obsidian
 
 ## Modules
@@ -12,11 +12,12 @@ class ExportMD(QFileDialog):
         super().__init__()
         self.setWindowTitle(caption)
         self.setFileMode(QFileDialog.FileMode.Directory)
+        self.setDirectory("")
 
         if self.exec():
             self.dir_output = self.selectedFiles()[0]
             props = dataframe.index.tolist()
-            values = [[item for item in value if item != ""] for value in dataframe.values]
+            values = [[str(item) for item in value if item != ""] for value in dataframe.values]
             if "Date of Recording" in props:
                 dateStr = dataframe.loc["Date of Recording"][0]
                 prefix = datetime.strptime(dateStr, '%Y-%m-%d').strftime('%Y_%m_%d')

@@ -1,5 +1,5 @@
 ## Author: Kang
-## Last Update: 2025-Jan-23
+## Last Update: 2025-Jan-26
 ## Usage: A class for build a dialog to open directory and save the file
 
 import os
@@ -10,7 +10,6 @@ class SaveTemplate(QDialog):
     def __init__(self, caption="Saving..."):
         super().__init__()
         self.setWindowTitle(caption)
-        
         self.buttons = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.buttonBox = QDialogButtonBox(self.buttons)
         self.buttonBox.accepted.connect(self.accept)

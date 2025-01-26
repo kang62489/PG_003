@@ -2,40 +2,43 @@
     "Config_0": {
         "VALUE": {
             "OBJ": "10X",
-            "EXC": "LED",
+            "EXC": "HLG",
             "LEVEL": "",
+            "EXPO": "",
             "EMI": "IR",
-            "SLICE": "",
-            "SAMPLE": "",
             "FRAMES": "",
             "FPS": "",
-            "CAM.TRIG.MODE": ""
+            "CAM.TRIG.MODE": "",
+            "SLICE": "",
+            "AT": ""
         }
     },
     "Config_1": {
         "VALUE": {
-            "OBJ": "10X",
-            "EXC": "HLG",
+            "OBJ": "60X",
+            "EXC": "LED_GREEN",
             "LEVEL": "",
-            "EMI": "IR",
-            "SLICE": "",
-            "SAMPLE": "",
+            "EXPO": "",
+            "EMI": "RED",
             "FRAMES": "",
             "FPS": "",
-            "CAM.TRIG.MODE": ""
+            "CAM.TRIG.MODE": "",
+            "SLICE": "",
+            "AT": ""
         }
     },
     "Config_2": {
         "VALUE": {
-            "OBJ": "60X",
-            "EXC": "HLG",
+            "OBJ": "10X",
+            "EXC": "LED_BLUE",
             "LEVEL": "",
-            "EMI": "IR",
-            "SLICE": "",
-            "SAMPLE": "",
+            "EXPO": "",
+            "EMI": "GREEN",
             "FRAMES": "",
             "FPS": "",
-            "CAM.TRIG.MODE": ""
+            "CAM.TRIG.MODE": "",
+            "SLICE": "",
+            "AT": ""
         }
     }
 }

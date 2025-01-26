@@ -1,5 +1,5 @@
 ## Author: Kang
-## Last Update: 2025-Jan-22
+## Last Update: 2025-Jan-26
 ## Usage: A gui interface for generating metadata tag which will be pasted to each recording file (.rec)
 
 ## Modules
@@ -228,7 +228,7 @@ class MainPanel:
         self.serial = 0
         self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.serial:04d}.tif")
     # Set the attributes of status bar
-        self.ui.statusbar.showMessage("Metadata Generator 1.1.2, Author: Kang, Last Update: 2025-Jan-23, Made in OIST")
+        self.ui.statusbar.showMessage("Metadata Generator 1.1.3, Author: Kang, Last Update: 2025-Jan-26, Made in OIST")
     
     def setModels(self):
         # Set the model displays in QTableView (tv_expInfo)
