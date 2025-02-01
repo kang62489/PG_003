@@ -8,7 +8,7 @@
             "EMI": "IR",
             "FRAMES": "",
             "FPS": "",
-            "CAM.TRIG.MODE": "",
+            "CAM_TRIG_MODE": "",
             "SLICE": "",
             "AT": ""
         }
@@ -22,7 +22,7 @@
             "EMI": "RED",
             "FRAMES": "",
             "FPS": "",
-            "CAM.TRIG.MODE": "",
+            "CAM_TRIG_MODE": "",
             "SLICE": "",
             "AT": ""
         }
@@ -36,7 +36,7 @@
             "EMI": "GREEN",
             "FRAMES": "",
             "FPS": "",
-            "CAM.TRIG.MODE": "",
+            "CAM_TRIG_MODE": "",
             "SLICE": "",
             "AT": ""
         }
