@@ -204,7 +204,7 @@ class MainPanel:
         self.ui.tv_expInfo.horizontalHeader().setVisible(False)
         self.ui.tv_expInfo.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.ui.tv_expInfo.verticalHeader().setDefaultSectionSize(50)
-        self.ui.tv_expInfo.setEditTriggers(QAbstractItemView.DoubleClicked)
+        self.ui.tv_expInfo.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.EditKeyPressed)
         self.ui.tv_expInfo.setItemDelegate(customized_delegate.CellEditDelegate())
         
     # Set the attributes of QGroupBox
@@ -438,7 +438,7 @@ class MainPanel:
             tagDisp.tv_tag.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
             tagDisp.tv_tag.verticalHeader().setDefaultSectionSize(50)
             tagDisp.tv_tag.verticalHeader().setDefaultAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            tagDisp.tv_tag.setEditTriggers(QAbstractItemView.DoubleClicked)
+            tagDisp.tv_tag.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.EditKeyPressed)
             tagDisp.tv_tag.setItemDelegate(customized_delegate.CellEditDelegate())
             tagDisp.lbl_page.setText(f"Configuration {i}")
             
@@ -705,6 +705,7 @@ class MainPanel:
             values = [val[0] for val in self.stackedModels[page]._data.values]
             for prop, val in zip(rowNames, values):
                 self.ui.te_clipboard.append(f"{prop}: {val}")
+            self.plus()
         else:
             print("Please load a tag set first!")
     
@@ -758,6 +759,3 @@ window = MainPanel()
 
 
 app.exec()
-
-if __name__ == "__main__":
-    pass
