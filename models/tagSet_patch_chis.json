@@ -1,0 +1,74 @@
+{
+    "Config_0": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "HLG",
+            "LEVEL": "MAX",
+            "EMI": "IR",
+            "SLICE": "3",
+            "AT": "CELL_2",
+            "STIM_ID": "0"
+        }
+    },
+    "Config_1": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "LED_GREEN",
+            "LEVEL": "LV8",
+            "EMI": "RED",
+            "SLICE": "3",
+            "AT": "CELL_2",
+            "STIM_ID": "0"
+        }
+    },
+    "Config_2": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "LED_BLUE",
+            "LEVEL": "LV8",
+            "EMI": "GREEN",
+            "SLICE": "3",
+            "AT": "CELL_2",
+            "STIM_ID": "0"
+        }
+    },
+    "Config_3": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "LED_BLUE",
+            "LEVEL": "LV8",
+            "EMI": "GREEN",
+            "SLICE": "3",
+            "AT": "CELL_2",
+            "STIM_ID": "10",
+            "ABF": "0031",
+            "HOLDING_I": "0"
+        }
+    },
+    "Config_4": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "LED_BLUE",
+            "LEVEL": "LV8",
+            "EMI": "GREEN",
+            "SLICE": "3",
+            "AT": "CELL_2",
+            "STIM_ID": "11",
+            "ABF": "0030",
+            "HOLDING_I": "0"
+        }
+    },
+    "Config_5": {
+        "VALUE": {
+            "OBJ": "",
+            "EXC": "",
+            "LEVEL": "",
+            "EMI": "",
+            "SLICE": "",
+            "AT": "",
+            "FRAMES": "",
+            "FPS": "",
+            "CAM.TRIG.MODE": ""
+        }
+    }
+}

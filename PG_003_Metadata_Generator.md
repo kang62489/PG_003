@@ -45,3 +45,14 @@ CALL %venvPath%
 %pyPath% %progPath%
 
 ```
+
+# Log
+## 2025-Mar-19
+Considering updates for this program
+- New functions to be added
+	- An add button for adding configurations in a Tag Set.
+	- Need to add a function to create an index of recorded files
+- Modify
+	- Automatically get current filename when press "Save" button in both Tab
+	- Automatically name the file if user didn't input filename.
+	- The comment dialog of PCO.Camware cannot excess 10 lines. Change the format of metadata.

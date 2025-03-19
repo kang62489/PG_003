@@ -1,0 +1,35 @@
+{
+    "Config_0": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "HLG",
+            "LEVEL": "MAX",
+            "EMI": "IR",
+            "SLICE": "1",
+            "AT": "CELL_1",
+            "STIM_ID": "0"
+        }
+    },
+    "Config_1": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "LED_GREEN",
+            "LEVEL": "LV8",
+            "EMI": "RED",
+            "SLICE": "1",
+            "AT": "CELL_1",
+            "STIM_ID": "0"
+        }
+    },
+    "Config_2": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "LED_BLUE",
+            "LEVEL": "LV8",
+            "EMI": "GREEN",
+            "SLICE": "1",
+            "AT": "CELL_1",
+            "STIM_ID": "0"
+        }
+    }
+}

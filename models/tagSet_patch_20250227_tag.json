@@ -1,0 +1,41 @@
+{
+    "Config_0": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "HLG",
+            "LEVEL": "MAX",
+            "EXPO": "40ms",
+            "EMI": "IR",
+            "FRAMES": "10p",
+            "FPS": "20Hz",
+            "SLICE": "1",
+            "AT": "SITE_1"
+        }
+    },
+    "Config_1": {
+        "VALUE": {
+            "OBJ": "60X",
+            "EXC": "LED_GREEN",
+            "LEVEL": "LV6",
+            "EXPO": "40ms",
+            "EMI": "RED",
+            "FRAMES": "10p",
+            "FPS": "20Hz",
+            "SLICE": "1",
+            "AT": "CELL_1"
+        }
+    },
+    "Config_2": {
+        "VALUE": {
+            "OBJ": "10X",
+            "EXC": "LED_BLUE",
+            "LEVEL": "LV6",
+            "EXPO": "40ms",
+            "EMI": "GREEN",
+            "FRAMES": "10p",
+            "FPS": "20Hz",
+            "SLICE": "1",
+            "AT": "CELL_1"
+        }
+    }
+}
