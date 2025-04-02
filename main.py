@@ -11,8 +11,7 @@ from pathlib import Path
 import glob
 from rich import print
 import pandas as pd
-from PySide6.QtGui import QRegularExpressionValidator
-from PySide6.QtCore import Qt, QSize , QRegularExpression
+from PySide6.QtCore import Qt, QSize
 from PySide6.QtCore import QModelIndex, QItemSelectionModel
 from PySide6.QtWidgets import (
     QApplication,
@@ -37,41 +36,53 @@ from classes import (
     model_table_1,
     model_table_2,
     widget_buttonSet,
-    widget_tagDisplay
+    widget_tagDisplay,
+    expinfo_tab_manager,
+    tag_tab_manager
 )
 
-loader = QUiLoader()
+from util.constants import (
+    APP_NAME,
+    APP_STATUS_MESSAGE,
+    UI_FILE, 
+    STYLE_FILE,
+    DEFAULTS
+)
+
+# loader = QUiLoader()
 basedir = os.path.dirname(__file__)
-qssdir = Path(__file__).parent / "styles"
 modeldir = Path(__file__).parent / "models"
 
 class MainPanel:
     def __init__(self):
         super().__init__()
-        self.ui = loader.load(os.path.join(basedir, "ui/metadata_generator.ui"), None)
-        self.ui.setWindowTitle("Metadata Generator")
+        self.loader = QUiLoader()
+        self.ui = self.loader.load(UI_FILE, None)
+        self.ui.setWindowTitle(APP_NAME)
         self.ui.show()
-        with open(qssdir / "styles.qss", "r") as f:
+        
+        with open(STYLE_FILE, "r") as f:
             self.ui.setStyleSheet(f.read())
+        
+        # Set status bar message
+        self.ui.statusbar.showMessage(APP_STATUS_MESSAGE)
+        
+        # Initialize tab managers
+        expinfo_tab_manager.ExpInfoTab(self.ui, self)
+        tag_tab_manager.TagManagerTab(self.ui, self)
+        
+        # Set default tab index
+        self.ui.tab_main.setCurrentIndex(DEFAULTS["TAB_INDEX"])
         
         # Set Models
         self.setModels()
         self.setButtons()
         
-        # Set attributes of UIs
-        self.setAttrs()
-
-        # List object names of tab_0, tab_1
-        self.tab0_objs = self.list_objs(self.ui.tab_0)
-        self.tab1_objs = self.list_objs(self.ui.tab_1)
-        
         # Set default tag set saving mode
         self.createModeSave = False
         
 ## Functions for initialization
-    def list_objs(self, parent_widget):
-        return [child.objectName() for child in parent_widget.children()]
-    
+
     def setButtons(self):
         ## Tab_0
         self.ui.btn_loadTemplate.clicked.connect(self.loadTemplate)
@@ -103,132 +114,8 @@ class MainPanel:
         self.ui.btn_copyTag.clicked.connect(self.copyTag)
         self.ui.btn_clearTag.clicked.connect(self.clearTag)
     
-    def setAttrs(self):
-    ## Set default tab index
-        self.ui.tab_main.setCurrentIndex(0)
-    ## Set spaces
-        ## Tab_0
-        self.ui.verticalLayout_7.setSpacing(5)
-        self.ui.verticalLayout_11.setSpacing(5)
-        
-        self.ui.verticalLayout_7.insertSpacing(2, 200)
-        self.ui.verticalLayout_11.insertSpacing(0, 300)
-        
-    ## Set attributes of buttons
-        # Sizes
-        size_btn_01 = QSize(180, 80)
-        size_btn_02 = QSize(100, 80)
-        size_btn_03 = QSize(80, 40)
-        size_btn_04 = QSize(60, 30)
-        size_btn_05 = QSize(125, 40)
-        
-        size_lbl_01 = QSize(180, 40)
-        size_lbl_02 = QSize(200, 40)
-        
-        size_cb_01 = QSize(180, 40)
-        size_cb_02 = QSize(200, 40)
-        
-        # Tab_0
-        self.ui.btn_loadTemplate.setFixedSize(size_btn_01)
-        self.ui.btn_saveTemplate.setFixedSize(size_btn_01)
-        self.ui.btn_deleteCurrentTemplate.setFixedSize(size_btn_01)
-        self.ui.btn_exportExpInfo.setFixedSize(size_btn_01)
-        self.ui.btn_addNewRows.setFixedSize(size_btn_01)
-        self.ui.btn_removeSelectedRows.setFixedSize(size_btn_01)
-        self.ui.btn_moveUp.setFixedSize(size_btn_01)
-        self.ui.btn_moveDown.setFixedSize(size_btn_01)
-        
-        # button status
-        self.ui.btn_deleteCurrentTemplate.setEnabled(False)
-        
-        ## Tab_1
-        self.ui.btn_up.setFixedSize(size_btn_02)
-        self.ui.btn_down.setFixedSize(size_btn_02)
-        self.ui.btn_insert.setFixedSize(size_btn_02)
-        self.ui.btn_rm.setFixedSize(size_btn_02)
-        self.ui.btn_convert.setFixedSize(size_btn_02)
-        
-        self.ui.btn_loadTagSet.setFixedSize(size_btn_03)
-        self.ui.btn_newTagSet.setFixedSize(size_btn_03)
-        self.ui.btn_discard.setFixedSize(size_btn_03)
-        self.ui.btn_saveTagSet.setFixedSize(size_btn_03)
-        self.ui.btn_deleteTagSet.setFixedSize(size_btn_03)
-        
-        self.ui.btn_plus.setFixedSize(size_btn_04)
-        self.ui.btn_minus.setFixedSize(size_btn_04)
-        self.ui.btn_resetSerial.setFixedSize(size_btn_04)
-        self.ui.btn_copySerial.setFixedSize(size_btn_04)
-        self.ui.btn_copyTag.setFixedSize(size_btn_05)
-        self.ui.btn_clearTag.setFixedSize(size_btn_05)
-        
-        # button status
-        self.ui.btn_deleteTagSet.setEnabled(False)
-        self.ui.btn_discard.setVisible(False)
-        
-        
-    # Set attributes of QComboBox (cb_expInfo)
-        #Tab_0
-        self.ui.cb_expInfo.setFixedSize(size_cb_01)
-        
-        #Tab_1
-        self.ui.cb_recTagSet.setFixedSize(size_cb_02)
-        
-        # comboBox alignment
-        center_aligment = customized_delegate.CenterAlignDelegate()
-        self.ui.cb_recTagSet.setItemDelegate(center_aligment)
-        
-    # Set attributes of QLabel (lbl_expInfo)
-        #Tab_0
-        self.ui.lbl_expInfo.setFixedSize(size_lbl_01)
-        
-        #label alignment
-        self.ui.lbl_expInfo.setAlignment(Qt.AlignCenter)
-        
-        #Tab_1
-        self.ui.lbl_DOR.setFixedSize(size_lbl_02)
-        self.ui.lbl_date.setFixedSize(size_lbl_02)
-        
-        #label alignment
-        self.ui.lbl_date.setAlignment(Qt.AlignCenter)
-        
-        #label text
-        self.date = datetime.today()
-        self.ui.lbl_date.setText(f"{self.date.strftime('%Y-%m-%d')}")
-        
-    # Set the attributes of QTableView
-        #Tab_0
-        # table alignment
-        self.ui.tv_expInfo.verticalHeader().setDefaultAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        
-        # table display settings
-        self.ui.tv_expInfo.horizontalHeader().setVisible(False)
-        self.ui.tv_expInfo.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.ui.tv_expInfo.verticalHeader().setDefaultSectionSize(50)
-        self.ui.tv_expInfo.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.EditKeyPressed)
-        self.ui.tv_expInfo.setItemDelegate(customized_delegate.CellEditDelegate())
-        
-    # Set the attributes of QGroupBox
-        # gruopbox title
-        self.ui.gb_tagSwitch.setTitle("Button Switches")
-        
-        # groupbox width
-        self.ui.gb_tagSwitch.setFixedWidth(150)
-        
-    # Set the attributes of lineEdit
-        self.ui.le_serialName.setFixedHeight(60)
-        self.ui.le_serialName.setAlignment(Qt.AlignCenter)
-        
-        regex = QRegularExpression(r"^\d{8}-\d{4}\.tif$")
-        self.validator = QRegularExpressionValidator(regex)
-        self.ui.le_serialName.setValidator(self.validator)
-        self.ui.le_serialName.setPlaceholderText("YYYYMMDD-0000")
-        self.ui.le_serialName.textChanged.connect(self.validate_serial)
-        self.ui.le_serialName.setValidator(None)
-        
-        self.serial = 0
-        self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.serial:04d}.tif")
-    # Set the attributes of status bar
-        self.ui.statusbar.showMessage("Metadata Generator 1.1.3, Author: Kang, Last Update: 2025-Jan-26, Made in OIST")
+
+    
     
     def setModels(self):
         # Set the model displays in QTableView (tv_expInfo)
@@ -732,17 +619,6 @@ class MainPanel:
     def resetSerial(self):
         self.Serial = 0
         self.ui.le_serialName.setText(f"{self.date.strftime('%Y%m%d')}-{self.Serial:04d}.tif")
-    
-    def validate_serial(self):
-        self.ui.le_serialName.setValidator(self.validator)
-        if self.ui.le_serialName.hasAcceptableInput():
-            self.ui.le_serialName.setStyleSheet("QLineEdit { color: green; }")
-            self.ui.btn_copySerial.setEnabled(True)
-            self.ui.le_serialName.setValidator(None)
-        else:
-            self.ui.le_serialName.setStyleSheet("QLineEdit { color: red; }")
-            self.ui.btn_copySerial.setEnabled(False)
-            self.ui.le_serialName.setValidator(None)
     
     def copySerial(self):
         QApplication.clipboard().setText(self.ui.le_serialName.text())
