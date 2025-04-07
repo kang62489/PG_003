@@ -1,7 +1,3 @@
-## Author: Kang
-## Last Update: 2025-Jan-26
-## Usage: A class for build a dialog to open directory and save the file
-
 import os
 from PySide6.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout, QLabel, QLineEdit
 from classes.dialog_confirm import Confirm

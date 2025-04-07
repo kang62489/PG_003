@@ -1,13 +1,13 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHeaderView, QAbstractItemView
-from .customized_delegate import CellEditDelegate
+from classes.customized_delegate import CellEditDelegate
 from util.constants import (
     UISizes, 
     UIAlignments, 
     DEFAULTS
 )
 
-class ExpInfoTab:
+class ExpInfoView:
     """Handles UI configuration for Template Manager tab (tab_0)"""
     def __init__(self, ui, main_panel):
         self.ui = ui

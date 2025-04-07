@@ -1,7 +1,4 @@
-## Author: Kang
-## Last Update: 2025-Jan-22
-## Usage: A class for build a customized model for QTableView
-
+# Modules
 import pendulum
 from PySide6.QtCore import Qt, QAbstractTableModel
 from datetime import datetime

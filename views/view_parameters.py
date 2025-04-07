@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt, QRegularExpression
 from PySide6.QtWidgets import QHeaderView, QAbstractItemView, QSizePolicy
 from PySide6.QtGui import QRegularExpressionValidator
-from .customized_delegate import CellEditDelegate, CenterAlignDelegate
+from classes.customized_delegate import CellEditDelegate, CenterAlignDelegate
 from datetime import datetime
 from util.constants import (
     UISizes, 
@@ -11,7 +11,7 @@ from util.constants import (
     DEFAULTS
 )
 
-class TagManagerTab:
+class ParametersView:
     """Handles UI configuration for Tag Manager tab (tab_1)"""
     def __init__(self, ui, main_panel):
         self.ui = ui
