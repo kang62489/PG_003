@@ -39,7 +39,6 @@ class HandlersExpInfo:
         self.ui.btn_moveUp.clicked.connect(self.moveRowUp)
         self.ui.btn_moveDown.clicked.connect(self.moveRowDown)
     
-    
     def reloadMenuList(self):
         # cb_01
         templateFiles = [os.path.basename(i) for i in glob.glob(os.path.join(BASE_DIR,"models",'template_*.json'))]
