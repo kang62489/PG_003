@@ -1,7 +1,5 @@
 ## Modules
-import os
 import sys
-from pathlib import Path
 from rich import print
 from PySide6.QtWidgets import QApplication
 from PySide6.QtUiTools import QUiLoader

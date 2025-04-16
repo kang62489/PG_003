@@ -1,5 +1,5 @@
-from PySide6.QtCore import Qt, QRegularExpression
-from PySide6.QtWidgets import QHeaderView, QAbstractItemView, QSizePolicy
+# Modules
+from PySide6.QtCore import QRegularExpression
 from PySide6.QtGui import QRegularExpressionValidator
 from classes.customized_delegate import CellEditDelegate, CenterAlignDelegate
 from datetime import datetime

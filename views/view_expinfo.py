@@ -1,3 +1,4 @@
+# Modules
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHeaderView, QAbstractItemView
 from classes.customized_delegate import CellEditDelegate

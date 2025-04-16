@@ -1,7 +1,3 @@
-## Author: Kang
-## Last Update: 2025-Jan-23
-## Usage: A class for build a dialog to open directory and save the file
-
 import os
 import json
 from PySide6.QtCore import Qt, QSize
