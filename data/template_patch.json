@@ -1,0 +1,26 @@
+{
+    "Value_0":{
+        "Date of Recording":"2025-01-01",
+        "Experimenters":"Kang",
+        "ACUC Protocol":"ACUP-2024-001-2",
+        "Keywords":"ACh",
+        "Animal ID":"neoChAT-552",
+        "Numbers of Animals":1,
+        "Species":"mouse",
+        "Strain":"neoChAT-Hom",
+        "Sex":"M",
+        "Date of Birth":"2024-09-13",
+        "Ages(weeks)":15,
+        "Date of Injection":"2024-12-16",
+        "Incubated(weeks)":2,
+        "Injected brain area":"Right_DMS",
+        "Coordinates_R(mm)":"DV -3.2",
+        "Coordinates_L(mm)":"",
+        "Virus_R":"200 nl\/site 1:1 mixtures",
+        "Virus_L":"",
+        "OS_Cutting(mOsm\/Kg)":"313",
+        "OS_Holding(mOsm\/Kg)":"296",
+        "OS_Recording(mOsm\/Kg)":"303",
+        "LED_TRIG_MODE":"Continuous"
+    }
+}

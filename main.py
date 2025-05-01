@@ -5,12 +5,12 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtUiTools import QUiLoader
 
 from views import (
-    view_expinfo,
-    view_parameters
+    RecTaggerView,
+    ParametersView
 )
 
 from controllers import (
-    HandlersExpInfo,
+    RecTaggerHandlers,
     HandlersParameters
     )
 
@@ -37,14 +37,14 @@ class MainPanel:
         self.ui.statusbar.showMessage(APP_STATUS_MESSAGE)
         
         # Initialize tab managers
-        view_expinfo.ExpInfoView(self.ui, self)
-        view_parameters.ParametersView(self.ui, self)
+        RecTaggerView(self.ui, self)
+        ParametersView(self.ui, self)
         
         # Set default tab index
-        self.ui.tab_main.setCurrentIndex(DEFAULTS["TAB_INDEX"])
+        self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])
         
         # Connect signals
-        self.handlers_expinfo = HandlersExpInfo(self.ui)
+        self.handlers_expinfo = RecTaggerHandlers(self.ui)
         self.handlers_parameters = HandlersParameters(self.ui)
 
 app = QApplication(sys.argv)

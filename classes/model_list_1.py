@@ -1,10 +1,7 @@
-## Author: Kang
-## Last Update: 2025-Jan-20
-## Usage: A class for build a customized model for QComboBox
-
 from PySide6.QtCore import Qt, QAbstractListModel
 
-class SelectorModel(QAbstractListModel):
+class ListModel(QAbstractListModel):
+    """Create a list model for combobox menu which can be updated automatically"""
     def __init__(self, selections=None):
         super().__init__()
         self.selections = selections or []

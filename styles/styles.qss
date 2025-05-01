@@ -56,8 +56,8 @@ QTableView {
 
 QPushButton#btn_loadTemplate,
 QPushButton#btn_saveTemplate,
+QPushButton#btn_newTemplate,
 QPushButton#btn_deleteCurrentTemplate,
-QPushButton#btn_exportExpInfo,
 QPushButton#btn_addNewRows,
 QPushButton#btn_removeSelectedRows,
 QPushButton#btn_moveUp,

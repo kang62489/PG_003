@@ -1,4 +1,4 @@
-from .handlers_expinfo import HandlersExpInfo
+from .handlers_recTagger import RecTaggerHandlers
 from .handlers_parameters import HandlersParameters
 
-__all__ = ['HandlersExpInfo', 'HandlersParameters']
+__all__ = ['HandlersExpInfo', 'RecTaggerHandlers', 'HandlersParameters']

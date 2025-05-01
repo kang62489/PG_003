@@ -18,7 +18,7 @@ APP_STATUS_MESSAGE = f"{APP_NAME} {APP_VERSION}, Author: {APP_AUTHOR}, Last Upda
 BASE_DIR = Path(__file__).parent.parent
 UI_DIR = BASE_DIR / "ui"
 STYLES_DIR = BASE_DIR / "styles"
-MODELS_DIR = BASE_DIR / "models"
+MODELS_DIR = BASE_DIR / "data"
 
 # File Paths
 UI_FILE = UI_DIR / "metadata_generator.ui"
@@ -66,10 +66,11 @@ DISPLAY_DATE_FORMAT = "%Y-%m-%d"
 # Default Values
 DEFAULTS = {
     "SERIAL": 0,
-    "TAB_INDEX": 0,
-    "LAYOUT_SPACING": 5,
-    "VERTICAL_SPACING_1": 200,
-    "VERTICAL_SPACING_2": 300,
+    "TAB_INDEX": 1,
+    "LIGHT_INENSITY": "LV6",
+    "EXPOSURE_TIME": "40",
+    "FRAMES": "1200p",
+    "FPS": "20Hz",
 }
 
 # Font Settings
@@ -97,3 +98,21 @@ class Colors:
     GREEN = "#008000"
     GRAY = "#808080"
     BLUE = "#0000FF"
+    
+# Menu Options
+@dataclass
+class MenuOptions:
+    # Excitation options
+    EXCITATION = ["HLG", "LED_GREEN", "LED_BLUE"]
+    
+    # Emission filter options
+    EMISSION = ["IR", "RED", "GREEN"]
+
+    # Exposure time units
+    EXPO_UNITS = ["ms", "us"]
+    
+    # Recording modes
+    CAM_TRIG_MODES = ["EXT_EXP_START", "EXT_EXP_CTRL"]
+    
+    # Recording location types
+    LOC_TYPES = ["SITE_", "CELL_"]

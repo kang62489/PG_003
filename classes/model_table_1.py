@@ -9,9 +9,11 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 class TableModel(QAbstractTableModel):
-    def __init__(self, data=None):
+    """Create a table model for add customized properties"""
+    def __init__(self, data=None, auto_calc=True):
         super().__init__()
         self._data = data if data is not None else pd.DataFrame()
+        self._auto_calc = auto_calc
 
         
     def data(self, index, role):
@@ -54,7 +56,8 @@ class TableModel(QAbstractTableModel):
     def setData(self, index, value, role=Qt.EditRole):
         if index.isValid() and role == Qt.EditRole:
             self._data.iloc[index.row(), index.column()] = value
-            self.autoCalc()
+            if self._auto_calc:
+                self.autoCalc()
             self.dataChanged.emit(index, index, [Qt.DisplayRole, Qt.EditRole])
             return True
         return False        
@@ -85,6 +88,7 @@ class TableModel(QAbstractTableModel):
         
     def addRows(self, SourceParent, rowNumber, addData):
         count = addData.shape[0]
+        # Check if we need to add columns for inserting new rows
         if addData.shape[1] > self._data.shape[1]:
             self.addCols(SourceParent, self._data.shape[1]-1, (addData.shape[1] - self._data.shape[1]))
         
@@ -127,6 +131,10 @@ class TableModel(QAbstractTableModel):
     def selfClean(self):
        self._data.fillna('', inplace=True)
        
+    def set_auto_calc(self, enabled):
+        """Enable or disable automatic calculations"""
+        self._auto_calc = enabled
+    
     def autoCalc(self):
         properties = self._data.index.tolist()
         iloc_0 = self._data.index.get_loc("Date of Recording")

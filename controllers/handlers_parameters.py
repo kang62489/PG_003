@@ -12,8 +12,8 @@ from PySide6.QtWidgets import (
     QHeaderView
 )
 from classes import (
-    model_table_2,
-    model_comboBox,
+    model_list_1,
+    model_table_1,
     dialog_confirm,
     dialog_createTagSet,
     dialog_insertProperties,
@@ -32,7 +32,7 @@ class HandlersParameters:
     def __init__(self, ui):
         self.ui = ui
         self.date = datetime.today()
-        self.model_cb_02 = model_comboBox.SelectorModel()
+        self.model_cb_02 = model_list_1.ListModel()
         self.ui.cb_recTagSet.setModel(self.model_cb_02)
         
         self.connect_signals()
@@ -60,7 +60,7 @@ class HandlersParameters:
         self.ui.btn_clearTag.clicked.connect(self.clearTag)
         
     def reloadMenuList(self):
-        tagSetFiles = [os.path.basename(i) for i in glob.glob(os.path.join(BASE_DIR,"models",'tagSet_*.json'))]
+        tagSetFiles = [os.path.basename(i) for i in glob.glob(os.path.join(MODELS_DIR,'tagSet_*.json'))]
         tagSetList = [Path(tempName.replace("tagSet_","")).stem for tempName in tagSetFiles]
         with open(MODELS_DIR / "cb_list_02.json", "w") as f:
             json.dump(tagSetList, f)
@@ -85,7 +85,7 @@ class HandlersParameters:
         stackedSelectionModels = []
         for i in range(len(tagSet)):
             tagDisp = widget_tagDisplay.TagDisp(len(tagSet))
-            tagModel = model_table_2.TableModel()
+            tagModel = model_table_1.TableModel(auto_calc=False)
             tagDisp.tv_tag.setModel(tagModel)
             sm = tagDisp.tv_tag.selectionModel()
             self.ui.sw_tags.insertWidget(i, tagDisp)
@@ -250,7 +250,7 @@ class HandlersParameters:
                 if not self.createModeSave:
                     self.unsaved = ""
                 
-                self.saveDialog = dialog_saveTagSet.SaveTagSet(os.path.join(BASE_DIR,"models"), self.unsaved, toBeSavedTagSet)
+                self.saveDialog = dialog_saveTagSet.SaveTagSet(os.path.join(MODELS_DIR), self.unsaved, toBeSavedTagSet)
                 
                 if self.createModeSave:
                     # No need to ask for the filename
@@ -274,7 +274,7 @@ class HandlersParameters:
         self.deleteCheck = dialog_confirm.Confirm(title="Checking...", msg="Delete current tag set?")
         
         if self.deleteCheck.exec():
-            os.remove(os.path.join(BASE_DIR,"models","tagSet_{}.json".format(filename)))
+            os.remove(os.path.join(MODELS_DIR,"tagSet_{}.json".format(filename)))
             self.reloadMenuList()
             self.clearGroupbox()
             self.clearStackedWidget(self.ui.sw_tags)
