@@ -654,23 +654,9 @@
                 <widget class="QComboBox" name="comboBox_tagTemplates"/>
                </item>
                <item>
-                <widget class="QPushButton" name="btn_loadTemplate">
-                 <property name="text">
-                  <string>Load</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QPushButton" name="btn_saveTemplate">
                  <property name="text">
                   <string>Save</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btn_newTemplate">
-                 <property name="text">
-                  <string>New</string>
                  </property>
                 </widget>
                </item>
@@ -701,21 +687,21 @@
                <item>
                 <widget class="QPushButton" name="btn_removeSelectedRows">
                  <property name="text">
-                  <string>Remove Selected</string>
+                  <string>Remove</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="btn_addNewRows">
                  <property name="text">
-                  <string>Add New</string>
+                  <string>Insert</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="btn_moveUp">
                  <property name="text">
-                  <string>Move UP</string>
+                  <string>Shift Up</string>
                  </property>
                 </widget>
                </item>
@@ -728,7 +714,7 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>Move Down</string>
+                  <string>Shift Down</string>
                  </property>
                 </widget>
                </item>

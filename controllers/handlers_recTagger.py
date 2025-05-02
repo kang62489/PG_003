@@ -2,13 +2,14 @@ import os, json, glob
 import pandas as pd
 from pathlib import Path
 from PySide6.QtCore import QModelIndex, QItemSelectionModel
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialog, QApplication
 from rich import print
+from tabulate import tabulate
 from classes import (
     model_list_1,
     model_table_1,
     dialog_confirm,
-    dialog_addProperties,
+    dialog_insertProperties,
     dialog_saveTemplate
     )
 from util.constants import (
@@ -19,7 +20,7 @@ from util.constants import (
 class RecTaggerHandlers:
     def __init__(self, ui):
         self.ui = ui
-        self.model_tableView_customized = model_table_1.TableModel()
+        self.model_tableView_customized = model_table_1.TableModel(auto_calc=False)
         self.ui.tableView_customized.setModel(self.model_tableView_customized)
         self.sm_customized = self.ui.tableView_customized.selectionModel()
 
@@ -28,22 +29,35 @@ class RecTaggerHandlers:
         
         self.connect_signals()
         self.reloadMenuList()
+        self.loadTemplate()
         
     def connect_signals(self):
-        self.ui.radioBtnGroup_obj.buttonClicked.connect(self.magnificationSelected)
-        self.ui.btn_loadTemplate.clicked.connect(self.loadTemplate)
+        self.ui.radioBtnGroup_OBJ.buttonClicked.connect(self.updateTagOutput)
+        self.ui.comboBox_EXC.activated.connect(self.updateTagOutput)
+        self.ui.lineEdit_LEVEL.textChanged.connect(self.updateTagOutput)
+        self.ui.lineEdit_EXPO.textChanged.connect(self.updateTagOutput)
+        self.ui.comboBox_EXPO_UNITS.activated.connect(self.updateTagOutput)
+        self.ui.comboBox_EMI.activated.connect(self.updateTagOutput)
+        self.ui.lineEdit_FRAMES.textChanged.connect(self.updateTagOutput)
+        self.ui.lineEdit_FPS.textChanged.connect(self.updateTagOutput)
+        self.ui.spinBox_SLICE.valueChanged.connect(self.updateTagOutput)
+        self.ui.comboBox_CAM_TRIG_MODES.activated.connect(self.updateTagOutput)
+        self.ui.spinBox_SLICE.valueChanged.connect(self.updateTagOutput)
+        self.ui.comboBox_LOC_TYPES.activated.connect(self.updateTagOutput)
+        self.ui.spinBox_AT.valueChanged.connect(self.updateTagOutput)
+        
+        self.ui.comboBox_tagTemplates.activated.connect(self.loadTemplate)
         self.ui.btn_saveTemplate.clicked.connect(self.saveTemplate)
         self.ui.btn_deleteCurrentTemplate.clicked.connect(self.deleteTemplate)
-        self.ui.btn_addNewRows.clicked.connect(self.addNewRows)
+        self.ui.btn_addNewRows.clicked.connect(self.insert_customized_properties)
         self.ui.btn_removeSelectedRows.clicked.connect(self.removeSelectedRows)
-        self.ui.btn_moveUp.clicked.connect(self.moveRowUp)
-        self.ui.btn_moveDown.clicked.connect(self.moveRowDown)
+        self.ui.btn_moveUp.clicked.connect(self.moveRowsUp)
+        self.ui.btn_moveDown.clicked.connect(self.moveRowsDown)
     
-    def magnificationSelected(self, selected_radio_btn):
-        print(f"Selected objective: {selected_radio_btn.text()}")
+    def updateTagOutput(self):
+        print(f"Selected objective: {self.ui.radioBtnGroup_OBJ.checkedButton().text()}")
     
     def reloadMenuList(self):
-        # cb_01
         templateFiles = [os.path.basename(i) for i in glob.glob(os.path.join(MODELS_DIR,'template_*.json'))]
         templateList = [Path(tempName.replace("template_","")).stem for tempName in templateFiles]
         with open(MODELS_DIR / "cb_list_01.json", "w") as f:
@@ -54,36 +68,42 @@ class RecTaggerHandlers:
         
     def loadTemplate(self):
         filename = self.model_cb_01.selections[self.ui.comboBox_tagTemplates.currentIndex()]
-        if filename == "patch":
-            self.ui.btn_deleteCurrentTemplate.setEnabled(False)
-        else:
+        self.ui.btn_deleteCurrentTemplate.setEnabled(False)
+        
+        if filename not in ["patch_default", "puff_default"] :
             self.ui.btn_deleteCurrentTemplate.setEnabled(True)
         
         with open(MODELS_DIR / "template_{}.json".format(filename), "r") as f:
             template = pd.read_json(f, dtype=str)
-        pass
-                
-        self.model_tableView_customized.update(template)
-        self.model_tableView_customized.layoutChanged.emit()
+            self.model_tableView_customized.update(template)
+            self.model_tableView_customized.layoutChanged.emit()
         
     def saveTemplate(self):
-        if not self.model_tableView_customized._data.empty:
-            self.saveCheck = dialog_confirm.Confirm(title="Checking...", msg="Save current template?")
+        if self.model_tableView_customized._data.empty:
+            print("[bold red]Template doesn't exist![/bold red]")
+            return
+        
+        self.saveCheck = dialog_confirm.Confirm(title="Checking...", msg="Save current template?")
+        if not self.saveCheck.exec():
+            print("[bold yellow]Save Cancelled![/bold yellow]")
+            return
             
-            if self.saveCheck.exec():
-                self.saveDialog = dialog_saveTemplate.SaveTemplate()
-                self.saveDialog.savefile(os.path.join(MODELS_DIR), self.model_tableView_customized._data)
-                self.reloadMenuList()
-                
-                for idx, item in enumerate(self.model_cb_01.selections):
-                    if item == self.saveDialog.filename.text():
-                        self.ui.comboBox_tagTemplates.setCurrentIndex(idx)
-                        break
+        self.saveDialog = dialog_saveTemplate.SaveTemplate()
+        if not self.saveDialog.exec():
+            print("[bold yellow]Save Cancelled![/bold yellow]")
+            return
+        
+        self.saveDialog.savefile(os.path.join(MODELS_DIR), self.model_tableView_customized._data)
+        
+        # reload the menu list
+        self.reloadMenuList()
+        
+        # set the QComboBox display the saved template
+        for idx, item in enumerate(self.model_cb_01.selections):
+            if item == self.saveDialog.lineEdit_filename.text():
+                self.ui.comboBox_tagTemplates.setCurrentIndex(idx)
+                break
 
-            else:
-                print("Save Cancelled!")
-        else:
-            print("Template doesn't exist!")
 
     def deleteTemplate(self):
         filename = self.model_cb_01.selections[self.ui.comboBox_tagTemplates.currentIndex()]
@@ -104,57 +124,67 @@ class RecTaggerHandlers:
     def isTableViewEmpty(self):
         return self.model_tableView_customized._data.empty
 
-    def addNewRows(self):
+    def insert_customized_properties(self):
+        if self.isTableViewEmpty():
+            print("[bold red]Please load a template first![/bold red]")
+            return
+        
         if self.sm_customized.hasSelection():
-            idx = self.sm_customized.currentIndex()
-            rowNumber = idx.row()
-            self.w = dialog_addProperties.AddProp()
-            if self.w.exec() == QDialog.Accepted:
-                print("Add data:", self.w.addData)
-                self.model_tableView_customized.addRows(QModelIndex(), rowNumber, self.w.addData)
-                new_index = self.model_tableView_customized.index(rowNumber + self.w.addData.shape[0], self.w.addData.shape[1]-1)
-                self.sm_customized.setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
-                print(self.sm_customized.currentIndex())
+            insert_from_this_row = self.sm_customized.currentIndex().row()
         else:
-            if not self.isTableViewEmpty():
-                rowNumber = self.model_tableView_customized.rowCount(QModelIndex())-1
-                self.w = dialog_addProperties.AddProp()
-                if self.w.exec() == QDialog.Accepted:
-                    print("Add data:", self.w.addData)
-                    self.model_tableView_customized.addRows(QModelIndex(), rowNumber+2, self.w.addData)
-                    new_index = self.model_tableView_customized.index(rowNumber + self.w.addData.shape[0], self.w.addData.shape[1]-1)
-                    self.sm_customized.setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
-            else:
-                print("Please load a template first!")
+            insert_from_this_row = self.model_tableView_customized.rowCount(QModelIndex())-1
+            
+            
+        self.dlg_insertion = dialog_insertProperties.InsertProp()
+        if not self.dlg_insertion.exec() == QDialog.Accepted:
+            print("Cancel Insertion!")
+            return
+        
+        self.model_tableView_customized.addRows(QModelIndex(), insert_from_this_row, self.dlg_insertion.dataToBeAdded)
+        new_index = self.model_tableView_customized.index(insert_from_this_row + self.dlg_insertion.dataToBeAdded.shape[0], self.dlg_insertion.dataToBeAdded.shape[1]-1)
+        self.sm_customized.setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
+        
 
     def removeSelectedRows(self):
         selected_indexes = self.sm_customized.selectedIndexes()
+        if selected_indexes == []:
+            print("No row is selected")
+            return
         
-        if selected_indexes:
-            rows = sorted(set(index.row() for index in selected_indexes), reverse=True)
-            for row in rows:
-                self.model_tableView_customized.rmRows(QModelIndex(), row, 1)
-        else:
-            print("No selected row")
+        rows_to_be_removed = sorted(set(index.row() for index in selected_indexes), reverse=True)
+        for row in rows_to_be_removed:
+            self.model_tableView_customized.rmRows(QModelIndex(), row, 1)
 
-    def moveRowUp(self):
-        if self.sm_customized.hasSelection():
-            idx = self.sm_customized.currentIndex()
-            rowNumber = idx.row()
-            if (rowNumber-1>=0):
-                self.model_tableView_customized.moveRows(rowNumber, rowNumber - 1)
-                new_index = self.model_tableView_customized.index(rowNumber-1, idx.column())
-                self.sm_customized.setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
-        else:
-            print("No selected row")
+    def moveRowsUp(self):
+        selected_indexes = self.sm_customized.selectedIndexes()
+        if not selected_indexes:
+            print("No row is selected")
+            return
+        
+        # Get indices of selected rows
+        rows = sorted(set(index.row() for index in selected_indexes))
+        
+        # Move rows up
+        new_positions_of_moved_rows = self.model_tableView_customized.moveRows(rows, -1)
+        # Reselect the moved rows
+        self.sm_customized.clearSelection()
+        for row in new_positions_of_moved_rows:
+            index = self.model_tableView_customized.index(row, 0)
+            self.sm_customized.select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
             
-    def moveRowDown(self):
-        if self.sm_customized.hasSelection():
-            idx = self.sm_customized.currentIndex()
-            rowNumber = idx.row()
-            if (rowNumber+1 < self.model_tableView_customized.rowCount(QModelIndex())):
-                self.model_tableView_customized.moveRows(rowNumber, rowNumber + 2)
-                new_index = self.model_tableView_customized.index(rowNumber+1, idx.column())
-                self.sm_customized.setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
-        else:
-            print("No selected row")
+    def moveRowsDown(self):
+        selected_indexes = self.sm_customized.selectedIndexes()
+        if not selected_indexes:
+            print("No row is selected")
+            return
+        
+        # Get indices of selected rows
+        rows = sorted(set(index.row() for index in selected_indexes))
+        
+        # Move rows down
+        new_positions_of_moved_rows = self.model_tableView_customized.moveRows(rows, 1)
+        # Reselect the moved rows
+        self.sm_customized.clearSelection()
+        for row in new_positions_of_moved_rows:
+            index = self.model_tableView_customized.index(row, 0)
+            self.sm_customized.select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)

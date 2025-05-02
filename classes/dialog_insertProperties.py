@@ -1,7 +1,3 @@
-## Author: Kang
-## Last Update: 2025-Jan-23
-## Usage: A class for creating an inputing window for QTableView
-
 import pandas as pd
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import (
@@ -10,10 +6,13 @@ from PySide6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QHBoxLayout,
-    QDialog
+    QDialog,
+    QSizePolicy,
+    QApplication
 )
 
 class InsertProp(QDialog):
+    """A class for creating an inputing window for QTableView"""
     def __init__(self, parent=None, propertyNum=1, valueNum=1):
         super().__init__(parent)
         self.layout_main = QVBoxLayout()
@@ -22,10 +21,13 @@ class InsertProp(QDialog):
         self.layout_properties = QVBoxLayout()
         
         
-        self.label_properties = QLabel("Property Names")
-        self.layout_properties.addWidget(self.label_properties)
-        self.label_values = QLabel("VALUE")
-        self.layout_values.addWidget(self.label_values)
+        self.lbl_properties = QLabel("Property Names")
+        self.layout_properties.addWidget(self.lbl_properties)
+        self.lbl_values = QLabel("VALUE")
+        self.layout_values.addWidget(self.lbl_values)
+        
+        self.lbl_properties.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.lbl_values.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         
         
         self.properties = [f"Property {i:02d}" for i in range(propertyNum)]
@@ -79,10 +81,10 @@ class InsertProp(QDialog):
         self.setLayout(self.layout_main)
         
     def addRow(self):
-        # Add the property of a new row
+        # Add a new row to the bottom
         lineEdit_prop = QLineEdit()
-        rowNum = len(self.properties)
-        newRowName = f"Property {rowNum:02d}"
+        current_row_number = len(self.properties)
+        newRowName = f"Property {current_row_number:02d}"
         self.properties.append(newRowName)            
         lineEdit_prop.setPlaceholderText(newRowName)
         self.lineEdit_properties.append(lineEdit_prop)
@@ -90,14 +92,19 @@ class InsertProp(QDialog):
         
         # Add a set of values of a new row
         lineEdit_val = QLineEdit()
-        newValueName = f"Value {rowNum:02d}"
+        newValueName = f"Value {current_row_number:02d}"
+        self.values.append(newValueName)
         lineEdit_val.setPlaceholderText(newValueName)
         self.lineEdit_values.append(lineEdit_val)
         self.layout_values.addWidget(lineEdit_val)
         self.adjustSize()
+        self.btn_ok.setDefault(True)
         
     def removeRow(self):
         if len(self.properties) > 1:
+            # Disable updates to prevent flickering
+            self.setUpdatesEnabled(False)
+            
             # Remove the last property QLineEdit widget
             self.properties.pop()
             self.layout_properties.removeWidget(self.lineEdit_properties[-1])
@@ -109,10 +116,25 @@ class InsertProp(QDialog):
             self.layout_values.removeWidget(self.lineEdit_values[-1])
             self.lineEdit_values[-1].deleteLater()
             self.lineEdit_values.pop()
-            self.adjustSize()            
+            
+            # Force layout update
+            self.layout_properties.invalidate()
+            self.layout_values.invalidate()
+            
+            # Process events to ensure widgets are properly removed
+            QApplication.processEvents()
+            
+            # Now adjust the size
+            self.adjustSize()
+            
+            # Re-enable updates
+            self.setUpdatesEnabled(True)
+            
+            self.btn_ok.setDefault(True)
+                    
     
     def ok(self):
-        # Get the inputted data
+        # Get the input data
         self.toBeAddProperties = []
         self.toBeAddValues = []
         texts_prop = [lineEdit.text() for lineEdit in self.lineEdit_properties]
@@ -122,8 +144,8 @@ class InsertProp(QDialog):
                 self.toBeAddProperties.append(prop)
                 self.toBeAddValues.append(val)
         
-        columnNames = ["VALUE"]
-        self.addData = pd.DataFrame(self.toBeAddValues, columns=columnNames, index=self.toBeAddProperties)
+        columnNames = ["VALUE_0"]
+        self.dataToBeAdded = pd.DataFrame(self.toBeAddValues, columns=columnNames, index=self.toBeAddProperties)
         
         self.accept()
     
@@ -141,9 +163,10 @@ class InsertProp(QDialog):
         self.setMinimumWidth(min_width)
         self.setMaximumWidth(max_width)
             
-        self.label_properties.setMaximumSize(size_01)
-        self.label_values.setMaximumSize(size_01)
+        self.lbl_properties.setMaximumSize(size_01)
+        self.lbl_values.setMaximumSize(size_01)
         
-        self.label_properties.setStyleSheet("font-weight: bold;")
-        self.label_values.setStyleSheet("font-weight: bold;")
+        self.lbl_properties.setStyleSheet("font-weight: bold;")
+        self.lbl_values.setStyleSheet("font-weight: bold;")
 
+        self.btn_ok.setDefault(True)

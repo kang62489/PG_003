@@ -41,10 +41,10 @@ class RecTaggerView:
         self.ui.groupBox_recBasic.setTitle(f"Experiment Date: {datetime.today().strftime(DISPLAY_DATE_FORMAT)}")
     
     def setup_radiobuttons(self):
-        self.ui.radioBtnGroup_obj = QButtonGroup()
-        self.ui.radioBtnGroup_obj.addButton(self.ui.radioBtn_10X)
-        self.ui.radioBtnGroup_obj.addButton(self.ui.radioBtn_40X)
-        self.ui.radioBtnGroup_obj.addButton(self.ui.radioBtn_60X)
+        self.ui.radioBtnGroup_OBJ = QButtonGroup()
+        self.ui.radioBtnGroup_OBJ.addButton(self.ui.radioBtn_10X)
+        self.ui.radioBtnGroup_OBJ.addButton(self.ui.radioBtn_40X)
+        self.ui.radioBtnGroup_OBJ.addButton(self.ui.radioBtn_60X)
         self.ui.radioBtn_60X.setChecked(True)
 
     def setup_lineedits(self):
@@ -55,9 +55,7 @@ class RecTaggerView:
     
     def setup_pushbuttons(self):
         buttons = [
-            self.ui.btn_loadTemplate,
             self.ui.btn_saveTemplate,
-            self.ui.btn_newTemplate,
             self.ui.btn_deleteCurrentTemplate,
             self.ui.btn_removeSelectedRows,
             self.ui.btn_addNewRows,
@@ -75,12 +73,12 @@ class RecTaggerView:
     def setup_tableview(self):
         table = self.ui.tableView_customized
         # Alignment
-        table.verticalHeader().setDefaultAlignment(UIAlignments.RIGHT_CENTER)
+        table.verticalHeader().setDefaultAlignment(UIAlignments.LEFT_CENTER)
         
         # Display settings
         table.horizontalHeader().setVisible(False)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.verticalHeader().setDefaultSectionSize(50)
+        table.verticalHeader().setDefaultSectionSize(30)
         table.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.EditKeyPressed)
         table.setItemDelegate(CellEditDelegate())
         

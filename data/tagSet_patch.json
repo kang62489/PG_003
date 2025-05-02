@@ -1,6 +1,6 @@
 {
     "Config_0": {
-        "VALUE": {
+        "VALUE_0": {
             "OBJ": "60X",
             "EXC": "HLG",
             "LEVEL": "MAX",
@@ -11,7 +11,7 @@
         }
     },
     "Config_1": {
-        "VALUE": {
+        "VALUE_0": {
             "OBJ": "60X",
             "EXC": "LED_GREEN",
             "LEVEL": "LV8",
@@ -22,7 +22,7 @@
         }
     },
     "Config_2": {
-        "VALUE": {
+        "VALUE_0": {
             "OBJ": "60X",
             "EXC": "LED_BLUE",
             "LEVEL": "LV8",

@@ -1,0 +1,15 @@
+{
+    "VALUE_0":{
+        "PUFF": "",
+        "PUFF_CONC": "",
+        "PUFF_DURATION": "",
+        "PUFF_COUNTS": "",
+        "PUFF_INTERVAL": "",
+        "PUFF_PRESSURE": "",
+        "BATHED_IN": "",
+        "BATHED_CONC":"",
+        "TIME_FLOWED":"",
+        "STIMULATOR_PROTOCOL_NUMBER":"",
+        "ABF_SERIAL_NUMBER":""
+    }
+}

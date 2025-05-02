@@ -5,8 +5,13 @@
 QHeaderView::section {
     font-weight: bold;
     font-family: "Arial";
-    font-size: 16px;
+    font-size: 14px;
     color:blue;
+}
+
+QTableView {
+    font-family: "Arial";
+    font-size: 14px;
 }
 
 QScrollBar:vertical {
@@ -49,10 +54,6 @@ QGroupBox {
     font-weight: bold;
 }
 
-QTableView {
-    font-family: "Arial";
-    font-size: 14px;
-}
 
 QPushButton#btn_loadTemplate,
 QPushButton#btn_saveTemplate,

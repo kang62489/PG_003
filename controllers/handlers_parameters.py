@@ -2,6 +2,7 @@
 import os, json, glob
 import pandas as pd
 from datetime import datetime
+from tabulate import tabulate
 from pathlib import Path
 from PySide6.QtCore import Qt, QSize ,QModelIndex, QItemSelectionModel
 from PySide6.QtWidgets import (
@@ -283,36 +284,48 @@ class HandlersParameters:
             print("Delete Cancelled!")
     
     def moveUp(self):
-        if hasattr(self, "stackedSelectionModels"):
-            page = self.ui.sw_tags.currentIndex()
-            if self.stackedSelectionModels[page].hasSelection():
-                idx = self.stackedSelectionModels[page].currentIndex()
-                rowNumber = idx.row()
-                if (rowNumber-1>=0):
-                    self.stackedModels[page].moveRows(rowNumber, rowNumber - 1)
-                    new_index = self.stackedModels[page].index(rowNumber-1, idx.column())
-                    self.stackedSelectionModels[page].setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
-            else:
-                print("No selected row")
-            
-        else:
+        if not hasattr(self, "stackedSelectionModels"):
             print("Please load a tag set first!")
+            return
+        
+        page = self.ui.sw_tags.currentIndex()
+        selected_indexes = self.stackedSelectionModels[page].selectedIndexes()
+        if not selected_indexes:
+            print("No row is selected")
+            return
+        
+        # Get indices of selected rows
+        rows = sorted(set(index.row() for index in selected_indexes))
+        
+        # Move rows up
+        new_positions_of_moved_rows = self.stackedModels[page].moveRows(rows, -1)
+        # Reselect the moved rows
+        self.stackedSelectionModels[page].clearSelection()
+        for row in new_positions_of_moved_rows:
+            index = self.stackedModels[page].index(row, 0)
+            self.stackedSelectionModels[page].select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
             
     def moveDown(self):
-        if hasattr(self, "stackedSelectionModels"):
-            page = self.ui.sw_tags.currentIndex()
-            if self.stackedSelectionModels[page].hasSelection():
-                idx = self.stackedSelectionModels[page].currentIndex()
-                rowNumber = idx.row()
-                if (rowNumber+1 < self.stackedModels[page].rowCount(QModelIndex())):
-                    self.stackedModels[page].moveRows(rowNumber, rowNumber + 2)
-                    new_index = self.stackedModels[page].index(rowNumber+1, idx.column())
-                    self.stackedSelectionModels[page].setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
-            else:
-                print("No selected row")
-            
-        else:
+        if not hasattr(self, "stackedSelectionModels"):
             print("Please load a tag set first!")
+            return
+        
+        page = self.ui.sw_tags.currentIndex()
+        selected_indexes = self.stackedSelectionModels[page].selectedIndexes()
+        if not selected_indexes:
+            print("No row is selected")
+            return
+        
+        # Get indices of selected rows
+        rows = sorted(set(index.row() for index in selected_indexes))
+        
+        # Move rows up
+        new_positions_of_moved_rows = self.stackedModels[page].moveRows(rows, 1)
+        # Reselect the moved rows
+        self.stackedSelectionModels[page].clearSelection()
+        for row in new_positions_of_moved_rows:
+            index = self.stackedModels[page].index(row, 0)
+            self.stackedSelectionModels[page].select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
     
     def insert(self):
         if hasattr(self, "stackedSelectionModels"):
@@ -320,21 +333,19 @@ class HandlersParameters:
             if self.stackedSelectionModels[page].hasSelection():
                 idx = self.stackedSelectionModels[page].currentIndex()
                 rowNumber = idx.row()
-                self.w = dialog_insertProperties.InsertProp()
-                if self.w.exec() == QDialog.Accepted:
-                    print("Insert data:", self.w.addData)
-                    self.stackedModels[page].addRows(QModelIndex(), rowNumber, self.w.addData)
-                    new_index = self.stackedModels[page].index(rowNumber + self.w.addData.shape[0], self.w.addData.shape[1]-1)
+                self.dlg_insertion = dialog_insertProperties.InsertProp()
+                if self.dlg_insertion.exec() == QDialog.Accepted:
+                    self.stackedModels[page].addRows(QModelIndex(), rowNumber, self.dlg_insertion.dataToBeAdded)
+                    new_index = self.stackedModels[page].index(rowNumber + self.dlg_insertion.dataToBeAdded.shape[0], self.dlg_insertion.dataToBeAdded.shape[1]-1)
                     self.stackedSelectionModels[page].setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
                 else:
                     print("Cancel Insertion!")
             else:
                 rowNumber = self.stackedModels[page].rowCount(QModelIndex())-1
-                self.w = dialog_insertProperties.InsertProp()
-                if self.w.exec() == QDialog.Accepted:
-                    print("Insert data:", self.w.addData)
-                    self.stackedModels[page].addRows(QModelIndex(), rowNumber+2, self.w.addData)
-                    new_index = self.stackedModels[page].index(rowNumber + self.w.addData.shape[0], self.w.addData.shape[1]-1)
+                self.dlg_insertion = dialog_insertProperties.InsertProp()
+                if self.dlg_insertion.exec() == QDialog.Accepted:
+                    self.stackedModels[page].addRows(QModelIndex(), rowNumber+2, self.dlg_insertion.dataToBeAdded)
+                    new_index = self.stackedModels[page].index(rowNumber + self.dlg_insertion.dataToBeAdded.shape[0], self.dlg_insertion.dataToBeAdded.shape[1]-1)
                     self.stackedSelectionModels[page].setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
                 else:
                     print("Cancel Insertion!")

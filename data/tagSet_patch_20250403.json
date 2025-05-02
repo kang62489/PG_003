@@ -1,6 +1,6 @@
 {
     "Config_0": {
-        "VALUE": {
+        "VALUE_0": {
             "OBJ": "60X",
             "EXC": "HLG",
             "LEVEL": "LVMAX",
@@ -13,7 +13,7 @@
         }
     },
     "Config_1": {
-        "VALUE": {
+        "VALUE_0": {
             "OBJ": "60X",
             "EXC": "LED_YELLOW",
             "LEVEL": "LV6",
@@ -26,7 +26,7 @@
         }
     },
     "Config_2": {
-        "VALUE": {
+        "VALUE_0": {
             "OBJ": "60X",
             "EXC": "LED_BLUE",
             "LEVEL": "LV6",
@@ -39,7 +39,7 @@
         }
     },
     "Config_3": {
-        "VALUE": {
+        "VALUE_0": {
             "OBJ": "60X",
             "EXC": "LED_BLUE",
             "LEVEL": "LV6",
@@ -54,7 +54,7 @@
         }
     },
     "Config_4": {
-        "VALUE": {
+        "VALUE_0": {
             "OBJ": "60X",
             "EXC": "LED_BLUE",
             "LEVEL": "LV6",
@@ -68,7 +68,7 @@
         }
     },
     "Config_5": {
-        "VALUE": {
+        "VALUE_0": {
             "OBJ": "60X",
             "EXC": "LED_BLUE",
             "LEVEL": "LV6",
