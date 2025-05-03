@@ -6,6 +6,11 @@ dist/
 wheels/
 *.egg-info
 
+# Files for testing program
+rec_backups.json
+2025_05_03-0000.tif.rec
+2025_05_03-0001.tif.rec
+
 # Virtual environments
 .venv
 

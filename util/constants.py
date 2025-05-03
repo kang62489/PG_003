@@ -47,6 +47,7 @@ class UISizes:
 
     # Group Boxes
     GROUP_BOX_WIDTH = 150
+    GROUP_BOX_STATUS_HEIGHT = 100
 
 # UI Alignments
 @dataclass
@@ -56,12 +57,12 @@ class UIAlignments:
     LEFT_CENTER = Qt.AlignLeft | Qt.AlignVCenter
 
 # Regular Expressions
-SERIAL_NAME_REGEX = r"^\d{8}-\d{4}\.tif$"
+SERIAL_NAME_REGEX = r"^\d{4}_\d{2}_\d{2}-\d{4}\.tif$"
 
 # File Format Templates
 SERIAL_NAME_FORMAT = "{date}-{serial:04d}.tif"
 DATE_FORMAT = "%Y%m%d"
-DISPLAY_DATE_FORMAT = "%Y-%m-%d"
+DISPLAY_DATE_FORMAT = "%Y_%m_%d"
 
 # Default Values
 DEFAULTS = {

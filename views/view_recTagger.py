@@ -1,4 +1,5 @@
 # Modules
+import os
 from PySide6.QtWidgets import QHeaderView, QAbstractItemView, QButtonGroup
 from classes.customized_delegate import CellEditDelegate
 from datetime import datetime
@@ -6,6 +7,7 @@ from util.constants import (
     UISizes, 
     UIAlignments,
     MenuOptions,
+    BASE_DIR,
     DISPLAY_DATE_FORMAT,
     DEFAULTS
 )
@@ -39,7 +41,8 @@ class RecTaggerView:
     
     def setup_groupboxes(self):
         self.ui.groupBox_recBasic.setTitle(f"Experiment Date: {datetime.today().strftime(DISPLAY_DATE_FORMAT)}")
-    
+        self.ui.groupBox_status.setFixedHeight(UISizes.GROUP_BOX_STATUS_HEIGHT)
+
     def setup_radiobuttons(self):
         self.ui.radioBtnGroup_OBJ = QButtonGroup()
         self.ui.radioBtnGroup_OBJ.addButton(self.ui.radioBtn_10X)
@@ -52,24 +55,51 @@ class RecTaggerView:
         self.ui.lineEdit_EXPO.setText(DEFAULTS["EXPOSURE_TIME"])
         self.ui.lineEdit_FRAMES.setText(DEFAULTS["FRAMES"])
         self.ui.lineEdit_FPS.setText(DEFAULTS["FPS"])
+        
+        self.ui.lineEdit_recDir.setText(os.path.join(BASE_DIR))
+        
+        self.ui.lineEdit_filenameSN.setFixedHeight(UISizes.LINE_EDIT_HEIGHT)
+        self.ui.lineEdit_filenameSN.setAlignment(UIAlignments.CENTER)
+        self.ui.lineEdit_filenameSN.setPlaceholderText("YYYY_MM_DD-0000")
+        self.ui.lineEdit_filenameSN.setText(f"{datetime.today().strftime(DISPLAY_DATE_FORMAT)}-{DEFAULTS['SERIAL']:04d}.tif")
+        
+        
+    
+    def setup_checkboxes(self):
+        self.ui.checkBox_addCustomized.setChecked(False)
     
     def setup_pushbuttons(self):
-        buttons = [
+        buttons_for_template = [
             self.ui.btn_saveTemplate,
             self.ui.btn_deleteCurrentTemplate,
+        ]
+        
+        buttons_for_editting =[
             self.ui.btn_removeSelectedRows,
             self.ui.btn_addNewRows,
             self.ui.btn_moveUp,
             self.ui.btn_moveDown
         ]
         
-        for btn in buttons[0:4]:
+        buttons_for_SN = [
+            self.ui.btn_increaseSN,
+            self.ui.btn_decreaseSN,
+            self.ui.btn_resetSN,
+            self.ui.btn_copyFilenameSN
+        ]
+        
+        for btn in buttons_for_template:
             btn.setFixedSize(UISizes.BUTTON_SMALL)
+                
+        for btn in buttons_for_editting:
+            btn.setFixedSize(UISizes.BUTTON_SMALL)
+            
+        for btn in buttons_for_SN:
+            btn.setFixedSize(UISizes.BUTTON_TINY)
             
         # Initial button states
         self.ui.btn_deleteCurrentTemplate.setEnabled(False)
     
-        
     def setup_tableview(self):
         table = self.ui.tableView_customized
         # Alignment
@@ -96,3 +126,4 @@ class RecTaggerView:
         
         self.ui.spinBox_AT.setValue(1)
         self.ui.spinBox_AT.setRange(1, 100)
+    

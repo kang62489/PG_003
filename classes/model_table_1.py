@@ -12,11 +12,11 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 class TableModel(QAbstractTableModel):
     """Create a table model for add customized properties"""
+    
     def __init__(self, data=None, auto_calc=True):
         super().__init__()
         self._data = data if data is not None else pd.DataFrame()
         self._auto_calc = auto_calc
-
         
     def data(self, index, role):
         columns = list(self._data.columns)
@@ -155,6 +155,7 @@ class TableModel(QAbstractTableModel):
                     self._data.drop(columns=col, inplace=True)
         
         self.layoutChanged.emit()
+        
     
     def addCols(self, SourceParent, colNumber, count):
         columnWidth = len(self._data.columns.tolist())

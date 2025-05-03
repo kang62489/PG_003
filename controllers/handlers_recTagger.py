@@ -1,7 +1,9 @@
 import os, json, glob
 import pandas as pd
+from datetime import datetime
 from pathlib import Path
-from PySide6.QtCore import QModelIndex, QItemSelectionModel
+from PySide6.QtCore import QModelIndex, QItemSelectionModel, QRegularExpression
+from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import QDialog, QApplication
 from rich import print
 from tabulate import tabulate
@@ -10,11 +12,14 @@ from classes import (
     model_table_1,
     dialog_confirm,
     dialog_insertProperties,
-    dialog_saveTemplate
+    dialog_saveTemplate,
+    dialog_getPath
     )
 from util.constants import (
     MODELS_DIR,
-    BASE_DIR,
+    DATE_FORMAT,
+    DISPLAY_DATE_FORMAT,
+    SERIAL_NAME_REGEX
     )
 
 class RecTaggerHandlers:
@@ -27,7 +32,16 @@ class RecTaggerHandlers:
         self.model_cb_01 = model_list_1.ListModel()
         self.ui.comboBox_tagTemplates.setModel(self.model_cb_01)
         
+        # Set validtor for cheking filename-SN.tif
+        regex = QRegularExpression(SERIAL_NAME_REGEX)
+        self.validator = QRegularExpressionValidator(regex)
+        self.dateStr = datetime.today().strftime(DISPLAY_DATE_FORMAT)
+        
+        self.directory = self.ui.lineEdit_recDir.text()
+        self.recBackups = dict()
+        
         self.connect_signals()
+        self.updateTagOutput()
         self.reloadMenuList()
         self.loadTemplate()
         
@@ -45,6 +59,11 @@ class RecTaggerHandlers:
         self.ui.spinBox_SLICE.valueChanged.connect(self.updateTagOutput)
         self.ui.comboBox_LOC_TYPES.activated.connect(self.updateTagOutput)
         self.ui.spinBox_AT.valueChanged.connect(self.updateTagOutput)
+        self.ui.checkBox_addCustomized.stateChanged.connect(self.updateTagOutput)
+        
+        # Emit signal to update tag output when the table in the QTableView (tableView_customized) is changed
+        self.model_tableView_customized.dataChanged.connect(self.updateTagOutput)
+        self.model_tableView_customized.layoutChanged.connect(self.updateTagOutput)
         
         self.ui.comboBox_tagTemplates.activated.connect(self.loadTemplate)
         self.ui.btn_saveTemplate.clicked.connect(self.saveTemplate)
@@ -53,13 +72,70 @@ class RecTaggerHandlers:
         self.ui.btn_removeSelectedRows.clicked.connect(self.removeSelectedRows)
         self.ui.btn_moveUp.clicked.connect(self.moveRowsUp)
         self.ui.btn_moveDown.clicked.connect(self.moveRowsDown)
-    
+        
+        self.ui.lineEdit_recDir.textChanged.connect(self.isRecDirectoryValid)
+        self.ui.btn_browse.clicked.connect(self.browseRecDirectory)
+        
+        self.ui.lineEdit_filenameSN.textChanged.connect(self.isFilenameSNValid)
+        
+        self.ui.btn_increaseSN.clicked.connect(self.increaseSN)
+        self.ui.btn_decreaseSN.clicked.connect(self.decreaseSN)
+        self.ui.btn_resetSN.clicked.connect(self.resetSN)
+        self.ui.btn_copyFilenameSN.clicked.connect(self.copyFilenameSN)
+        
+        self.ui.btn_writeToRec.clicked.connect(self.writeToRec)
+        self.ui.btn_loadFromRec.clicked.connect(self.loadFromRec)
+        self.ui.btn_recoverRec.clicked.connect(self.recoverRec)
+        
     def updateTagOutput(self):
-        print(f"Selected objective: {self.ui.radioBtnGroup_OBJ.checkedButton().text()}")
+        self.clearTagOutput()
+        props = [
+            "OBJ",
+            "EXC",
+            "LEVEL",
+            "EXPO",
+            "EMI",
+            "FRAMES",
+            "FPS",
+            "CAM_TRIG_MODE",
+            "SLICE",
+            "AT",
+        ]
+        values = [
+            self.ui.radioBtnGroup_OBJ.checkedButton().text(),
+            self.ui.comboBox_EXC.currentText(),
+            self.ui.lineEdit_LEVEL.text(),
+            self.ui.lineEdit_EXPO.text() + self.ui.comboBox_EXPO_UNITS.currentText(),
+            self.ui.comboBox_EMI.currentText(),
+            self.ui.lineEdit_FRAMES.text(),
+            self.ui.lineEdit_FPS.text(),
+            self.ui.comboBox_CAM_TRIG_MODES.currentText(),
+            self.ui.spinBox_SLICE.value(),
+            self.ui.comboBox_LOC_TYPES.currentText() + str(self.ui.spinBox_AT.value())
+        ]
+        
+        if self.ui.checkBox_addCustomized.isChecked():
+            for prop, val in zip(self.model_tableView_customized._data.index.tolist(), self.model_tableView_customized._data["VALUE_0"].tolist()):
+                props.append(prop)
+                values.append(val)
+        
+        for prop, val in zip(props, values):
+            self.ui.textEdit_tags.append(f"{prop}: {val}")
     
+    def clearTagOutput(self):
+        self.ui.textEdit_tags.clear()
+        
     def reloadMenuList(self):
         templateFiles = [os.path.basename(i) for i in glob.glob(os.path.join(MODELS_DIR,'template_*.json'))]
         templateList = [Path(tempName.replace("template_","")).stem for tempName in templateFiles]
+        for file in templateList:
+            if file == "patch_default":
+                templateList.remove(file)
+                templateList.insert(0, file)
+            elif file == "puff_default":
+                templateList.remove(file)
+                templateList.insert(1, file)
+        
         with open(MODELS_DIR / "cb_list_01.json", "w") as f:
             json.dump(templateList, f)
         
@@ -104,7 +180,6 @@ class RecTaggerHandlers:
                 self.ui.comboBox_tagTemplates.setCurrentIndex(idx)
                 break
 
-
     def deleteTemplate(self):
         filename = self.model_cb_01.selections[self.ui.comboBox_tagTemplates.currentIndex()]
         self.deleteCheck = dialog_confirm.Confirm(title="Checking...", msg="Delete current template?")
@@ -144,7 +219,6 @@ class RecTaggerHandlers:
         new_index = self.model_tableView_customized.index(insert_from_this_row + self.dlg_insertion.dataToBeAdded.shape[0], self.dlg_insertion.dataToBeAdded.shape[1]-1)
         self.sm_customized.setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
         
-
     def removeSelectedRows(self):
         selected_indexes = self.sm_customized.selectedIndexes()
         if selected_indexes == []:
@@ -188,3 +262,179 @@ class RecTaggerHandlers:
         for row in new_positions_of_moved_rows:
             index = self.model_tableView_customized.index(row, 0)
             self.sm_customized.select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
+            
+    def browseRecDirectory(self):
+        self.dlg_requestRecDirectory = dialog_getPath.GetPath()
+        self.directory = self.dlg_requestRecDirectory.get_path()
+        if self.directory == "":
+            self.ui.lineEdit_recDir.setText("No selected directory")
+        else:
+            self.ui.lineEdit_recDir.setText(self.directory)
+            
+    def isRecDirectoryValid(self):
+        self.directory = self.ui.lineEdit_recDir.text()
+        prefix_text = self.ui.lbl_recDir.text()
+        if not os.path.isdir(self.directory):
+            dirCheckText = prefix_text + " (Invalid)"
+            self.ui.lbl_recDir.setText(dirCheckText)
+            self.ui.lbl_recDir.setStyleSheet("color: red;")
+        else:
+            direCheckText = prefix_text + " (Valid)"
+            self.ui.lbl_recDir.setText(direCheckText)
+            self.ui.lbl_recDir.setStyleSheet("color: green;")
+    
+    def isFilenameSNValid(self):
+        self.ui.lineEdit_filenameSN.setValidator(self.validator)
+        if self.ui.lineEdit_filenameSN.hasAcceptableInput():
+            self.ui.lineEdit_filenameSN.setStyleSheet("QLineEdit { color: green; }")
+            self.ui.btn_copyFilenameSN.setEnabled(True)
+            self.ui.lineEdit_filenameSN.setValidator(None)
+        else:
+            self.ui.lineEdit_filenameSN.setStyleSheet("QLineEdit { color: red; }")
+            self.ui.btn_copyFilenameSN.setEnabled(False)
+            self.ui.lineEdit_filenameSN.setValidator(None)
+        
+    def increaseSN(self):
+        latest_value = (self.ui.lineEdit_filenameSN.text().split("-")[1].split(".")[0])
+        self.Serial = int(latest_value)
+        if self.Serial < 9999:
+            self.Serial += 1
+            self.ui.lineEdit_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+        elif self.Serial == 9999:
+            self.Serial = 0
+            self.ui.lineEdit_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+            
+    def decreaseSN(self):
+        latest_value = (self.ui.lineEdit_filenameSN.text().split("-")[1].split(".")[0])
+        self.Serial = int(latest_value)
+        if self.Serial > 0:
+            self.Serial -= 1
+            self.ui.lineEdit_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+        elif self.Serial == 0:
+            self.Serial = 0
+            self.ui.lineEdit_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+    
+    def resetSN(self):
+        self.Serial = 0
+        self.ui.lineEdit_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+    
+    def copyFilenameSN(self):
+        QApplication.clipboard().setText(self.ui.lineEdit_filenameSN.text())
+        
+    def scan_rec_commments(self, rec_filepath):
+        with open(rec_filepath, mode="r", encoding="utf-16-LE") as f:
+            original_content = f.read().splitlines()
+            write_from_line = 0
+            keep_to_line = 0
+            for line_num, line_content in enumerate(original_content):
+                if 'Comment:' in line_content:
+                    keep_to_line = line_num + 1
+                    write_from_line = line_num + 2
+                    break
+            
+            tags = original_content[write_from_line:]
+            preserved_content = original_content[:keep_to_line]
+            preserved_content.append("")
+    
+        return tags, preserved_content, original_content
+    
+    def backup_rec_contents(self, rec_directory, rec_filename, contents_to_be_backupped):
+        # Backup before writing (can be recovered)
+        if self.rec_filename in self.recBackups.keys():
+            self.recBackups[rec_filename].append(contents_to_be_backupped)
+        else:
+            self.recBackups[rec_filename] = [contents_to_be_backupped]
+    
+        backup_path=os.path.join(rec_directory, f"rec_backups.json")
+        with open(backup_path, mode="w") as f:
+            json.dump(self.recBackups, f, indent=4)
+            self.ui.textBrowser_status.append("Backup saved!")
+        
+    def writeToRec(self):
+        # Prepare filename and path
+        self.rec_filename = self.ui.lineEdit_filenameSN.text().replace(".tif", ".tif.rec")
+        self.rec_filepath = os.path.join(self.directory, self.rec_filename)
+        
+        # Check if file exists
+        if not os.path.isfile(self.rec_filepath):
+            self.ui.textBrowser_status.setPlainText(f"{self.rec_filename} is not found")
+            return
+        
+        self.ui.textBrowser_status.setPlainText(f"{self.rec_filename} is found")
+        
+        # Confirm write operation
+        dlg_checkWriteTags = dialog_confirm.Confirm(
+            title="Checking...", 
+            msg=f"Write tags to the {self.rec_filename}?"
+        )
+        
+        if not dlg_checkWriteTags.exec():
+            self.ui.textBrowser_status.append("Write Cancelled!")
+            return
+        
+        # Scan existing comments
+        self.tags_read, self.preserved_content, self.original_content = self.scan_rec_commments(self.rec_filepath)
+        self.tags_to_be_written = self.ui.textEdit_tags.toPlainText().splitlines()
+        print("tags read from rec:",self.tags_read)
+        print("contents to be preserved:",self.preserved_content)
+        print("tags to be written:",self.tags_to_be_written)
+
+        # Handle case with existing tags
+        if self.tags_read:
+            dlg_checkOverwriteTags = dialog_confirm.Confirm(
+                title="Checking...", 
+                msg="Overwrite existing tags?"
+            )
+            
+            if not dlg_checkOverwriteTags.exec():
+                self.ui.textBrowser_status.append("Overwrite Cancelled!")
+                return
+        # Backup before writing (can be recovered)
+        self.backup_rec_contents(self.directory, self.rec_filename, self.original_content)
+        
+        # Write tags to file (either no existing tags or overwrite confirmed)
+        contents_to_be_written = self.preserved_content + self.tags_to_be_written
+        print("contents_to_be_written:",contents_to_be_written)
+        with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
+            f.write("\n".join(contents_to_be_written))
+        
+        self.ui.textBrowser_status.append(f"Tags were written to {self.rec_filename}!")
+
+    def loadFromRec(self):
+        self.rec_filename = self.ui.lineEdit_filenameSN.text().replace(".tif", ".tif.rec")
+        self.rec_filepath = os.path.join(self.directory, self.rec_filename)
+        
+        if not os.path.isfile(self.rec_filepath):    
+            self.ui.textBrowser_status.setPlainText(f"{self.rec_filename} is not found")
+            return
+        else:
+            self.ui.textBrowser_status.setPlainText(f"{self.rec_filename} is found")
+        
+        dlg_checkLoadTags = dialog_confirm.Confirm(title="Checking...", msg=f"Load tags from the {self.rec_filename}?")
+        if not dlg_checkLoadTags.exec():
+            self.ui.textBrowser_status.append("Load Cancelled!")
+            return
+        
+        self.ui.textBrowser_status.append(f"Tags were loaded from {self.rec_filename}!")
+        self.ui.textEdit_tags.clear()
+        self.tags_read, _, _ = self.scan_rec_commments(self.rec_filepath)
+        self.ui.textEdit_tags.setPlainText("\n".join(self.tags_read))
+
+    def recoverRec(self):
+        recovery_filepath = os.path.join(self.directory, "rec_backups.json")
+        if not os.path.isfile(recovery_filepath):
+            self.ui.textBrowser_status.setPlainText("No backup found!")
+            return
+        with open(recovery_filepath, mode="r") as f:
+            self.recBackups = json.load(f)
+        
+        dlg_checkRecover = dialog_confirm.Confirm(title="Checking...", msg=f"Recover {self.rec_filename} to the original state?")
+        if not dlg_checkRecover.exec():
+            self.ui.textBrowser_status.append("Recover Cancelled!")
+            return
+        
+        with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
+            f.write("\n".join(self.recBackups[self.rec_filename][0]))
+            self.ui.textBrowser_status.append(f"{self.rec_filename} was recovered!")
+        
+        self.loadFromRec()

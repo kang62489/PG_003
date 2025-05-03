@@ -68,7 +68,8 @@ QPushButton#btn_moveDown {
     font-weight: bold;
 }
 
-QLineEdit#le_serialName {
+QLineEdit#le_serialName,
+QLineEdit#lineEdit_filenameSN {
     font-family: "Arial";
     font-size: 24px;
     font-weight: bold;

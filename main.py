@@ -43,6 +43,9 @@ class MainPanel:
         # Set default tab index
         self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])
         
+        # Remove old tagger
+        self.ui.tabs.removeTab(2)
+        
         # Connect signals
         self.handlers_expinfo = RecTaggerHandlers(self.ui)
         self.handlers_parameters = HandlersParameters(self.ui)
