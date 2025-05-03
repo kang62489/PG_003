@@ -46,8 +46,9 @@ class UISizes:
     LINE_EDIT_HEIGHT = 60
 
     # Group Boxes
-    GROUP_BOX_WIDTH = 150
-    GROUP_BOX_STATUS_HEIGHT = 100
+    GROUP_BOX_WIDTH_LEFT_COLUMN = 400
+    GROUP_BOX_WIDTH_RIGHT_COLUMN = 400
+    GROUP_BOX_STATUS_HEIGHT = 120
 
 # UI Alignments
 @dataclass
@@ -67,7 +68,7 @@ DISPLAY_DATE_FORMAT = "%Y_%m_%d"
 # Default Values
 DEFAULTS = {
     "SERIAL": 0,
-    "TAB_INDEX": 1,
+    "TAB_INDEX": 0,
     "LIGHT_INENSITY": "LV6",
     "EXPOSURE_TIME": "40",
     "FRAMES": "1200p",

@@ -37,7 +37,6 @@ class RecTaggerHandlers:
         self.validator = QRegularExpressionValidator(regex)
         self.dateStr = datetime.today().strftime(DISPLAY_DATE_FORMAT)
         
-        self.directory = self.ui.lineEdit_recDir.text()
         self.recBackups = dict()
         
         self.connect_signals()
@@ -348,7 +347,7 @@ class RecTaggerHandlers:
         backup_path=os.path.join(rec_directory, f"rec_backups.json")
         with open(backup_path, mode="w") as f:
             json.dump(self.recBackups, f, indent=4)
-            self.ui.textBrowser_status.append("Backup saved!")
+            self.ui.textBrowser_status.append("[info] Backup saved!")
         
     def writeToRec(self):
         # Prepare filename and path
@@ -357,10 +356,10 @@ class RecTaggerHandlers:
         
         # Check if file exists
         if not os.path.isfile(self.rec_filepath):
-            self.ui.textBrowser_status.setPlainText(f"{self.rec_filename} is not found")
+            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is not found")
             return
         
-        self.ui.textBrowser_status.setPlainText(f"{self.rec_filename} is found")
+        self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is found")
         
         # Confirm write operation
         dlg_checkWriteTags = dialog_confirm.Confirm(
@@ -369,7 +368,7 @@ class RecTaggerHandlers:
         )
         
         if not dlg_checkWriteTags.exec():
-            self.ui.textBrowser_status.append("Write Cancelled!")
+            self.ui.textBrowser_status.append("[info] Write Cancelled!")
             return
         
         # Scan existing comments
@@ -387,7 +386,7 @@ class RecTaggerHandlers:
             )
             
             if not dlg_checkOverwriteTags.exec():
-                self.ui.textBrowser_status.append("Overwrite Cancelled!")
+                self.ui.textBrowser_status.append("[info] Overwrite Cancelled!")
                 return
         # Backup before writing (can be recovered)
         self.backup_rec_contents(self.directory, self.rec_filename, self.original_content)
@@ -398,43 +397,52 @@ class RecTaggerHandlers:
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
             f.write("\n".join(contents_to_be_written))
         
-        self.ui.textBrowser_status.append(f"Tags were written to {self.rec_filename}!")
+        self.ui.textBrowser_status.append(f"[info] Tags were written to {self.rec_filename}!")
 
     def loadFromRec(self):
+        self.directory = self.ui.lineEdit_recDir.text()
         self.rec_filename = self.ui.lineEdit_filenameSN.text().replace(".tif", ".tif.rec")
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
         
         if not os.path.isfile(self.rec_filepath):    
-            self.ui.textBrowser_status.setPlainText(f"{self.rec_filename} is not found")
+            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is not found")
             return
         else:
-            self.ui.textBrowser_status.setPlainText(f"{self.rec_filename} is found")
+            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is found")
         
-        dlg_checkLoadTags = dialog_confirm.Confirm(title="Checking...", msg=f"Load tags from the {self.rec_filename}?")
-        if not dlg_checkLoadTags.exec():
-            self.ui.textBrowser_status.append("Load Cancelled!")
-            return
-        
-        self.ui.textBrowser_status.append(f"Tags were loaded from {self.rec_filename}!")
+        self.ui.textBrowser_status.append(f"[info] Tags were loaded from {self.rec_filename}!")
         self.ui.textEdit_tags.clear()
         self.tags_read, _, _ = self.scan_rec_commments(self.rec_filepath)
         self.ui.textEdit_tags.setPlainText("\n".join(self.tags_read))
 
     def recoverRec(self):
+        self.directory = self.ui.lineEdit_recDir.text()
+        self.rec_filename = self.ui.lineEdit_filenameSN.text().replace(".tif", ".tif.rec")
+        self.rec_filepath = os.path.join(self.directory, self.rec_filename)
+        
+        if not os.path.isfile(self.rec_filepath):    
+            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is not found")
+            return
+        else:
+            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is found")
+        
         recovery_filepath = os.path.join(self.directory, "rec_backups.json")
         if not os.path.isfile(recovery_filepath):
-            self.ui.textBrowser_status.setPlainText("No backup found!")
+            self.ui.textBrowser_status.append("[info] No backup found!")
             return
-        with open(recovery_filepath, mode="r") as f:
-            self.recBackups = json.load(f)
-        
+        else:
+            with open(recovery_filepath, mode="r") as f:
+                self.recBackups = json.load(f)
+            self.ui.textBrowser_status.append("[info] Backup Loaded!")
+    
         dlg_checkRecover = dialog_confirm.Confirm(title="Checking...", msg=f"Recover {self.rec_filename} to the original state?")
         if not dlg_checkRecover.exec():
-            self.ui.textBrowser_status.append("Recover Cancelled!")
+            self.ui.textBrowser_status.append("[info] Recover Cancelled!")
             return
         
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
-            f.write("\n".join(self.recBackups[self.rec_filename][0]))
-            self.ui.textBrowser_status.append(f"{self.rec_filename} was recovered!")
-        
-        self.loadFromRec()
+            if self.rec_filename in self.recBackups.keys():
+                f.write("\n".join(self.recBackups[self.rec_filename][0]))
+                self.ui.textBrowser_status.append(f"[info] {self.rec_filename} was recovered!")
+            else:
+                self.ui.textBrowser_status.append(f"[info] Recovery failed! {self.rec_filename} was not found in the backup!")

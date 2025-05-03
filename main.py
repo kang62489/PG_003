@@ -6,12 +6,10 @@ from PySide6.QtUiTools import QUiLoader
 
 from views import (
     RecTaggerView,
-    ParametersView
 )
 
 from controllers import (
     RecTaggerHandlers,
-    HandlersParameters
     )
 
 from util.constants import (
@@ -38,17 +36,12 @@ class MainPanel:
         
         # Initialize tab managers
         RecTaggerView(self.ui, self)
-        ParametersView(self.ui, self)
         
         # Set default tab index
         self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])
         
-        # Remove old tagger
-        self.ui.tabs.removeTab(2)
-        
         # Connect signals
         self.handlers_expinfo = RecTaggerHandlers(self.ui)
-        self.handlers_parameters = HandlersParameters(self.ui)
 
 app = QApplication(sys.argv)
 window = MainPanel()

@@ -41,7 +41,12 @@ class RecTaggerView:
     
     def setup_groupboxes(self):
         self.ui.groupBox_recBasic.setTitle(f"Experiment Date: {datetime.today().strftime(DISPLAY_DATE_FORMAT)}")
+        self.ui.groupBox_recBasic.setFixedWidth(UISizes.GROUP_BOX_WIDTH_LEFT_COLUMN)
+        self.ui.groupBox_recCustomized.setFixedWidth(UISizes.GROUP_BOX_WIDTH_LEFT_COLUMN)
+        
+        self.ui.groupBox_tagOutput.setFixedWidth(UISizes.GROUP_BOX_WIDTH_RIGHT_COLUMN)
         self.ui.groupBox_status.setFixedHeight(UISizes.GROUP_BOX_STATUS_HEIGHT)
+        
 
     def setup_radiobuttons(self):
         self.ui.radioBtnGroup_OBJ = QButtonGroup()
@@ -63,8 +68,6 @@ class RecTaggerView:
         self.ui.lineEdit_filenameSN.setPlaceholderText("YYYY_MM_DD-0000")
         self.ui.lineEdit_filenameSN.setText(f"{datetime.today().strftime(DISPLAY_DATE_FORMAT)}-{DEFAULTS['SERIAL']:04d}.tif")
         
-        
-    
     def setup_checkboxes(self):
         self.ui.checkBox_addCustomized.setChecked(False)
     

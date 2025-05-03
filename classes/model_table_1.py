@@ -156,7 +156,6 @@ class TableModel(QAbstractTableModel):
         
         self.layoutChanged.emit()
         
-    
     def addCols(self, SourceParent, colNumber, count):
         columnWidth = len(self._data.columns.tolist())
         rowNames = self._data.index.tolist()

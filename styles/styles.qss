@@ -1,17 +1,50 @@
-/* Author: Kang */
-/* Last Update: 2025-Jan-23 */
-/* Usage: to set the stylesheet of UIs in metadata generator */
-/* style.qss */
+QGroupBox {
+    font-family: "Calibri";
+    font-size: 18px;
+    font-weight: bold;
+}
+
+QLabel {
+    font-family: "Calibri";
+    font-size: 16px;
+    font-weight: bold;
+}
+
+QRadioButton {
+    font-family: "Calibri";
+    font-size: 16px;
+}
+
+QComboBox{
+    font-family: "Calibri";
+    font-size: 16px;
+}
+
+QLineEdit#lineEdit_LEVEL,
+QLineEdit#lineEdit_EXPO,
+QLineEdit#lineEdit_FRAMES,
+QLineEdit#lineEdit_FPS,
+QLineEdit#lineEdit_recDir {
+    font-family: "Calibri";
+    font-size: 16px;
+}
+
+QSpinBox {
+    font-family: "Calibri";
+    font-size: 16px;
+}
+
 QHeaderView::section {
     font-weight: bold;
-    font-family: "Arial";
+    font-family: "Calibri";
     font-size: 14px;
     color:blue;
 }
 
 QTableView {
-    font-family: "Arial";
+    font-family: "Calibri";
     font-size: 14px;
+    font-weight: bold;
 }
 
 QScrollBar:vertical {
@@ -21,84 +54,50 @@ QScrollBar:vertical {
 QScrollBar:horizontal {
     height: 30px;
 }
-QLabel {
-    font-family: "Arial";
-    font-size: 14px;
-    font-weight: bold;
-}
 
 
-QComboBox,
 QPushButton {
-    font-family: "Arial";
-    font-size: 14px;
-}
-
-QLabel#lbl_expInfo {
+    font-family: "Calibri";
+    font-size: 16px;
     font-weight: bold;
 }
 
-QPushButton#btn_deleteTagSet,
 QPushButton#btn_deleteCurrentTemplate {
     color: red;
 }
 
-QPushButton#btn_deleteTagSet:disabled,
 QPushButton#btn_deleteCurrentTemplate:disabled{
     color: gray;
 }
 
-QGroupBox {
-    font-family: "Arial";
-    font-size: 12px;
-    font-weight: bold;
-}
 
-
-QPushButton#btn_loadTemplate,
-QPushButton#btn_saveTemplate,
-QPushButton#btn_newTemplate,
-QPushButton#btn_deleteCurrentTemplate,
-QPushButton#btn_addNewRows,
-QPushButton#btn_removeSelectedRows,
-QPushButton#btn_moveUp,
-QPushButton#btn_moveDown {
-    font-family: "Arial";
-    font-size: 18px;
-    font-weight: bold;
-}
-
-QLineEdit#le_serialName,
 QLineEdit#lineEdit_filenameSN {
-    font-family: "Arial";
-    font-size: 24px;
+    font-family: "Calibri";
+    font-size: 20px;
     font-weight: bold;
     font-style: italic;
-    color: purple;
-}
-
-QTextEdit#te_clipboard {
-    font-family: "Arial";
-    font-size: 16px;
-    font-weight: bold;
-    font-style: italic;
-    color: purple;
-}
-
-QPushButton#btn_copyTag {
-    font-family: "Arial";
-    font-weight: bold;
-    color: purple;
-}
-
-QPushButton#btn_copySerial:enabled {
-    font-family: "Arial";
-    font-weight: bold;
     color: green;
 }
 
-QPushButton#btn_copySerial:disabled {
-    font-family: "Arial";
-    font-weight: bold;
+QPushButton#btn_copyFilenameSN:enabled {
+    color: green;
+}
+
+QPushButton#btn_copyFilenameSN:disabled {
     color: gray;
+}
+
+QTextBrowser {
+    font-family: "Calibri";
+    font-size: 16px;
+    font-weight: bold;
+    color: yellow;
+    background-color: black;
+}
+
+QTextEdit#textEdit_tags {
+    font-family: "Calibri";
+    font-size: 16px;
+    font-weight: bold;
+    color: purple;
 }

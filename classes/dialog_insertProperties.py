@@ -132,7 +132,6 @@ class InsertProp(QDialog):
             
             self.btn_ok.setDefault(True)
                     
-    
     def ok(self):
         # Get the input data
         self.toBeAddProperties = []
