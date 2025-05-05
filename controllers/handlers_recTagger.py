@@ -6,7 +6,6 @@ from PySide6.QtCore import QModelIndex, QItemSelectionModel, QRegularExpression
 from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import QDialog, QApplication
 from rich import print
-from tabulate import tabulate
 from classes import (
     model_list_1,
     model_table_1,
@@ -17,7 +16,6 @@ from classes import (
     )
 from util.constants import (
     MODELS_DIR,
-    DATE_FORMAT,
     DISPLAY_DATE_FORMAT,
     SERIAL_NAME_REGEX
     )
@@ -25,12 +23,12 @@ from util.constants import (
 class RecTaggerHandlers:
     def __init__(self, ui):
         self.ui = ui
-        self.model_tableView_customized = model_table_1.TableModel(auto_calc=False)
+        self.model_tableView_customized = model_table_1.TableModel()
         self.ui.tableView_customized.setModel(self.model_tableView_customized)
         self.sm_customized = self.ui.tableView_customized.selectionModel()
 
-        self.model_cb_01 = model_list_1.ListModel()
-        self.ui.comboBox_tagTemplates.setModel(self.model_cb_01)
+        self.model_menuList_templates = model_list_1.ListModel()
+        self.ui.comboBox_tagTemplates.setModel(self.model_menuList_templates)
         
         # Set validtor for cheking filename-SN.tif
         regex = QRegularExpression(SERIAL_NAME_REGEX)
@@ -41,7 +39,7 @@ class RecTaggerHandlers:
         
         self.connect_signals()
         self.updateTagOutput()
-        self.reloadMenuList()
+        self.reloadMenuList_templates()
         self.loadTemplate()
         
     def connect_signals(self):
@@ -124,7 +122,7 @@ class RecTaggerHandlers:
     def clearTagOutput(self):
         self.ui.textEdit_tags.clear()
         
-    def reloadMenuList(self):
+    def reloadMenuList_templates(self):
         templateFiles = [os.path.basename(i) for i in glob.glob(os.path.join(MODELS_DIR,'template_*.json'))]
         templateList = [Path(tempName.replace("template_","")).stem for tempName in templateFiles]
         for file in templateList:
@@ -135,14 +133,14 @@ class RecTaggerHandlers:
                 templateList.remove(file)
                 templateList.insert(1, file)
         
-        with open(MODELS_DIR / "cb_list_01.json", "w") as f:
-            json.dump(templateList, f)
+        with open(MODELS_DIR / "menuList_templates.json", "w") as f:
+            json.dump(templateList, f, indent=4)
         
-        self.model_cb_01.updateList(templateList)
-        self.model_cb_01.layoutChanged.emit()
+        self.model_menuList_templates.updateList(templateList)
+        self.model_menuList_templates.layoutChanged.emit()
         
     def loadTemplate(self):
-        filename = self.model_cb_01.selections[self.ui.comboBox_tagTemplates.currentIndex()]
+        filename = self.model_menuList_templates.list_of_options[self.ui.comboBox_tagTemplates.currentIndex()]
         self.ui.btn_deleteCurrentTemplate.setEnabled(False)
         
         if filename not in ["patch_default", "puff_default"] :
@@ -171,21 +169,22 @@ class RecTaggerHandlers:
         self.saveDialog.savefile(os.path.join(MODELS_DIR), self.model_tableView_customized._data)
         
         # reload the menu list
-        self.reloadMenuList()
+        self.reloadMenuList_templates()
         
         # set the QComboBox display the saved template
-        for idx, item in enumerate(self.model_cb_01.selections):
+        for idx, item in enumerate(self.model_menuList_templates.list_of_options):
             if item == self.saveDialog.lineEdit_filename.text():
                 self.ui.comboBox_tagTemplates.setCurrentIndex(idx)
+                self.loadTemplate()
                 break
 
     def deleteTemplate(self):
-        filename = self.model_cb_01.selections[self.ui.comboBox_tagTemplates.currentIndex()]
+        filename = self.model_menuList_templates.list_of_options[self.ui.comboBox_tagTemplates.currentIndex()]
         self.deleteCheck = dialog_confirm.Confirm(title="Checking...", msg="Delete current template?")
         
         if self.deleteCheck.exec():
             os.remove(os.path.join(MODELS_DIR,"template_{}.json".format(filename)))
-            self.reloadMenuList()
+            self.reloadMenuList_templates()
             self.clearQTableView(self.model_tableView_customized)
             self.ui.btn_deleteCurrentTemplate.setEnabled(False)
         else:
@@ -276,7 +275,7 @@ class RecTaggerHandlers:
         if not os.path.isdir(self.directory):
             dirCheckText = prefix_text + " (Invalid)"
             self.ui.lbl_recDir.setText(dirCheckText)
-            self.ui.lbl_recDir.setStyleSheet("color: red;")
+            self.ui.lbl_recDir.setStyleSheet("color: tomato;")
         else:
             direCheckText = prefix_text + " (Valid)"
             self.ui.lbl_recDir.setText(direCheckText)
@@ -289,11 +288,12 @@ class RecTaggerHandlers:
             self.ui.btn_copyFilenameSN.setEnabled(True)
             self.ui.lineEdit_filenameSN.setValidator(None)
         else:
-            self.ui.lineEdit_filenameSN.setStyleSheet("QLineEdit { color: red; }")
+            self.ui.lineEdit_filenameSN.setStyleSheet("QLineEdit { color: tomato; }")
             self.ui.btn_copyFilenameSN.setEnabled(False)
             self.ui.lineEdit_filenameSN.setValidator(None)
         
     def increaseSN(self):
+        self.dateStr = self.ui.lineEdit_filenameSN.text().split("-")[0]
         latest_value = (self.ui.lineEdit_filenameSN.text().split("-")[1].split(".")[0])
         self.Serial = int(latest_value)
         if self.Serial < 9999:
@@ -304,6 +304,7 @@ class RecTaggerHandlers:
             self.ui.lineEdit_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
             
     def decreaseSN(self):
+        self.dateStr = self.ui.lineEdit_filenameSN.text().split("-")[0]
         latest_value = (self.ui.lineEdit_filenameSN.text().split("-")[1].split(".")[0])
         self.Serial = int(latest_value)
         if self.Serial > 0:
@@ -314,6 +315,7 @@ class RecTaggerHandlers:
             self.ui.lineEdit_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
     
     def resetSN(self):
+        self.dateStr = self.ui.lineEdit_filenameSN.text().split("-")[0]
         self.Serial = 0
         self.ui.lineEdit_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
     
@@ -347,7 +349,7 @@ class RecTaggerHandlers:
         backup_path=os.path.join(rec_directory, f"rec_backups.json")
         with open(backup_path, mode="w") as f:
             json.dump(self.recBackups, f, indent=4)
-            self.ui.textBrowser_status.append("[info] Backup saved!")
+            self.ui.textBrowser_status.append("<span style='color: lime;'>[INFO] Backup saved!</span>")
         
     def writeToRec(self):
         # Prepare filename and path
@@ -356,10 +358,10 @@ class RecTaggerHandlers:
         
         # Check if file exists
         if not os.path.isfile(self.rec_filepath):
-            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is not found")
+            self.ui.textBrowser_status.setText(f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>")
             return
         
-        self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is found")
+        self.ui.textBrowser_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
         
         # Confirm write operation
         dlg_checkWriteTags = dialog_confirm.Confirm(
@@ -368,15 +370,12 @@ class RecTaggerHandlers:
         )
         
         if not dlg_checkWriteTags.exec():
-            self.ui.textBrowser_status.append("[info] Write Cancelled!")
+            self.ui.textBrowser_status.append("<span style='color: white;'>[MESSAGE] Write Cancelled!</span>")
             return
         
         # Scan existing comments
         self.tags_read, self.preserved_content, self.original_content = self.scan_rec_commments(self.rec_filepath)
         self.tags_to_be_written = self.ui.textEdit_tags.toPlainText().splitlines()
-        print("tags read from rec:",self.tags_read)
-        print("contents to be preserved:",self.preserved_content)
-        print("tags to be written:",self.tags_to_be_written)
 
         # Handle case with existing tags
         if self.tags_read:
@@ -386,8 +385,11 @@ class RecTaggerHandlers:
             )
             
             if not dlg_checkOverwriteTags.exec():
-                self.ui.textBrowser_status.append("[info] Overwrite Cancelled!")
+                self.ui.textBrowser_status.append("<span style='color: white;'>[MESSAGE] Overwrite Cancelled!</span>")
                 return
+            else:
+                self.ui.textBrowser_status.append("<span style='color: yellow;'>[WARNING] Overwrite Confirmed!</span>")
+
         # Backup before writing (can be recovered)
         self.backup_rec_contents(self.directory, self.rec_filename, self.original_content)
         
@@ -396,8 +398,7 @@ class RecTaggerHandlers:
         print("contents_to_be_written:",contents_to_be_written)
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
             f.write("\n".join(contents_to_be_written))
-        
-        self.ui.textBrowser_status.append(f"[info] Tags were written to {self.rec_filename}!")
+            self.ui.textBrowser_status.append(f"<span style='color: lime;'>[INFO] Tags were written to {self.rec_filename}!</span>")
 
     def loadFromRec(self):
         self.directory = self.ui.lineEdit_recDir.text()
@@ -405,12 +406,12 @@ class RecTaggerHandlers:
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
         
         if not os.path.isfile(self.rec_filepath):    
-            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is not found")
+            self.ui.textBrowser_status.setText(f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>")
             return
         else:
-            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is found")
+            self.ui.textBrowser_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
         
-        self.ui.textBrowser_status.append(f"[info] Tags were loaded from {self.rec_filename}!")
+        self.ui.textBrowser_status.append(f"<span style='color: lime;'>[INFO] Tags were loaded from {self.rec_filename}!</span>")
         self.ui.textEdit_tags.clear()
         self.tags_read, _, _ = self.scan_rec_commments(self.rec_filepath)
         self.ui.textEdit_tags.setPlainText("\n".join(self.tags_read))
@@ -421,28 +422,30 @@ class RecTaggerHandlers:
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
         
         if not os.path.isfile(self.rec_filepath):    
-            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is not found")
+            self.ui.textBrowser_status.setText(f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>")
             return
         else:
-            self.ui.textBrowser_status.setPlainText(f"[info] {self.rec_filename} is found")
+            self.ui.textBrowser_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
         
         recovery_filepath = os.path.join(self.directory, "rec_backups.json")
         if not os.path.isfile(recovery_filepath):
-            self.ui.textBrowser_status.append("[info] No backup found!")
+            self.ui.textBrowser_status.append("<span style='color: tomato;'>[ERROR] No backup file (JSON) is found!</span>")
             return
         else:
             with open(recovery_filepath, mode="r") as f:
                 self.recBackups = json.load(f)
-            self.ui.textBrowser_status.append("[info] Backup Loaded!")
+            self.ui.textBrowser_status.append("<span style='color: lime;'>[INFO] Backup JSON file is Loaded!</span>")
     
         dlg_checkRecover = dialog_confirm.Confirm(title="Checking...", msg=f"Recover {self.rec_filename} to the original state?")
         if not dlg_checkRecover.exec():
-            self.ui.textBrowser_status.append("[info] Recover Cancelled!")
+            self.ui.textBrowser_status.append("<span style='color: white;'>[MESSAGE] Recovery Cancelled!</span>")
             return
+        else:
+            self.ui.textBrowser_status.append("<span style='color: yellow;'>[WARNING] Recovery Confirmed!</span>")
         
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
             if self.rec_filename in self.recBackups.keys():
                 f.write("\n".join(self.recBackups[self.rec_filename][0]))
-                self.ui.textBrowser_status.append(f"[info] {self.rec_filename} was recovered!")
+                self.ui.textBrowser_status.append(f"<span style='color: lime;'>[INFO] {self.rec_filename} was recovered!</span>")
             else:
-                self.ui.textBrowser_status.append(f"[info] Recovery failed! {self.rec_filename} was not found in the backup!")
+                self.ui.textBrowser_status.append(f"<span style='color: tomato;'>[ERROR] Recovery failed! {self.rec_filename} was not found in the backup!</span>")

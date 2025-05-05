@@ -7,5 +7,6 @@
         <file alias="remove.png">icons\minus.png</file>
         <file alias="add.png">icons\plus.png</file>
         <file alias="properties.png">icons\property-blue.png</file>
+        <file alias="calendar-select.png">icons\calendar-select.png</file>
     </qresource>
 </RCC>

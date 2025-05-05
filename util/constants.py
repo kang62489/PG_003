@@ -30,9 +30,10 @@ class UISizes:
     # Buttons
     BUTTON_LARGE = QSize(180, 80)    # Main action buttons
     BUTTON_MEDIUM = QSize(100, 80)   # Secondary action buttons
-    BUTTON_SMALL = QSize(80, 40)     # Navigation buttons
-    BUTTON_TINY = QSize(60, 30)      # Utility buttons (plus, minus, etc.)
+    BUTTON_SMALL = QSize(90, 40)     # Navigation buttons
+    BUTTON_TINY = QSize(60, 25)      # Utility buttons (plus, minus, etc.)
     BUTTON_WIDE = QSize(125, 40)     # Wide buttons (copyTag, clearTag)
+    BUTTON_TINY_SQUARE = QSize(25, 25)
 
     # Labels
     LABEL_STANDARD = QSize(180, 40)  # Standard labels
@@ -43,12 +44,20 @@ class UISizes:
     COMBO_WIDE = QSize(200, 40)      # Wide combo boxes
     
     # Line Edits
-    LINE_EDIT_HEIGHT = 60
+    LINE_EDIT_HEIGHT = 50
 
     # Group Boxes
+    GROUP_BOX_ROW1_HEIGHT = 150
+    GROUP_BOX_ROW1_WIDTH = 400
+    
+    GROUP_BOX_ROW2_HEIGHT_1 = 120
+    GROUP_BOX_ROW2_HEIGHT_2 = 246
+    GROUP_BOX_ROW2_WIDTH = 400
+    GROUP_BOX_ROW3_WIDTH = 806
+    
     GROUP_BOX_WIDTH_LEFT_COLUMN = 400
     GROUP_BOX_WIDTH_RIGHT_COLUMN = 400
-    GROUP_BOX_STATUS_HEIGHT = 120
+    GROUP_BOX_STATUS_HEIGHT = 150
 
 # UI Alignments
 @dataclass
@@ -118,3 +127,20 @@ class MenuOptions:
     
     # Recording location types
     LOC_TYPES = ["SITE_", "CELL_"]
+    
+    #MenuList files
+    MENU_LIST_FILES = {
+    "model_menuList_ACUC": "menuList_ACUC.json",
+    "model_menuList_virus_R": "menuList_virus_R.json",
+    "model_menuList_virus_L": "menuList_virus_L.json",
+    }
+    
+    VOLUME_UNIT = ["nL", "uL"]
+
+    INJECTION_MODE = ["STEREOTAXIC", "RETRO-ORBITAL"]
+    
+    GENOTYPE = ['neoChAT-Hom', 'neoChAT-Het', 'WT']
+    
+    SEX = ['M', 'F']
+    
+    SPECIES= ['Mouse', 'Rat']
