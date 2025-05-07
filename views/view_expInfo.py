@@ -1,8 +1,6 @@
 # Modules
-import os
 from datetime import datetime
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QIcon
 from util.constants import (
     UISizes,
     MenuOptions
@@ -15,7 +13,6 @@ class ExpInfoView:
         self.setup_ui()
         
     def setup_ui(self):
-        self.setup_labels()
         self.setup_groupboxes()
         self.setup_dateedit()
         self.setup_lineedits()
@@ -23,18 +20,8 @@ class ExpInfoView:
         self.setup_pushbuttons()
         self.setup_comboboxes()
     
-    def setup_labels(self):
-        self.ui.lbl_DOR.setText(datetime.today().strftime("%Y-%b-%d (%a)"))
-        
     def setup_groupboxes(self):
-        groupboxes_first_row = [
-            self.ui.groupBox_display,
-            self.ui.groupBox_fileIO,
-        ]
-        
-        for box in groupboxes_first_row:
-            box.setFixedSize(UISizes.GROUP_BOX_ROW1_WIDTH, UISizes.GROUP_BOX_ROW1_HEIGHT)
-        
+        self.ui.groupBox_fileIO.setFixedSize(UISizes.GROUP_BOX_ROW1_WIDTH, UISizes.GROUP_BOX_ROW1_HEIGHT)
         self.ui.groupBox_basics.setFixedSize(UISizes.GROUP_BOX_ROW2_WIDTH, UISizes.GROUP_BOX_ROW2_HEIGHT_1)
         self.ui.groupBox_solutions.setFixedSize(UISizes.GROUP_BOX_ROW2_WIDTH, UISizes.GROUP_BOX_ROW2_HEIGHT_1)
         self.ui.groupBox_animals.setFixedSize(UISizes.GROUP_BOX_ROW2_WIDTH, UISizes.GROUP_BOX_ROW2_HEIGHT_2)
@@ -79,3 +66,4 @@ class ExpInfoView:
         self.ui.comboBox_species.addItems(MenuOptions.SPECIES)
         self.ui.comboBox_genotype.addItems(MenuOptions.GENOTYPE)
         self.ui.comboBox_sex.addItems(MenuOptions.SEX)
+        self.ui.comboBox_expInfoDB_tableNames.addItems(MenuOptions.EXPINFO_DB_TABLES)

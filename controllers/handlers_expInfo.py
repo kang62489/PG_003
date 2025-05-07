@@ -1,5 +1,5 @@
-import os, json, glob
-from datetime import datetime
+import json, sqlite3
+from tabulate import tabulate
 import pendulum
 from pathlib import Path
 import pandas as pd
@@ -8,8 +8,8 @@ from PySide6.QtCore import Qt, QEvent, QObject
 from PySide6.QtWidgets import QApplication, QComboBox
 from classes import (
     model_list_1,
-    dialog_confirm,
-    dialog_getPath
+    dialog_database,
+    dialog_confirm
     )
 from util.constants import (
     MODELS_DIR,
@@ -43,6 +43,9 @@ class ExpInfoHandlers(QObject):
         self.connect_signals()
         
     def connect_signals(self):
+        self.ui.btn_openDB.clicked.connect(self.openDB)
+        self.ui.btn_saveToDB.clicked.connect(self.save_to_DB)
+        
         self.ui.btn_add_ACUC_PN.clicked.connect(lambda: self.add_new_item_to_menu(self.ui.comboBox_ACUC, self.model_menuList_ACUC))
         self.ui.btn_rm_ACUC_PN.clicked.connect(lambda: self.remove_item_from_menu(self.ui.comboBox_ACUC, self.model_menuList_ACUC))
         self.ui.btn_add_virus_R.clicked.connect(lambda: self.add_new_item_to_menu(self.ui.comboBox_virus_R, self.model_menuList_virus_R))
@@ -149,3 +152,69 @@ class ExpInfoHandlers(QObject):
         
         self.ui.lbl_ages.setText(str(self.ages))
         self.ui.lbl_incubation.setText(str(self.incubation))
+    
+    def openDB(self):
+        self.dlg_dbViewer = dialog_database.DatabaseViewer(self.ui, self)
+        
+    def save_to_DB(self):
+        checkSaveToDB = dialog_confirm.Confirm(title="Checking...", msg="Save current expinfo to database?")
+        if not checkSaveToDB.exec():
+            print("[bold yellow]Save Cancelled![/bold yellow]")
+            return
+        
+        # get data from UIs
+        data_main = {
+            "DOR": self.ui.dateEdit_DOR.date().toPython().strftime("%Y_%m_%d"),
+            "Experimenters": self.ui.lineEdit_experimenters.text(),
+            "ACUC_Protocol": self.ui.comboBox_ACUC.currentText(),
+            "Animal_ID": self.ui.lineEdit_animalID.text(),
+            "Species": self.ui.comboBox_species.currentText(),
+            "Genotype": self.ui.comboBox_genotype.currentText(),
+            "Sex": self.ui.comboBox_sex.currentText(),
+            "DOB": self.ui.dateEdit_DOB.date().toPython().strftime("%Y_%m_%d"),
+            "Ages": self.ui.lbl_ages.text(),
+            "DOI": self.ui.dateEdit_DOI.date().toPython().strftime("%Y_%m_%d"),
+            "Incubation": self.ui.lbl_incubation.text(),
+            "CuttingOS": self.ui.lineEdit_CuttingOS.text(),
+            "HoldingOS": self.ui.lineEdit_HoldingOS.text(),
+            "RecordingOS": self.ui.lineEdit_RecordingOS.text(),
+            "Enable_R": str(self.ui.checkBox_enable_R.isChecked()),
+            "Enable_L": str(self.ui.checkBox_enable_L.isChecked())
+        }
+        
+        if self.ui.checkBox_enable_R.isChecked():
+            data_R = {
+                "Inj_Volume_R": self.ui.lineEdit_volume_R.text(),
+                "Inj_Volume_Unit_R": self.ui.comboBox_volumeUnit_R.currentText(),
+                "Inj_Mode_R": self.ui.comboBox_injectionMode_R.currentText(),
+                "Inj_Coord_DV_R": self.ui.lineEdit_Coord_DV_R.text(),
+                "Inj_Coord_ML_R": self.ui.lineEdit_Coord_ML_R.text(),
+                "Inj_Coord_AP_R": self.ui.lineEdit_Coord_AP_R.text(),
+                "Inj_virus_R": self.ui.comboBox_virus_R.currentText()
+            }
+            data_main.update(data_R)
+        
+        if self.ui.checkBox_enable_L.isChecked():    
+            data_L ={
+                "Inj_Volume_L": self.ui.lineEdit_volume_L.text(),
+                "Inj_Volume_Unit_L": self.ui.comboBox_volumeUnit_L.currentText(),
+                "Inj_Mode_L": self.ui.comboBox_injectionMode_L.currentText(),
+                "Inj_Coord_DV_L": self.ui.lineEdit_Coord_DV_L.text(),
+                "Inj_Coord_ML_L": self.ui.lineEdit_Coord_ML_L.text(),
+                "Inj_Coord_AP_L": self.ui.lineEdit_Coord_AP_L.text(),
+                "Inj_virus_L": self.ui.comboBox_virus_L.currentText()
+            }
+            data_main.update(data_L)
+        
+        columns_to_be_inserted = ", ".join(data_main.keys())
+        placeholders_for_inserting_values = ", ".join(["?"] * len(data_main))
+        values_to_be_inserted = tuple(data_main.values())
+        
+        conn = sqlite3.connect(MODELS_DIR / "expInfo.db")
+        cursor = conn.cursor()
+        sql_command = f"INSERT INTO ACh_Dynamics ({columns_to_be_inserted}) VALUES ({placeholders_for_inserting_values})"
+        
+        cursor.execute(sql_command, values_to_be_inserted)
+        conn.commit()
+        print("[bold green]Data saved to database![/bold green]")
+        conn.close()

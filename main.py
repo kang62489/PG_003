@@ -41,8 +41,8 @@ class MainPanel:  # Inherit from QObject
         RecTaggerView(self.ui, self)
 
         # Initialize tab handlers
-        self.handlers_expinfo = ExpInfoHandlers(self.ui)
-        self.handlers_rectagger = RecTaggerHandlers(self.ui)
+        self.handlers_expInfo = ExpInfoHandlers(self.ui)
+        self.handlers_recTagger = RecTaggerHandlers(self.ui)
 
         # Set default tab index
         self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])

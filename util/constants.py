@@ -47,17 +47,21 @@ class UISizes:
     LINE_EDIT_HEIGHT = 50
 
     # Group Boxes
-    GROUP_BOX_ROW1_HEIGHT = 150
-    GROUP_BOX_ROW1_WIDTH = 400
+    GROUP_BOX_ROW1_HEIGHT = 80
+    GROUP_BOX_ROW1_WIDTH = 806
     
-    GROUP_BOX_ROW2_HEIGHT_1 = 120
-    GROUP_BOX_ROW2_HEIGHT_2 = 246
+    GROUP_BOX_ROW2_HEIGHT_1 = 150
+    GROUP_BOX_ROW2_HEIGHT_2 = 306
     GROUP_BOX_ROW2_WIDTH = 400
     GROUP_BOX_ROW3_WIDTH = 806
     
     GROUP_BOX_WIDTH_LEFT_COLUMN = 400
     GROUP_BOX_WIDTH_RIGHT_COLUMN = 400
     GROUP_BOX_STATUS_HEIGHT = 150
+    
+    # Database Viewer
+    DATABASE_VIEWER_WIDTH = 800
+    DATABASE_VIEWER_HEIGHT = 300
 
 # UI Alignments
 @dataclass
@@ -144,3 +148,6 @@ class MenuOptions:
     SEX = ['M', 'F']
     
     SPECIES= ['Mouse', 'Rat']
+    
+    # Database Tables
+    EXPINFO_DB_TABLES = ["ACh_Dynamics", "ACh_Sensor_Specificity"]
