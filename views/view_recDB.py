@@ -7,9 +7,8 @@ from util.constants import (
 )
 
 class RecDBView:
-    def __init__(self, ui, main_panel):
+    def __init__(self, ui):
         self.ui = ui
-        self.main = main_panel
         self.setupUI()
         
     def setupUI(self):
@@ -28,20 +27,13 @@ class RecDBView:
             self.ui.btn_loadRecDB,
             self.ui.btn_deleteTable,
             self.ui.btn_exportSummary,
-            self.ui.btn_applySort,
-            self.ui.btn_applyFilter
         ]
         
         for btn in buttons_small:
             btn.setFixedSize(UISizes.BUTTON_SMALL)
         
-        buttons_long = [
-            self.ui.btn_importRecDB,
-            self.ui.btn_saveResult
-        ]
-        
-        for btn in buttons_long:
-            btn.setFixedHeight(UISizes.BUTTON_LONG_HEIGHT)
-    
+        self.ui.btn_importRecDB.setFixedHeight(UISizes.BUTTON_LONG_HEIGHT)
+            
     def setup_groupbox(self):
         self.ui.groupBox_recDB_status.setFixedHeight(UISizes.GROUP_BOX_STATUS_HEIGHT)
+        

@@ -53,9 +53,6 @@ class RecDBHandlers:
         self.ui.btn_loadRecDB.clicked.connect(self.loadRecDB)
         self.ui.btn_deleteTable.clicked.connect(self.delete_table)
         self.ui.btn_exportSummary.clicked.connect(self.export_summary)
-        self.ui.btn_saveResult.clicked.connect(self.save_result)
-        self.ui.btn_applySort.clicked.connect(self.apply_sort)
-        self.ui.btn_applyFilter.clicked.connect(self.apply_filter)
         
     
     def rec_content_scanner(self, list_of_rec_paths):
@@ -148,7 +145,7 @@ class RecDBHandlers:
         self.model_recDB.setSort(self.model_recDB.fieldIndex('Timestamp'), Qt.AscendingOrder)
         self.model_recDB.select()
         self.ui.textBrowser_recDB.append(f"<span style='color: lime;'>[INFO] Table '{self.selected_table}' loaded!</span>")
-    
+
     def delete_table(self):
         self.selected_table = self.ui.comboBox_tableOfRecDB.currentText()
         if self.selected_table == "":
@@ -174,14 +171,23 @@ class RecDBHandlers:
         self.model_recDB.setTable("")
         self.model_recDB.select()
         
-    def save_result(self):
-        pass
-    
-    def apply_sort(self):
-        pass
-    
-    def apply_filter(self):
-        pass
-    
     def export_summary(self):
+        selected_table = self.ui.comboBox_tableOfRecDB.currentText()
+        if selected_table == "":
+            self.ui.textBrowser_recDB.append("<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>")
+            return
+        
+        dlg_get_outputDir = dialog_getPath.GetPath(title="Select the output directory of the csv file of selected table!")
+        output_dir = dlg_get_outputDir.get_path()
+        if output_dir == "":
+            self.ui.textBrowser_recDB.append("<span style='color: white;'>[MESSAGE] Export canceled</span>")
+            return
+        
+        conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
+        df = pd.read_sql_query(f"SELECT * FROM {selected_table}", conn)
+        conn.close()
+        
+        df.to_excel(os.path.join(output_dir, f"{selected_table}.xlsx"), index=False)
+        self.ui.textBrowser_recDB.append(f"<span style='color: lime;'>[INFO] Table '{selected_table}' exported to {output_dir}</span>")
+    
         pass

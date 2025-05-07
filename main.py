@@ -41,7 +41,7 @@ class MainPanel:  # Inherit from QObject
         # Initialize tab managers
         ExpInfoView(self.ui, self)
         RecTaggerView(self.ui, self)
-        RecDBView(self.ui, self)
+        RecDBView(self.ui)
 
         # Initialize tab handlers
         self.handlers_expInfo = ExpInfoHandlers(self.ui)

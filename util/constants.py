@@ -82,7 +82,7 @@ DISPLAY_DATE_FORMAT = "%Y_%m_%d"
 # Default Values
 DEFAULTS = {
     "SERIAL": 0,
-    "TAB_INDEX": 2,
+    "TAB_INDEX": 3,
     "LIGHT_INENSITY": "LV6",
     "EXPOSURE_TIME": "40",
     "FRAMES": "1200p",
