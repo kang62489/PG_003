@@ -53,7 +53,7 @@ class DatabaseViewer(QDialog):
         self.model_expInfoDB = QSqlTableModel(db=self.db)
         self.tableView_expInfoDB.setModel(self.model_expInfoDB)
         self.sm_expInfoDB = self.tableView_expInfoDB.selectionModel()
-        self.selected_table = self.ui.comboBox_expInfoDB_tableNames.currentText()
+        self.selected_table = self.ui.comboBox_tableOfExpInfoDB.currentText()
         self.model_expInfoDB.setTable(self.selected_table)
         self.model_expInfoDB.setSort(self.model_expInfoDB.fieldIndex('DOR'), Qt.DescendingOrder)
         self.model_expInfoDB.select()

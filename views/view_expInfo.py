@@ -66,4 +66,4 @@ class ExpInfoView:
         self.ui.comboBox_species.addItems(MenuOptions.SPECIES)
         self.ui.comboBox_genotype.addItems(MenuOptions.GENOTYPE)
         self.ui.comboBox_sex.addItems(MenuOptions.SEX)
-        self.ui.comboBox_expInfoDB_tableNames.addItems(MenuOptions.EXPINFO_DB_TABLES)
+        self.ui.comboBox_tableOfExpInfoDB.addItems(MenuOptions.EXPINFO_DB_TABLES)

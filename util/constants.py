@@ -9,9 +9,9 @@ from dataclasses import dataclass
 
 # Application Info
 APP_NAME = "ACh Dynamic Analyzer"
-APP_VERSION = "1.1.3"
+APP_VERSION = "2.0"
 APP_AUTHOR = "Kang"
-APP_LAST_UPDATE = "2025-Jan-26"
+APP_LAST_UPDATE = "2025-May-07"
 APP_STATUS_MESSAGE = f"{APP_NAME} {APP_VERSION}, Author: {APP_AUTHOR}, Last Update: {APP_LAST_UPDATE}, Made in OIST"
 
 # Directory Paths
@@ -34,6 +34,7 @@ class UISizes:
     BUTTON_TINY = QSize(60, 25)      # Utility buttons (plus, minus, etc.)
     BUTTON_WIDE = QSize(125, 40)     # Wide buttons (copyTag, clearTag)
     BUTTON_TINY_SQUARE = QSize(25, 25)
+    BUTTON_LONG_HEIGHT = 50
 
     # Labels
     LABEL_STANDARD = QSize(180, 40)  # Standard labels
@@ -81,7 +82,7 @@ DISPLAY_DATE_FORMAT = "%Y_%m_%d"
 # Default Values
 DEFAULTS = {
     "SERIAL": 0,
-    "TAB_INDEX": 0,
+    "TAB_INDEX": 2,
     "LIGHT_INENSITY": "LV6",
     "EXPOSURE_TIME": "40",
     "FRAMES": "1200p",

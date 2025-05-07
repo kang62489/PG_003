@@ -7,12 +7,14 @@ from PySide6.QtUiTools import QUiLoader
 
 from views import (
     ExpInfoView,
-    RecTaggerView
+    RecTaggerView,
+    RecDBView,
 )
 
 from controllers import (
     ExpInfoHandlers,
-    RecTaggerHandlers
+    RecTaggerHandlers,
+    RecDBHandlers
     )
 
 from util.constants import (
@@ -39,10 +41,12 @@ class MainPanel:  # Inherit from QObject
         # Initialize tab managers
         ExpInfoView(self.ui, self)
         RecTaggerView(self.ui, self)
+        RecDBView(self.ui, self)
 
         # Initialize tab handlers
         self.handlers_expInfo = ExpInfoHandlers(self.ui)
         self.handlers_recTagger = RecTaggerHandlers(self.ui)
+        self.handlers_recDB = RecDBHandlers(self.ui)
 
         # Set default tab index
         self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])

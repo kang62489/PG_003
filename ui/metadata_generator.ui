@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_ExpInfo">
        <attribute name="title">
@@ -34,7 +34,7 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <widget class="QComboBox" name="comboBox_expInfoDB_tableNames"/>
+              <widget class="QComboBox" name="comboBox_tableOfExpInfoDB"/>
              </item>
              <item>
               <widget class="QPushButton" name="btn_openDB">
@@ -951,33 +951,116 @@
       </widget>
       <widget class="QWidget" name="tab_RecSumGen">
        <attribute name="title">
-        <string>Rec Summary Generator</string>
+        <string>Rec Database</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_21">
         <item>
-         <widget class="QPushButton" name="pushButton_5">
+         <widget class="QPushButton" name="btn_importRecDB">
           <property name="text">
-           <string>Scan REC files</string>
+           <string>Import Data From Rec Files</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QListView" name="listView_2"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_6">
-          <property name="text">
-           <string>Generate</string>
+         <widget class="QGroupBox" name="groupBox_recDB_status">
+          <property name="title">
+           <string>Status</string>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QTextBrowser" name="textBrowser_recDB"/>
+           </item>
+          </layout>
          </widget>
         </item>
         <item>
-         <widget class="QTableView" name="tableView"/>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Table Name</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Sort by</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>Filter</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QComboBox" name="comboBox_tableOfRecDB"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btn_loadRecDB">
+              <property name="text">
+               <string>Load</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btn_deleteTable">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btn_exportSummary">
+              <property name="text">
+               <string>Export</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_14">
+            <item>
+             <widget class="QLineEdit" name="lineEdit_sort"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btn_applySort">
+              <property name="text">
+               <string>Apply</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_24">
+            <item>
+             <widget class="QLineEdit" name="lineEdit_Filter"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btn_applyFilter">
+              <property name="text">
+               <string>Apply</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_7">
+         <widget class="QTableView" name="tableView_recDB"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_saveResult">
           <property name="text">
-           <string>Export</string>
+           <string>Save Result</string>
           </property>
          </widget>
         </item>
@@ -1025,7 +1108,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="label_44">
              <property name="text">
-              <string>Gaussian Kernel Radius</string>
+              <string>Gaussian Kernel Radius (pixels)</string>
              </property>
             </widget>
            </item>
@@ -1044,7 +1127,18 @@
             </layout>
            </item>
            <item row="1" column="1">
-            <widget class="QComboBox" name="comboBox_15"/>
+            <layout class="QHBoxLayout" name="horizontalLayout_26">
+             <item>
+              <widget class="QComboBox" name="comboBox_15"/>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_4">
+               <property name="text">
+                <string>Load</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
@@ -1054,10 +1148,12 @@
           <property name="title">
            <string>Release Map</string>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QGraphicsView" name="graphicsView"/>
+           </item>
+          </layout>
          </widget>
-        </item>
-        <item>
-         <widget class="QGraphicsView" name="graphicsView"/>
         </item>
        </layout>
       </widget>
