@@ -58,6 +58,7 @@ class RecTaggerView:
     def setup_lineedits(self):
         self.ui.lineEdit_LEVEL.setText(DEFAULTS["LIGHT_INENSITY"])
         self.ui.lineEdit_EXPO.setText(DEFAULTS["EXPOSURE_TIME"])
+        self.ui.lineEdit_EXPO.setFixedWidth(UISizes.LINE_EDIT_EXPO_WIDTH)
         self.ui.lineEdit_FRAMES.setText(DEFAULTS["FRAMES"])
         self.ui.lineEdit_FPS.setText(DEFAULTS["FPS"])
         

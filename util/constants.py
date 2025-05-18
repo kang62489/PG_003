@@ -43,9 +43,12 @@ class UISizes:
     # Combo Boxes
     COMBO_STANDARD = QSize(180, 40)  # Standard combo boxes
     COMBO_WIDE = QSize(200, 40)      # Wide combo boxes
+    COMBO_UNIT_WIDTH = 80
     
     # Line Edits
     LINE_EDIT_HEIGHT = 50
+    LINE_EDIT_EXPO_WIDTH = 120
+    LINE_EDIT_VOLUME_WIDTH = 120
 
     # Group Boxes
     GROUP_BOX_ROW1_HEIGHT = 80

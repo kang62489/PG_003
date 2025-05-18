@@ -45,10 +45,12 @@ class RecTaggerHandlers:
     def connect_signals(self):
         self.ui.radioBtnGroup_OBJ.buttonClicked.connect(self.updateTagOutput)
         self.ui.comboBox_EXC.activated.connect(self.updateTagOutput)
+        self.ui.comboBox_EXC.currentIndexChanged.connect(self.autoSelectEMI)
         self.ui.lineEdit_LEVEL.textChanged.connect(self.updateTagOutput)
         self.ui.lineEdit_EXPO.textChanged.connect(self.updateTagOutput)
         self.ui.comboBox_EXPO_UNITS.activated.connect(self.updateTagOutput)
         self.ui.comboBox_EMI.activated.connect(self.updateTagOutput)
+        self.ui.comboBox_EMI.currentIndexChanged.connect(self.autoSelectEXC)
         self.ui.lineEdit_FRAMES.textChanged.connect(self.updateTagOutput)
         self.ui.lineEdit_FPS.textChanged.connect(self.updateTagOutput)
         self.ui.spinBox_SLICE.valueChanged.connect(self.updateTagOutput)
@@ -83,7 +85,24 @@ class RecTaggerHandlers:
         self.ui.btn_writeToRec.clicked.connect(self.writeToRec)
         self.ui.btn_loadFromRec.clicked.connect(self.loadFromRec)
         self.ui.btn_recoverRec.clicked.connect(self.recoverRec)
-        
+    
+    def autoSelectEMI(self):
+        if self.ui.comboBox_EXC.currentText() == "HLG":
+            self.ui.comboBox_EMI.setCurrentIndex(0)
+        elif self.ui.comboBox_EXC.currentText() == "LED_GREEN":
+            self.ui.comboBox_EMI.setCurrentIndex(1)
+        elif self.ui.comboBox_EXC.currentText() == "LED_BLUE":
+            self.ui.comboBox_EMI.setCurrentIndex(2)
+    
+    def autoSelectEXC(self):
+        if self.ui.comboBox_EMI.currentText() == "IR":
+            self.ui.comboBox_EXC.setCurrentIndex(0)
+        elif self.ui.comboBox_EMI.currentText() == "RED":
+            self.ui.comboBox_EXC.setCurrentIndex(1)
+        elif self.ui.comboBox_EMI.currentText() == "GREEN":
+            self.ui.comboBox_EXC.setCurrentIndex(2)
+    
+    
     def updateTagOutput(self):
         self.clearTagOutput()
         props = [
@@ -321,6 +340,7 @@ class RecTaggerHandlers:
     
     def copyFilenameSN(self):
         QApplication.clipboard().setText(self.ui.lineEdit_filenameSN.text())
+        self.increaseSN()
         
     def scan_rec_commments(self, rec_filepath):
         with open(rec_filepath, mode="r", encoding="utf-16-LE") as f:

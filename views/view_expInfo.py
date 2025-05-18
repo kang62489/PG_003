@@ -40,6 +40,8 @@ class ExpInfoView:
     def setup_lineedits(self):
         self.ui.lineEdit_experimenters.setText('Kang')
         self.ui.lineEdit_targetArea.setText('Dorsal Medial Striatum')
+        self.ui.lineEdit_volume_R.setFixedWidth(UISizes.LINE_EDIT_VOLUME_WIDTH)
+        self.ui.lineEdit_volume_L.setFixedWidth(UISizes.LINE_EDIT_VOLUME_WIDTH)
         
     def setup_pushbuttons(self):
         tiny_buttons = [
@@ -61,6 +63,8 @@ class ExpInfoView:
     def setup_comboboxes(self):
         self.ui.comboBox_volumeUnit_R.addItems(MenuOptions.VOLUME_UNIT)
         self.ui.comboBox_volumeUnit_L.addItems(MenuOptions.VOLUME_UNIT)
+        self.ui.comboBox_volumeUnit_R.setFixedWidth(UISizes.COMBO_UNIT_WIDTH)
+        self.ui.comboBox_volumeUnit_L.setFixedWidth(UISizes.COMBO_UNIT_WIDTH)
         self.ui.comboBox_injectionMode_R.addItems(MenuOptions.INJECTION_MODE)
         self.ui.comboBox_injectionMode_L.addItems(MenuOptions.INJECTION_MODE)
         self.ui.comboBox_species.addItems(MenuOptions.SPECIES)
