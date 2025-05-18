@@ -1,5 +1,7 @@
 [
     "patch_default",
     "puff_default",
-    "montage"
+    "montage",
+    "patch_01",
+    "quick_check_expression"
 ]
