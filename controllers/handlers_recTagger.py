@@ -340,7 +340,6 @@ class RecTaggerHandlers:
     
     def copyFilenameSN(self):
         QApplication.clipboard().setText(self.ui.lineEdit_filenameSN.text())
-        self.increaseSN()
         
     def scan_rec_commments(self, rec_filepath):
         with open(rec_filepath, mode="r", encoding="utf-16-LE") as f:
@@ -419,6 +418,8 @@ class RecTaggerHandlers:
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
             f.write("\n".join(contents_to_be_written))
             self.ui.textBrowser_status.append(f"<span style='color: lime;'>[INFO] Tags were written to {self.rec_filename}!</span>")
+
+        self.increaseSN()
 
     def loadFromRec(self):
         self.directory = self.ui.lineEdit_recDir.text()
