@@ -9,12 +9,14 @@ from views import (
     ExpInfoView,
     RecTaggerView,
     RecDBView,
+    ConcatenatorView
 )
 
 from controllers import (
     ExpInfoHandlers,
     RecTaggerHandlers,
-    RecDBHandlers
+    RecDBHandlers,
+    ConcatenatorHandlers
     )
 
 from util.constants import (
@@ -42,11 +44,13 @@ class MainPanel:  # Inherit from QObject
         ExpInfoView(self.ui, self)
         RecTaggerView(self.ui, self)
         RecDBView(self.ui)
+        ConcatenatorView(self.ui)
 
         # Initialize tab handlers
         self.handlers_expInfo = ExpInfoHandlers(self.ui)
         self.handlers_recTagger = RecTaggerHandlers(self.ui)
         self.handlers_recDB = RecDBHandlers(self.ui)
+        self.handlers_concatenator = ConcatenatorHandlers(self.ui)
 
         # Set default tab index
         self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])
