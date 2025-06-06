@@ -1,7 +1,3 @@
-## Author: Kang
-## Last Update: 2025-Jan-23
-## Usage: To create an input delegate which can be used to modify values in the cells of QTableView
-
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QStyledItemDelegate, QLineEdit
 

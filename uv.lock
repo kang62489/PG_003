@@ -149,6 +149,7 @@ dependencies = [
     { name = "pyside6" },
     { name = "rich" },
     { name = "tabulate" },
+    { name = "tifftools" },
 ]
 
 [package.metadata]
@@ -161,6 +162,7 @@ requires-dist = [
     { name = "pyside6", specifier = ">=6.8.1,!=6.8.1.1" },
     { name = "rich", specifier = ">=13.9.4" },
     { name = "tabulate", specifier = ">=0.9.0" },
+    { name = "tifftools", specifier = ">=1.6.1" },
 ]
 
 [[package]]
@@ -287,6 +289,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/ec/fe/802052aecb21e3797b8f7902564ab6ea0d60ff8ca23952079064155d1ae1/tabulate-0.9.0.tar.gz", hash = "sha256:0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c", size = 81090 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/40/44/4a5f08c96eb108af5cb50b41f76142f0afa346dfa99d5296fe7202a11854/tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f", size = 35252 },
+]
+
+[[package]]
+name = "tifftools"
+version = "1.6.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f3/04/601f8750534e2145b457e0ff9faa2b3ce40ea2e2f1939f89428ac471fe7b/tifftools-1.6.1.tar.gz", hash = "sha256:3881708fffdd031bfaaf580f9a16fd8d7af84b6ccfd72f0b0c6c10dd0d157681", size = 69393 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/aa/9f/12afd6df88d968a26993d6abc8d167d87b01abdc65fd9669278bf6d78ef0/tifftools-1.6.1-py3-none-any.whl", hash = "sha256:78217108457d3a14bb313d7eed9bd46e8a92ab7c023460d6972f41a72fab17f0", size = 50596 },
 ]
 
 [[package]]

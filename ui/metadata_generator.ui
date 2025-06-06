@@ -807,145 +807,149 @@
          </layout>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_tagOutput">
-          <property name="title">
-           <string>Output</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_11">
-           <item>
-            <widget class="QLabel" name="lbl_recDir">
-             <property name="text">
-              <string>Directory of the recording files</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <layout class="QVBoxLayout" name="verticalLayout_13">
+          <item>
+           <widget class="QGroupBox" name="groupBox_status">
+            <property name="title">
+             <string>Status</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_16">
              <item>
-              <widget class="QLineEdit" name="lineEdit_recDir"/>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_browse">
-               <property name="text">
-                <string>Browse</string>
-               </property>
-              </widget>
+              <widget class="QTextBrowser" name="textBrowser_status"/>
              </item>
             </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="lbl_serialName_2">
-             <property name="text">
-              <string>Filename SN</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_18">
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_tagOutput">
+            <property name="title">
+             <string>Output</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_11">
              <item>
-              <widget class="QLineEdit" name="lineEdit_filenameSN">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
+              <widget class="QLabel" name="lbl_recDir">
                <property name="text">
-                <string/>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-               <property name="placeholderText">
-                <string/>
+                <string>Directory of the recording files</string>
                </property>
               </widget>
              </item>
              <item>
-              <layout class="QGridLayout" name="gridLayout">
-               <item row="1" column="0">
-                <widget class="QPushButton" name="btn_decreaseSN">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                </widget>
+              <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <item>
+                <widget class="QLineEdit" name="lineEdit_recDir"/>
                </item>
-               <item row="0" column="0">
-                <widget class="QPushButton" name="btn_increaseSN">
+               <item>
+                <widget class="QPushButton" name="btn_browse">
                  <property name="text">
-                  <string>+</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QPushButton" name="btn_resetSN">
-                 <property name="text">
-                  <string>Reset</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QPushButton" name="btn_copyFilenameSN">
-                 <property name="text">
-                  <string>Copy</string>
+                  <string>Browse</string>
                  </property>
                 </widget>
                </item>
               </layout>
              </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_status">
-             <property name="title">
-              <string>Status</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_16">
-              <item>
-               <widget class="QTextBrowser" name="textBrowser_status"/>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_tagPreview">
-             <property name="title">
-              <string>Tag Preview and Operations</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_14">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_19">
+             <item>
+              <widget class="QLabel" name="lbl_serialName_2">
+               <property name="text">
+                <string>Filename SN</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_18">
+               <item>
+                <widget class="QLineEdit" name="lineEdit_filenameSN">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="placeholderText">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QGridLayout" name="gridLayout">
+                 <item row="1" column="0">
+                  <widget class="QPushButton" name="btn_decreaseSN">
+                   <property name="text">
+                    <string>-</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QPushButton" name="btn_increaseSN">
+                   <property name="text">
+                    <string>+</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QPushButton" name="btn_resetSN">
+                   <property name="text">
+                    <string>Reset</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QPushButton" name="btn_copyFilenameSN">
+                   <property name="text">
+                    <string>Copy</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_tagPreview">
+               <property name="title">
+                <string>Tag Preview and Operations</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_14">
                 <item>
-                 <widget class="QPushButton" name="btn_writeToRec">
-                  <property name="text">
-                   <string>Write</string>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_19">
+                  <item>
+                   <widget class="QPushButton" name="btn_writeToRec">
+                    <property name="text">
+                     <string>Write</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="btn_loadFromRec">
+                    <property name="text">
+                     <string>Load</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="btn_recoverRec">
+                    <property name="text">
+                     <string>Recover</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="btn_loadFromRec">
-                  <property name="text">
-                   <string>Load</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="btn_recoverRec">
-                  <property name="text">
-                   <string>Recover</string>
-                  </property>
-                 </widget>
+                 <widget class="QTextEdit" name="textEdit_tags"/>
                 </item>
                </layout>
-              </item>
-              <item>
-               <widget class="QTextEdit" name="textEdit_tags"/>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -954,6 +958,18 @@
         <string>Rec Database</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_21">
+        <item>
+         <widget class="QGroupBox" name="groupBox_recDB_status">
+          <property name="title">
+           <string>Status</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QTextBrowser" name="textBrowser_recDB"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
         <item>
          <widget class="QGroupBox" name="groupBox">
           <property name="title">
@@ -1006,18 +1022,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_recDB_status">
-          <property name="title">
-           <string>Status</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
-           <item>
-            <widget class="QTextBrowser" name="textBrowser_recDB"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
            <string>Display</string>
@@ -1037,35 +1041,72 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_10">
-          <item>
-           <widget class="QLabel" name="lbl_tiffDir">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btn_browse_tiffs">
-            <property name="text">
-             <string>Browse</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QTextBrowser" name="textBrowser_concatenator"/>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkBox_selectAllFiles">
-          <property name="text">
-           <string>All</string>
+         <widget class="QGroupBox" name="groupBox_concat_status">
+          <property name="title">
+           <string>Status</string>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_15">
+           <item>
+            <widget class="QTextBrowser" name="textBrowser_concatenator"/>
+           </item>
+          </layout>
          </widget>
         </item>
         <item>
-         <widget class="QListView" name="listView_recFiles"/>
+         <widget class="QGroupBox" name="groupBox_concat_controls">
+          <property name="title">
+           <string>Control Terms</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_24">
+           <item>
+            <widget class="QCheckBox" name="checkBox_includeSubfolders">
+             <property name="text">
+              <string>Include subfolders</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_browse_tiffs">
+             <property name="text">
+              <string>Browse</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_tiffBrowser">
+          <property name="title">
+           <string>File Browser (Tiff)</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_17">
+           <item>
+            <widget class="QCheckBox" name="checkBox_selectAllFiles">
+             <property name="text">
+              <string>All</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QListView" name="listView_recFiles"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_start_concatenation">
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QProgressBar" name="progressBar_concatenation">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

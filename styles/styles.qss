@@ -1,5 +1,4 @@
 QDateEdit {
-    font-family: "Calibri";
     font-size: 16px;
     color: blue;
 }
@@ -19,46 +18,38 @@ QDateEdit::down-arrow {
 }
 
 QGroupBox {
-    font-family: "Calibri";
     font-size: 18px;
     font-weight: bold;
 }
 
 QLabel {
-    font-family: "Calibri";
     font-size: 16px;
     font-weight: bold;
 }
 
 QRadioButton {
-    font-family: "Calibri";
     font-size: 16px;
 }
 
 QComboBox{
-    font-family: "Calibri";
     font-size: 16px;
 }
 
 QLineEdit {
-    font-family: "Calibri";
     font-size: 16px;
 }
 
 QSpinBox {
-    font-family: "Calibri";
     font-size: 16px;
 }
 
 QHeaderView::section {
     font-weight: bold;
-    font-family: "Calibri";
     font-size: 14px;
     color:blue;
 }
 
 QTableView {
-    font-family: "Calibri";
     font-size: 14px;
     font-weight: bold;
 }
@@ -73,7 +64,6 @@ QScrollBar:horizontal {
 
 
 QPushButton {
-    font-family: "Calibri";
     font-size: 16px;
     font-weight: bold;
 }
@@ -88,7 +78,6 @@ QPushButton#btn_deleteCurrentTemplate:disabled{
 
 
 QLineEdit#lineEdit_filenameSN {
-    font-family: "Calibri";
     font-size: 20px;
     font-weight: bold;
     font-style: italic;
@@ -104,14 +93,13 @@ QPushButton#btn_copyFilenameSN:disabled {
 }
 
 QTextBrowser {
-    font-family: "Calibri";
+    font-family: "Hack Nerd Font Mono";
     font-size: 14px;
     font-weight: bold;
     background-color: black;
 }
 
 QTextEdit#textEdit_tags {
-    font-family: "Calibri";
     font-size: 16px;
     font-weight: bold;
     color: purple;
