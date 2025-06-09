@@ -31,7 +31,7 @@ class ConcatenatorHandlers:
         dlg_get_inputDir = dialog_getPath.GetPath(title="Please select the folder contains .rec and .tif files")
         self.input_dir = Path(dlg_get_inputDir.get_path())
         
-        if self.input_dir == "":
+        if str(self.input_dir) == ".":
             self.ui.textBrowser_concatenator.append("<span style='color: white;'>[MESSAGE] No directory is selected</span>")
             self.ui.textBrowser_concatenator.moveCursor(QTextCursor.End)
             return

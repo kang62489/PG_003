@@ -37,14 +37,15 @@ class ConcatenatorThread(QThread):
         self.progress_percentage.emit(int(self.processed_count/self.total_count*100))
 
     def run(self):
-        if not os.path.exists('merged'):
-            os.makedirs('merged')
+        if not os.path.exists(os.path.join(self.main_dir, 'merged')):
+            os.makedirs(os.path.join(self.main_dir, 'merged'))
         
         for file in self.files_to_process:
             self.progress_update.emit(f"{file}", "deepskyblue")
 
         length_horizontal_line = len(self.files_to_process[-1])+1
         self.progress_update.emit("-"*length_horizontal_line, "white")
+        self.progress_update.emit(f"Total files to concatenate: {self.total_count}", "white")
         
         # Process files in parallel with batching
         t_start = time()

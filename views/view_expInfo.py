@@ -7,9 +7,8 @@ from util.constants import (
 )
 
 class ExpInfoView:
-    def __init__(self, ui, main_panel):
+    def __init__(self, ui):
         self.ui = ui
-        self.main = main_panel
         self.setup_ui()
         
     def setup_ui(self):

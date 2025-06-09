@@ -53,8 +53,8 @@ class MainPanel:  # Inherit from QObject
         self.ui.statusbar.showMessage(APP_STATUS_MESSAGE)
 
         # Initialize tab managers
-        ExpInfoView(self.ui, self)
-        RecTaggerView(self.ui, self)
+        ExpInfoView(self.ui)
+        RecTaggerView(self.ui)
         RecDBView(self.ui)
         ConcatenatorView(self.ui)
 

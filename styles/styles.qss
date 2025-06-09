@@ -122,6 +122,11 @@ QProgressBar::chunk {
     background-color: darkviolet;
 }
 
+QCheckBox {
+    font-size: 16px;
+    font-weight: bold;
+}
+
 QCheckBox::indicator
  {
     width: 40px;
