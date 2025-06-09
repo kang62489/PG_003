@@ -15,7 +15,7 @@ class ConcatenatorView:
     
     
     def setup_listview(self):
-        checkbox_delegate = customized_delegate.CheckBoxSizeDelegate(checkbox_size=24)
+        checkbox_delegate = customized_delegate.QListViewItemDelegate()
         self.ui.listView_recFiles.setItemDelegate(checkbox_delegate)
         # pass
     

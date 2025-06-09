@@ -136,3 +136,16 @@ QCheckBox::indicator:checked {
     image: url(:checkbox/checked.svg);
 }
 
+QListView::indicator {
+    width: 40px;
+    height: 40px;
+    margin-right:100px
+}
+
+QListView::indicator:unchecked {
+    image: url(:checkbox/unchecked.svg);
+}
+
+QListView::indicator:checked {
+    image: url(:checkbox/checked.svg);
+}
