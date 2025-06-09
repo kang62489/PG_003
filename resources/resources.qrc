@@ -9,4 +9,8 @@
         <file alias="properties.png">icons\property-blue.png</file>
         <file alias="calendar-select.png">icons\calendar-select.png</file>
     </qresource>
+    <qresource prefix="checkbox">
+        <file alias="checked.svg">icons\checkbox-checked-svgrepo-com.svg</file>
+        <file alias="unchecked.svg">icons\checkbox-unchecked-svgrepo-com.svg</file>
+    </qresource>
 </RCC>

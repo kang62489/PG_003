@@ -104,3 +104,35 @@ QTextEdit#textEdit_tags {
     font-weight: bold;
     color: purple;
 }
+
+QProgressBar {
+    border-style: solid;
+    border-color: gray;
+    border-radius: 7px;
+    border-width: 2px;
+    background-color: darkgray;
+    text-align: center;
+    font-family: "Hack Nerd Font Mono";
+    font-size: 18px;
+    color: #f9f9f9;
+    font-weight: bold;
+    padding: 5px;
+}
+QProgressBar::chunk {
+    background-color: darkviolet;
+}
+
+QCheckBox::indicator
+ {
+    width: 40px;
+    height: 40px;
+}
+
+QCheckBox::indicator:unchecked {
+    image: url(:checkbox/unchecked.svg);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:checkbox/checked.svg);
+}
+

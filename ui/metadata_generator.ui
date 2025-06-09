@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>709</width>
+    <width>711</width>
     <height>869</height>
    </rect>
   </property>
@@ -1053,34 +1053,29 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_concat_controls">
-          <property name="title">
-           <string>Control Terms</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_24">
-           <item>
-            <widget class="QCheckBox" name="checkBox_includeSubfolders">
-             <property name="text">
-              <string>Include subfolders</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="btn_browse_tiffs">
-             <property name="text">
-              <string>Browse</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
          <widget class="QGroupBox" name="groupBox_tiffBrowser">
           <property name="title">
            <string>File Browser (Tiff)</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_17">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <item>
+              <widget class="QCheckBox" name="checkBox_includeSubfolders">
+               <property name="text">
+                <string>Include subfolders</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_browse_tiffs">
+               <property name="text">
+                <string>Browse</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
            <item>
             <widget class="QCheckBox" name="checkBox_selectAllFiles">
              <property name="text">
@@ -1210,7 +1205,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>709</width>
+     <width>711</width>
      <height>22</height>
     </rect>
    </property>

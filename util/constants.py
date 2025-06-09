@@ -66,6 +66,12 @@ class UISizes:
     # Database Viewer
     DATABASE_VIEWER_WIDTH = 800
     DATABASE_VIEWER_HEIGHT = 300
+    
+    # Progress Bar
+    PROGRESSBAR_HEIGHT = 40
+    
+    # Checkbox
+    CHECKBOX_LARGE = QSize(24, 24)
 
 # UI Alignments
 @dataclass

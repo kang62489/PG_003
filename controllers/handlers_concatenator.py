@@ -85,7 +85,7 @@ class ConcatenatorHandlers:
         self.concatenator_thread = thread_concatenator.ConcatenatorThread(to_be_concatenated, str(self.input_dir))
         self.concatenator_thread.progress_update.connect(self.update_concatenation_progress)
         self.concatenator_thread.finished.connect(self.on_concatenation_finished)
-        
+        self.concatenator_thread.progress_percentage.connect(self.ui.progressBar_concatenation.setValue)
         # Start the thread
         # use start() instead of run(), because run() is a built-in method of QThread
         self.concatenator_thread.start()

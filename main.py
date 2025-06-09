@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtGui import QFontDatabase, QFont
 
+
 from views import (
     ExpInfoView,
     RecTaggerView,
@@ -33,17 +34,17 @@ class MainPanel:  # Inherit from QObject
         # Load the UI
         self.ui = loader.load(UI_FILE, None)
         self.ui.setWindowTitle(APP_NAME)
-
-        self.default_font = QFont("Calibri", 12)
         
+        # Load custom font and set it
+        self.default_font = QFont("Calibri", 12)
         font_id = QFontDatabase.addApplicationFont("resources/fonts/HACKNERDFONTMONO-REGULAR.TTF")
         if font_id == -1:
             print("[red]Error loading font: Hack Nerd Font Mono[/red]")
         else:
             font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-            print(f"[green]{font_family} loaded successfully[/green]")
         
         self.ui.setFont(self.default_font)
+        
         # Apply styles
         with open(STYLE_FILE, "r") as f:
             self.ui.setStyleSheet(f.read())

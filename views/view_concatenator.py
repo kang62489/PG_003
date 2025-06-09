@@ -1,5 +1,6 @@
 ## Modules
 from util.constants import UISizes
+from classes import customized_delegate
 
 class ConcatenatorView:
     def __init__(self, ui):
@@ -9,11 +10,22 @@ class ConcatenatorView:
     def setup_ui(self):
         self.setup_listview()
         self.setup_groupbox()
-        
+        self.setup_progressbar()
+        self.setup_pushbuttons()
+    
     
     def setup_listview(self):
-        pass
+        checkbox_delegate = customized_delegate.CheckBoxSizeDelegate(checkbox_size=24)
+        self.ui.listView_recFiles.setItemDelegate(checkbox_delegate)
+        # pass
     
     def setup_groupbox(self):
         self.ui.groupBox_concat_status.setFixedHeight(2*UISizes.GROUP_BOX_STATUS_HEIGHT)
-        
+    
+    def setup_progressbar(self):
+        self.ui.progressBar_concatenation.setFixedHeight(UISizes.PROGRESSBAR_HEIGHT)
+
+    def setup_pushbuttons(self):
+        self.ui.btn_browse_tiffs.setFixedSize(UISizes.BUTTON_SMALL)
+        self.ui.btn_start_concatenation.setFixedHeight(UISizes.BUTTON_LONG_HEIGHT)
+    
