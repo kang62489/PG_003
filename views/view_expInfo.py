@@ -1,4 +1,4 @@
-# Modules
+## Modules
 from datetime import datetime
 from PySide6.QtCore import Qt
 from util.constants import (

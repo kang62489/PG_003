@@ -11,6 +11,7 @@ from classes import (
     dialog_confirm,
     dialog_getPath
 )
+from PySide6.QtGui import QTextCursor
 from util.constants import MODELS_DIR
 
 class RecDBHandlers:
@@ -115,10 +116,12 @@ class RecDBHandlers:
             return
         else:
             self.ui.textBrowser_recDB.append("<span style='color: lime;'>[INFO] .rec files are found, scanning...</span>")
+            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
 
         list_of_metadata, rec_filenames, timestamps = self.rec_content_scanner(list_of_rec_paths)
         df_summary = self.generate_summary_dateFrame_of_metadata(list_of_metadata, rec_filenames, timestamps)
         self.ui.textBrowser_recDB.append("<span style='color: lime;'>[INFO] Scanning completed! Summary generated!</span>")
+        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
         
         # Save to database
         conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
@@ -127,34 +130,41 @@ class RecDBHandlers:
         if table_name_to_be_written not in self.list_of_recDB_tables:
             df_summary.to_sql(table_name_to_be_written, conn, index=False)
             self.ui.textBrowser_recDB.append(f"<span style='color: lime;'>[INFO] New table '{table_name_to_be_written}' created in database!</span>")
+            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
             conn.close()
             self.reload_menuList_tablesOfRecDB()
             return
         
         self.ui.textBrowser_recDB.append(f"<span style='color: yellow;'>[Warning] Table '{table_name_to_be_written}' already exists in database, replacing...</span>")
+        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
         df_summary.to_sql(table_name_to_be_written, conn, if_exists="replace", index=False)
         self.ui.textBrowser_recDB.append("<span style='color: lime;'>[INFO] Summary successfully saved to database!</span>")
+        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
         conn.close()
         
     def loadRecDB(self):
         self.selected_table = self.ui.comboBox_tableOfRecDB.currentText()
         if self.selected_table == "":
             self.ui.textBrowser_recDB.append("<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>")
+            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
             return
         self.model_recDB.setTable(self.selected_table)
         self.model_recDB.setSort(self.model_recDB.fieldIndex('Timestamp'), Qt.AscendingOrder)
         self.model_recDB.select()
         self.ui.textBrowser_recDB.append(f"<span style='color: lime;'>[INFO] Table '{self.selected_table}' loaded!</span>")
+        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
 
     def delete_table(self):
         self.selected_table = self.ui.comboBox_tableOfRecDB.currentText()
         if self.selected_table == "":
             self.ui.textBrowser_recDB.append("<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>")
+            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
             return
         
         checkDeletion = dialog_confirm.Confirm(title="Warning...", msg="Delete selected table? This cannot be undone!")
         if not checkDeletion.exec():
             self.ui.textBrowser_recDB.append("<span style='color: white;'>[MESSAGE] Deletion Cancelled!</span>")
+            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
             return
         
         conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
@@ -164,6 +174,7 @@ class RecDBHandlers:
         conn.close()
         
         self.ui.textBrowser_recDB.append(f"<span style='color: lime;'>[INFO] Table '{self.selected_table}' deleted from database!</span>")
+        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
         self.reload_menuList_tablesOfRecDB()
         self.clear_tableview_recDB()
 
@@ -175,12 +186,14 @@ class RecDBHandlers:
         selected_table = self.ui.comboBox_tableOfRecDB.currentText()
         if selected_table == "":
             self.ui.textBrowser_recDB.append("<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>")
+            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
             return
         
         dlg_get_outputDir = dialog_getPath.GetPath(title="Select the output directory of the csv file of selected table!")
         output_dir = dlg_get_outputDir.get_path()
         if output_dir == "":
             self.ui.textBrowser_recDB.append("<span style='color: white;'>[MESSAGE] Export canceled</span>")
+            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
             return
         
         conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
@@ -189,5 +202,6 @@ class RecDBHandlers:
         
         df.to_excel(os.path.join(output_dir, f"{selected_table}.xlsx"), index=False)
         self.ui.textBrowser_recDB.append(f"<span style='color: lime;'>[INFO] Table '{selected_table}' exported to {output_dir}</span>")
+        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
     
         pass
