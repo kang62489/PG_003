@@ -369,9 +369,11 @@ class RecTaggerHandlers:
         with open(backup_path, mode="w") as f:
             json.dump(self.recBackups, f, indent=4)
             self.ui.textBrowser_status.append("<span style='color: lime;'>[INFO] Backup saved!</span>")
-            self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+            self.ui.textBrowser_status.moveCursor(QTextCursor.End)
         
     def writeToRec(self):
+        self.directory = self.ui.lineEdit_recDir.text()
+        
         # Prepare filename and path
         self.rec_filename = self.ui.lineEdit_filenameSN.text().replace(".tif", ".tif.rec")
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
@@ -391,7 +393,7 @@ class RecTaggerHandlers:
         
         if not dlg_checkWriteTags.exec():
             self.ui.textBrowser_status.append("<span style='color: white;'>[MESSAGE] Write Cancelled!</span>")
-            self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+            self.ui.textBrowser_status.moveCursor(QTextCursor.End)
             return
         
         # Scan existing comments
@@ -407,11 +409,11 @@ class RecTaggerHandlers:
             
             if not dlg_checkOverwriteTags.exec():
                 self.ui.textBrowser_status.append("<span style='color: white;'>[MESSAGE] Overwrite Cancelled!</span>")
-                self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+                self.ui.textBrowser_status.moveCursor(QTextCursor.End)
                 return
             else:
                 self.ui.textBrowser_status.append("<span style='color: yellow;'>[WARNING] Overwrite Confirmed!</span>")
-                self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+                self.ui.textBrowser_status.moveCursor(QTextCursor.End)
 
         # Backup before writing (can be recovered)
         self.backup_rec_contents(self.directory, self.rec_filename, self.original_content)
@@ -422,7 +424,7 @@ class RecTaggerHandlers:
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
             f.write("\n".join(contents_to_be_written))
             self.ui.textBrowser_status.append(f"<span style='color: lime;'>[INFO] Tags were written to {self.rec_filename}!</span>")
-            self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+            self.ui.textBrowser_status.moveCursor(QTextCursor.End)
 
         self.increaseSN()
 
@@ -438,7 +440,7 @@ class RecTaggerHandlers:
             self.ui.textBrowser_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
         
         self.ui.textBrowser_status.append(f"<span style='color: lime;'>[INFO] Tags were loaded from {self.rec_filename}!</span>")
-        self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+        self.ui.textBrowser_status.moveCursor(QTextCursor.End)
         self.ui.textEdit_tags.clear()
         self.tags_read, _, _ = self.scan_rec_commments(self.rec_filepath)
         self.ui.textEdit_tags.setPlainText("\n".join(self.tags_read))
@@ -457,28 +459,28 @@ class RecTaggerHandlers:
         recovery_filepath = os.path.join(self.directory, "rec_backups.json")
         if not os.path.isfile(recovery_filepath):
             self.ui.textBrowser_status.append("<span style='color: tomato;'>[ERROR] No backup file (JSON) is found!</span>")
-            self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+            self.ui.textBrowser_status.moveCursor(QTextCursor.End)
             return
         else:
             with open(recovery_filepath, mode="r") as f:
                 self.recBackups = json.load(f)
             self.ui.textBrowser_status.append("<span style='color: lime;'>[INFO] Backup JSON file is Loaded!</span>")
-            self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+            self.ui.textBrowser_status.moveCursor(QTextCursor.End)
     
         dlg_checkRecover = dialog_confirm.Confirm(title="Checking...", msg=f"Recover {self.rec_filename} to the original state?")
         if not dlg_checkRecover.exec():
             self.ui.textBrowser_status.append("<span style='color: white;'>[MESSAGE] Recovery Cancelled!</span>")
-            self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+            self.ui.textBrowser_status.moveCursor(QTextCursor.End)
             return
         else:
             self.ui.textBrowser_status.append("<span style='color: yellow;'>[WARNING] Recovery Confirmed!</span>")
-            self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+            self.ui.textBrowser_status.moveCursor(QTextCursor.End)
         
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
             if self.rec_filename in self.recBackups.keys():
                 f.write("\n".join(self.recBackups[self.rec_filename][0]))
                 self.ui.textBrowser_status.append(f"<span style='color: lime;'>[INFO] {self.rec_filename} was recovered!</span>")
-                self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+                self.ui.textBrowser_status.moveCursor(QTextCursor.End)
             else:
                 self.ui.textBrowser_status.append(f"<span style='color: tomato;'>[ERROR] Recovery failed! {self.rec_filename} was not found in the backup!</span>")
-                self.ui.textBrowser_status.moveCusror(QTextCursor.End)
+                self.ui.textBrowser_status.moveCursor(QTextCursor.End)
