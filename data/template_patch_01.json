@@ -1,12 +1,11 @@
 {
     "VALUE_0":{
-        "Rt":"4.4MOhm",
+        "Rt":"",
         "Cm":"",
         "Rm":"",
         "Ra":"",
         "Tau":"",
         "Hold":"",
-        "STIM_PROTOCOL_NUMBER":"",
         "ABF_SERIAL_NUMBER":""
     }
 }
