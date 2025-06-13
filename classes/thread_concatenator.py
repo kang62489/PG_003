@@ -47,16 +47,12 @@ class ConcatenatorThread(QThread):
         self.progress_update.emit("-"*length_horizontal_line, "white")
         self.progress_update.emit(f"Total files to concatenate: {self.total_count}", "white")
         
-        # Process files in parallel with batching
+        # Process files in parallel
         t_start = time()
         
-        # Process in smaller batches to manage memory better
-        batch_size = min(self.max_workers * 2, 8)  # Adjust based on your system
-        
-        for i in range(0, len(self.files_to_process), batch_size):
-            batch = self.files_to_process[i:i+batch_size]
-            with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-                executor.map(self.concatenate_process, batch)
+        # Process all files at once with ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+            executor.map(self.concatenate_process, self.files_to_process)
         
         elapse = time() - t_start
         self.progress_update.emit(f"Concatenation completed in {elapse:.2f} seconds<br>", "aqua")
