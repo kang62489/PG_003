@@ -11,7 +11,7 @@ class ConcatenatorThread(QThread):
     # No need to customize it explicitly (finished = Signal())
     progress_percentage = Signal(int)
     
-    def __init__(self, files_to_process, main_dir, max_workers=4):
+    def __init__(self, files_to_process, main_dir, max_workers=2):
         super().__init__()
         self.files_to_process = files_to_process
         self.main_dir = main_dir
@@ -25,9 +25,14 @@ class ConcatenatorThread(QThread):
         components = sorted(img_dir.glob(f"{img_basename}@*.tif"))
         
         all_files = [file] + components
+        output_path = f"{self.main_dir}/merged/m_{img_basename}.tif"
+        original_stat = os.stat(file)
         try:
-            tifftools.tiff_concat(all_files, f"{self.main_dir}/merged/m_{img_basename}.tif", overwrite=True)
-            self.progress_update.emit(f"{img_basename} is concatenated.", "aquamarine")
+            t_start = time()
+            tifftools.tiff_concat(all_files, output_path, overwrite=True)
+            elaspse = time() - t_start
+            os.utime(output_path, (original_stat.st_atime, original_stat.st_mtime))
+            self.progress_update.emit(f"{img_basename} is concatenated. Time used: {elaspse:.2f} seconds.", "aquamarine")
             
         except Exception as e:
             self.progress_update.emit(f"Error processing {img_basename}: {e}", "red")
@@ -54,5 +59,5 @@ class ConcatenatorThread(QThread):
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             executor.map(self.concatenate_process, self.files_to_process)
         
-        elapse = time() - t_start
-        self.progress_update.emit(f"Concatenation completed in {elapse:.2f} seconds<br>", "aqua")
+        t_end = time() - t_start
+        self.progress_update.emit(f"All concatenation completed in {t_end:.2f} seconds<br>", "aqua")
