@@ -14,5 +14,10 @@
     "AAV1-CAG-DIO-tdTomato (050) + AAV1-ihSyn-tTA-sv40/TRE-iAChSnFR-minWPRE (089)",
     "AAV1-ihSyn-tTA-sv40/TRE-iAChSnFR-minWPRE (089) + AAV1-hSyn-DIO-hM3D-mCherry (44361)",
     "AAV1-ihSyn-tTA-sv40/TRE-iAChSnFR-minWPRE (089) + AAV1-ihSyn-tTA-sv40/TRE-iAChSnFR-Null-minWPRE (090)",
-    "AAV1-hSyn-iAChSnFR-WPRE-sv40 (008) + AAV1-hSyn-DIO-mCherry (028)"
+    "AAV1-hSyn-iAChSnFR-WPRE-sv40 (008) + AAV1-hSyn-DIO-mCherry (028)",
+    "AAV.PHP.eB-ChAT-enhancer-rACh1h-WPRE3-bGHpA (140)",
+    "AAV9-ChATenhancer-rACh1h-WPRE3-bGHpA (140)",
+    "AAV1-hSyn-DIO-hM4D-mCherry (44362-AAV1)",
+    "AAV_PHP.eb-ihSyn-tTA-sv40/TRE-RdLight1-minWPRE (137)",
+    "AAV_PHP.eb-hSyn-GRAB_ACh3.0 (121922)"
 ]
