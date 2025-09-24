@@ -36,7 +36,7 @@ class ConcatenatorThread(QThread):
 
             # Use imageio v3 API
             images = [imageio.v3.imread(file_path) for file_path in all_files]
-            imageio.v3.imwrite(output_path, images)
+            imageio.v3.imwrite(output_path, images, bigtiff=True)
 
             elaspse = time() - t_start
             os.utime(output_path, (original_stat.st_atime, original_stat.st_mtime))
