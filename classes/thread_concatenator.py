@@ -34,11 +34,12 @@ class ConcatenatorThread(QThread):
         try:
             t_start = time()
 
-            # Use tifffile for concatenation
-            with tifffile.TiffWriter(output_path) as writer:
-                for file_path in all_files:
-                    data = tifffile.imread(file_path)
-                    writer.write(data)
+            # Use faster approach - read full files and append
+            for i, tiff_file in enumerate(all_files):
+                data = tifffile.imread(tiff_file)
+                # First file creates, rest append
+                append_mode = i > 0
+                tifffile.imwrite(output_path, data, append=append_mode)
 
             elaspse = time() - t_start
             os.utime(output_path, (original_stat.st_atime, original_stat.st_mtime))
