@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from time import time
 
-import tifftools
+import tifffile
 from PySide6.QtCore import QThread, Signal
 
 
@@ -34,14 +34,11 @@ class ConcatenatorThread(QThread):
         try:
             t_start = time()
 
-            # Use tifftools with IFDs extend approach
-            combined_ifds = []
-            for file_path in all_files:
-                tiff_data = tifftools.read_tiff(str(file_path))
-                combined_ifds.extend(tiff_data["ifds"])
-
-            # Write combined IFDs to output file
-            tifftools.write_tiff(combined_ifds, output_path)
+            # Use tifffile for concatenation
+            with tifffile.TiffWriter(output_path) as writer:
+                for file_path in all_files:
+                    data = tifffile.imread(file_path)
+                    writer.write(data)
 
             elaspse = time() - t_start
             os.utime(output_path, (original_stat.st_atime, original_stat.st_mtime))
