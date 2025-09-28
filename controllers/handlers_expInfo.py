@@ -73,8 +73,8 @@ class ExpInfoHandlers(QObject):
                 self.ui.comboBox_virus_L, self.model_menuList_virus_L
             )
         )
-        self.ui.checkBox_enable_R.checkStateChanged.connect(self.groupBox_R_available)
-        self.ui.checkBox_enable_L.checkStateChanged.connect(self.groupBox_L_available)
+        self.ui.checkBox_ST_R.checkStateChanged.connect(self.groupBox_R_available)
+        self.ui.checkBox_ST_L.checkStateChanged.connect(self.groupBox_L_available)
 
         self.ui.dateEdit_DOR.dateChanged.connect(self.auto_calculation)
         self.ui.dateEdit_DOB.dateChanged.connect(self.auto_calculation)
@@ -96,9 +96,8 @@ class ExpInfoHandlers(QObject):
         ui_combobox.lineEdit().returnPressed.connect(
             lambda: self.on_edit_done(ui_combobox, model_combobox)
         )
-        ui_combobox.lineEdit().editingFinished.connect(
-            lambda: self.editing_finished(ui_combobox)
-        )
+        # Install event filter to handle ESC key
+        ui_combobox.lineEdit().installEventFilter(self)
 
     def update_menuList_JSON_files(self, model_combobox):
         for model_name, file_name in MenuOptions.MENU_LIST_FILES.items():
@@ -203,11 +202,11 @@ class ExpInfoHandlers(QObject):
             "CuttingOS": self.ui.lineEdit_CuttingOS.text(),
             "HoldingOS": self.ui.lineEdit_HoldingOS.text(),
             "RecordingOS": self.ui.lineEdit_RecordingOS.text(),
-            "Enable_R": str(self.ui.checkBox_enable_R.isChecked()),
-            "Enable_L": str(self.ui.checkBox_enable_L.isChecked()),
+            "Enable_R": str(self.ui.checkBox_ST_R.isChecked()),
+            "Enable_L": str(self.ui.checkBox_ST_L.isChecked()),
         }
 
-        if self.ui.checkBox_enable_R.isChecked():
+        if self.ui.checkBox_ST_R.isChecked():
             data_R = {
                 "Inj_Volume_R": self.ui.lineEdit_volume_R.text(),
                 "Inj_Volume_Unit_R": self.ui.comboBox_volumeUnit_R.currentText(),
@@ -219,7 +218,7 @@ class ExpInfoHandlers(QObject):
             }
             data_main.update(data_R)
 
-        if self.ui.checkBox_enable_L.isChecked():
+        if self.ui.checkBox_ST_L.isChecked():
             data_L = {
                 "Inj_Volume_L": self.ui.lineEdit_volume_L.text(),
                 "Inj_Volume_Unit_L": self.ui.comboBox_volumeUnit_L.currentText(),
@@ -231,16 +230,31 @@ class ExpInfoHandlers(QObject):
             }
             data_main.update(data_L)
 
-        columns_to_be_inserted = ", ".join(data_main.keys())
-        placeholders_for_inserting_values = ", ".join(["?"] * len(data_main))
-        values_to_be_inserted = tuple(data_main.values())
-
         conn = sqlite3.connect(MODELS_DIR / "expInfo.db")
         cursor = conn.cursor()
         table_name = self.ui.comboBox_tableOfExpInfoDB.currentText()
-        sql_command = f"INSERT INTO {table_name} ({columns_to_be_inserted}) VALUES ({placeholders_for_inserting_values})"
 
-        cursor.execute(sql_command, values_to_be_inserted)
+        # Check if record exists using DOR and Animal_ID as unique identifier
+        check_query = f"SELECT id FROM {table_name} WHERE DOR = ? AND Animal_ID = ?"
+        cursor.execute(check_query, (data_main["DOR"], data_main["Animal_ID"]))
+        existing_record = cursor.fetchone()
+
+        if existing_record:
+            # Record exists - UPDATE
+            record_id = existing_record[0]
+            set_clause = ", ".join([f"{key} = ?" for key in data_main.keys()])
+            values_to_update = tuple(data_main.values()) + (record_id,)
+            sql_command = f"UPDATE {table_name} SET {set_clause} WHERE id = ?"
+            cursor.execute(sql_command, values_to_update)
+            print("[bold green]Data updated in database![/bold green]")
+        else:
+            # Record doesn't exist - INSERT
+            columns_to_be_inserted = ", ".join(data_main.keys())
+            placeholders_for_inserting_values = ", ".join(["?"] * len(data_main))
+            values_to_be_inserted = tuple(data_main.values())
+            sql_command = f"INSERT INTO {table_name} ({columns_to_be_inserted}) VALUES ({placeholders_for_inserting_values})"
+            cursor.execute(sql_command, values_to_be_inserted)
+            print("[bold green]Data saved to database![/bold green]")
+
         conn.commit()
-        print("[bold green]Data saved to database![/bold green]")
         conn.close()

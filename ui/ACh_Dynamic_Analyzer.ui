@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>711</width>
-    <height>869</height>
+    <width>722</width>
+    <height>881</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_ExpInfo">
        <attribute name="title">
@@ -290,26 +290,37 @@
              <item>
               <widget class="QLabel" name="label_33">
                <property name="text">
-                <string>Target Area</string>
+                <string>Mode</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox_enable_R">
+              <widget class="QCheckBox" name="checkBox_RO_R">
                <property name="text">
-                <string>Right</string>
+                <string>Retro-Orbital_R</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox_enable_L">
+              <widget class="QCheckBox" name="checkBox_RO_L">
                <property name="text">
-                <string>Left</string>
+                <string>Retro-Orbital_L</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit_targetArea"/>
+              <widget class="QCheckBox" name="checkBox_ST_R">
+               <property name="text">
+                <string>Stereotaxic_R</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBox_ST_L">
+               <property name="text">
+                <string>Stereotaxic_L</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -1205,8 +1216,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>711</width>
-     <height>22</height>
+     <width>722</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>
