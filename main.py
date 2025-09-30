@@ -10,16 +10,19 @@ from PySide6.QtWidgets import QApplication
 
 # Local application imports
 from controllers import (
-    ConcatenatorHandlers,
-    ExpInfoHandlers,
-    RecDBHandlers,
-    RecTaggerHandlers,
+    TAB_EXP_Handlers,
+    TAB_REC_DB_Handlers,
+    TAB_REC_Handlers,
 )
 
 # Import resources.py for qss file (using noqa to ignore unused import warning)
 from resources import resources  # noqa: F401
 from util.constants import APP_NAME, APP_STATUS_MESSAGE, DEFAULTS, STYLE_FILE, UI_FILE
-from views import ConcatenatorView, ExpInfoView, RecDBView, RecTaggerView
+from views import (
+    TAB_EXP_View,
+    TAB_REC_DB_View,
+    TAB_REC_View,
+)
 
 loader = QUiLoader()
 
@@ -50,17 +53,14 @@ class MainPanel:  # Inherit from QObject
         self.ui.statusbar.showMessage(APP_STATUS_MESSAGE)
 
         # Initialize tab managers
-        ExpInfoView(self.ui)
-        RecTaggerView(self.ui)
-        RecDBView(self.ui)
-        ConcatenatorView(self.ui)
+        TAB_EXP_View(self.ui)
+        TAB_REC_View(self.ui)
+        TAB_REC_DB_View(self.ui)
 
         # Initialize tab handlers
-        self.handlers_expInfo = ExpInfoHandlers(self.ui)
-        self.handlers_recTagger = RecTaggerHandlers(self.ui)
-        self.handlers_recDB = RecDBHandlers(self.ui)
-        self.handlers_concatenator = ConcatenatorHandlers(self.ui)
-
+        self.handlers_expInfo = TAB_EXP_Handlers(self.ui)
+        self.handlers_recTagger = TAB_REC_Handlers(self.ui)
+        self.handlers_recDB = TAB_REC_DB_Handlers(self.ui)
         # Set default tab index
         self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])
 

@@ -10,7 +10,7 @@ from classes import dialog_confirm, dialog_database, model_list_1
 from util.constants import MODELS_DIR, MenuOptions
 
 
-class ExpInfoHandlers(QObject):
+class TAB_EXP_Handlers(QObject):
     def __init__(self, ui):
         super().__init__()
         self.ui = ui

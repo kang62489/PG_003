@@ -1,6 +1,10 @@
-from .handlers_expInfo import ExpInfoHandlers
-from .handlers_recTagger import RecTaggerHandlers
-from .handlers_recDB import RecDBHandlers
-from .handlers_concatenator import ConcatenatorHandlers
+# Local application imports
+from .handlers_EXP import TAB_EXP_Handlers
+from .handlers_REC import TAB_REC_Handlers
+from .handlers_REC_DB import TAB_REC_DB_Handlers
 
-__all__ = ['ExpInfoHandlers', 'RecTaggerHandlers', 'RecDBHandlers', 'ConcatenatorHandlers']
+__all__ = [
+    "TAB_EXP_Handlers",
+    "TAB_REC_Handlers",
+    "TAB_REC_DB_Handlers",
+]

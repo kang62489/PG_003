@@ -6,7 +6,7 @@ from PySide6.QtCore import Qt
 from util.constants import MenuOptions, UISizes
 
 
-class ExpInfoView:
+class TAB_EXP_View:
     def __init__(self, ui):
         self.ui = ui
         self.setup_ui()

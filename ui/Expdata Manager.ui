@@ -14,15 +14,15 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_22">
+   <layout class="QVBoxLayout" name="verticalLayout_10">
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
-      <widget class="QWidget" name="tab_ExpInfo">
+      <widget class="QWidget" name="tab_EXP">
        <attribute name="title">
-        <string>Exp Info</string>
+        <string>Experiment Info</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
@@ -575,9 +575,9 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_RecTagger">
+      <widget class="QWidget" name="tab_REC">
        <attribute name="title">
-        <string>Rec Tagger</string>
+        <string>REC metatdata</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_23">
         <item>
@@ -964,9 +964,158 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_RecSumGen">
+      <widget class="QWidget" name="tab_ABF">
        <attribute name="title">
-        <string>Rec Database</string>
+        <string>ABF metadata</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_15">
+        <item>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="2" column="0">
+           <widget class="QComboBox" name="comboBox"/>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_36">
+            <property name="text">
+             <string>Slice</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>Filename</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>PClamp Protocol Name</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="label_37">
+            <property name="text">
+             <string>Cell</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Rt(Bath)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_34">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLineEdit" name="lineEdit"/>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLineEdit" name="lineEdit_2"/>
+          </item>
+          <item row="2" column="4">
+           <widget class="QLineEdit" name="lineEdit_3"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_38">
+            <property name="text">
+             <string>Timestamp</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_39">
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_35">
+            <property name="text">
+             <string>Mode</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QComboBox" name="comboBox_2"/>
+          </item>
+          <item row="3" column="2">
+           <widget class="QLabel" name="label_40">
+            <property name="text">
+             <string>Rm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QLabel" name="label_41">
+            <property name="text">
+             <string>Cm</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QLabel" name="label_42">
+            <property name="text">
+             <string>Ra</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="5">
+           <widget class="QLabel" name="label_43">
+            <property name="text">
+             <string>Tau</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLineEdit" name="lineEdit_4"/>
+          </item>
+          <item row="4" column="3">
+           <widget class="QLineEdit" name="lineEdit_5"/>
+          </item>
+          <item row="4" column="4">
+           <widget class="QLineEdit" name="lineEdit_6"/>
+          </item>
+          <item row="4" column="5">
+           <widget class="QLineEdit" name="lineEdit_7"/>
+          </item>
+          <item row="3" column="6">
+           <widget class="QLabel" name="label_44">
+            <property name="text">
+             <string>Hold</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="6">
+           <widget class="QLineEdit" name="lineEdit_8"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Add</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableView" name="tableView"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_REC_DB">
+       <attribute name="title">
+        <string>REC Database</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_21">
         <item>
@@ -1040,167 +1189,6 @@
           <layout class="QVBoxLayout" name="verticalLayout_9">
            <item>
             <widget class="QTableView" name="tableView_recDB"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_Concatenater">
-       <attribute name="title">
-        <string>Concatenator (Tiff)</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_10">
-        <item>
-         <widget class="QGroupBox" name="groupBox_concat_status">
-          <property name="title">
-           <string>Status</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_15">
-           <item>
-            <widget class="QTextBrowser" name="textBrowser_concatenator"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_tiffBrowser">
-          <property name="title">
-           <string>File Browser (Tiff)</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_17">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_10">
-             <item>
-              <widget class="QCheckBox" name="checkBox_includeSubfolders">
-               <property name="text">
-                <string>Include subfolders</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_browse_tiffs">
-               <property name="text">
-                <string>Browse</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_selectAllFiles">
-             <property name="text">
-              <string>All</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QListView" name="listView_recFiles"/>
-           </item>
-           <item>
-            <widget class="QPushButton" name="btn_start_concatenation">
-             <property name="text">
-              <string>Start</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QProgressBar" name="progressBar_concatenation">
-          <property name="value">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Quick Analysis</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_22">
-        <item>
-         <widget class="QGroupBox" name="groupBox_10">
-          <property name="title">
-           <string>Preprocessing Parameters</string>
-          </property>
-          <layout class="QFormLayout" name="formLayout_7">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_45">
-             <property name="text">
-              <string>Directory</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item>
-              <widget class="QLineEdit" name="lineEdit_20"/>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_8">
-               <property name="text">
-                <string>Browse</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_46">
-             <property name="text">
-              <string>Filename</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_44">
-             <property name="text">
-              <string>Gaussian Kernel Radius (pixels)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_25">
-             <item>
-              <widget class="QComboBox" name="comboBox_16"/>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_10">
-               <property name="text">
-                <string>Process</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_26">
-             <item>
-              <widget class="QComboBox" name="comboBox_15"/>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_4">
-               <property name="text">
-                <string>Load</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_11">
-          <property name="title">
-           <string>Release Map</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item>
-            <widget class="QGraphicsView" name="graphicsView"/>
            </item>
           </layout>
          </widget>

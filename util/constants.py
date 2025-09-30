@@ -9,10 +9,10 @@ from pathlib import Path
 from PySide6.QtCore import QSize, Qt
 
 # Application Info
-APP_NAME = "ACh Dynamic Analyzer"
-APP_VERSION = "3.1"
+APP_NAME = "Expdata Manager"
+APP_VERSION = "4.0"
 APP_AUTHOR = "Kang"
-APP_LAST_UPDATE = "2025-June-09"
+APP_LAST_UPDATE = "2025-Sep-29"
 APP_STATUS_MESSAGE = f"{APP_NAME} {APP_VERSION}, Author: {APP_AUTHOR}, Last Update: {APP_LAST_UPDATE}, Made in OIST"
 
 # Directory Paths
@@ -22,7 +22,7 @@ STYLES_DIR = BASE_DIR / "styles"
 MODELS_DIR = BASE_DIR / "data"
 
 # File Paths
-UI_FILE = UI_DIR / "ACh_Dynamic_Analyzer.ui"
+UI_FILE = UI_DIR / "Expdata Manager.ui"
 STYLE_FILE = STYLES_DIR / "styles.qss"
 
 
@@ -97,7 +97,7 @@ DEFAULTS = {
     "SERIAL": 0,
     "TAB_INDEX": 0,
     "LIGHT_INENSITY": "LV6",
-    "EXPOSURE_TIME": "40",
+    "EXPOSURE_TIME": "50",
     "FRAMES": "1200p",
     "FPS": "20Hz",
 }

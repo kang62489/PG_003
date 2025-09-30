@@ -16,7 +16,7 @@ from classes import dialog_confirm, dialog_getPath, model_list_1
 from util.constants import MODELS_DIR
 
 
-class RecDBHandlers:
+class TAB_REC_DB_Handlers:
     def __init__(self, ui):
         self.ui = ui
 
