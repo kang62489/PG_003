@@ -3,6 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from time import time
 
+import numpy as np
 import tifffile
 from PySide6.QtCore import QThread, Signal
 
@@ -34,12 +35,17 @@ class ConcatenatorThread(QThread):
         try:
             t_start = time()
 
-            # Use faster approach - read full files and append
-            for i, tiff_file in enumerate(all_files):
+            # Read all files and concatenate properly
+            all_data = []
+            for tiff_file in all_files:
                 data = tifffile.imread(tiff_file)
-                # First file creates, rest append
-                append_mode = i > 0
-                tifffile.imwrite(output_path, data, append=append_mode)
+                all_data.append(data)
+
+            # Concatenate along the first axis (frames)
+            concatenated_data = np.concatenate(all_data, axis=0)
+
+            # Write the concatenated data as a single file
+            tifffile.imwrite(output_path, concatenated_data)
 
             elaspse = time() - t_start
             os.utime(output_path, (original_stat.st_atime, original_stat.st_mtime))
