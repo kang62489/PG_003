@@ -14,9 +14,9 @@ from controllers import (
     TAB_REC_DB_Handlers,
     TAB_REC_Handlers,
 )
-
-# Import resources.py for qss file (using noqa to ignore unused import warning)
-from resources import resources  # noqa: F401
+from resources import (
+    resources,  # noqa: F401 (Import resources.py for qss file,using # noqa to ignore unused import warning)
+)
 from util.constants import APP_NAME, APP_STATUS_MESSAGE, DEFAULTS, STYLE_FILE, UI_FILE
 from views import (
     TAB_EXP_View,
@@ -27,7 +27,7 @@ from views import (
 loader = QUiLoader()
 
 
-class MainPanel:  # Inherit from QObject
+class MainPanel:
     def __init__(self) -> None:
         # Load the UI
         self.ui = loader.load(UI_FILE, None)

@@ -1,11 +1,15 @@
+## Modules
+# Standard library imports
 import json
 import sqlite3
 
+# Third-party imports
 import pendulum
 from PySide6.QtCore import QEvent, QObject, Qt
 from PySide6.QtWidgets import QApplication, QComboBox
 from rich import print
 
+# Local application imports
 from classes import dialog_confirm, dialog_database, model_list_1
 from util.constants import MODELS_DIR, MenuOptions
 
@@ -16,6 +20,7 @@ class TAB_EXP_Handlers(QObject):
         self.ui = ui
         self.model_menuList_ACUC = model_list_1.ListModel(name="model_menuList_ACUC")
         self.ui.comboBox_ACUC.setModel(self.model_menuList_ACUC)
+
         self.model_menuList_virus_R = model_list_1.ListModel(
             name="model_menuList_virus_R"
         )
@@ -28,10 +33,10 @@ class TAB_EXP_Handlers(QObject):
         self.loadMenuLists()
         self.ui.comboBox_ACUC.setCurrentIndex(0)
 
-        # install event filter
+        # install event filter for using ESC key to cancel editing
         self.ui.installEventFilter(self)
 
-        # Set initial check state
+        # Set initial check states
         self.groupBox_R_available(Qt.Checked)
         self.groupBox_L_available(Qt.Unchecked)
 
@@ -81,6 +86,7 @@ class TAB_EXP_Handlers(QObject):
         self.ui.dateEdit_DOI.dateChanged.connect(self.auto_calculation)
 
     def eventFilter(self, obj, event):
+        """Event filter to handle ESC key to cancel editing in combobox, installed in __init__"""
         if event.type() == QEvent.KeyPress:
             focus_widget = QApplication.focusWidget()
             if event.key() == Qt.Key_Escape and isinstance(focus_widget, QComboBox):
@@ -96,8 +102,6 @@ class TAB_EXP_Handlers(QObject):
         ui_combobox.lineEdit().returnPressed.connect(
             lambda: self.on_edit_done(ui_combobox, model_combobox)
         )
-        # Install event filter to handle ESC key
-        ui_combobox.lineEdit().installEventFilter(self)
 
     def update_menuList_JSON_files(self, model_combobox):
         for model_name, file_name in MenuOptions.MENU_LIST_FILES.items():
