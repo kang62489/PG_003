@@ -1,0 +1,14 @@
+{
+    "ACUC_PNS": ["ACUP-2021-011-2", "ACUP-2024-001"],
+    "EXCITATION": ["HLG", "LED_GREEN", "LED_BLUE"],
+    "EMISSION": ["IR", "RED", "GREEN"],
+    "EXPO_UNITS": ["ms", "us"],
+    "CAM_TRIG_MODES": ["EXT_EXP_START", "EXT_EXP_CTRL"],
+    "LOC_TYPES": ["SITE_", "CELL_"],
+    "VOLUME_UNIT": ["nL", "uL"],
+    "INJECTION_MODE": ["STEREOTAXIC", "RETRO-ORBITAL"],
+    "GENOTYPE": ["neoChAT-Hom", "neoChAT-Het", "WT", "R2PV-Het", "mChAT-cre"],
+    "SEX": ["M", "F"],
+    "SPECIES": ["Mouse", "Rat"],
+    "EXPINFO_DB_TABLES": ["ACh_Dynamics", "ACh_Sensor_Specificity"]
+}

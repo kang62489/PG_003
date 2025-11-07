@@ -1,8 +1,4 @@
-"""
-Constants for the Metadata Generator application.
-Author: Kang
-"""
-
+import json
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -20,6 +16,18 @@ BASE_DIR = Path(__file__).parent.parent
 UI_DIR = BASE_DIR / "ui"
 STYLES_DIR = BASE_DIR / "styles"
 MODELS_DIR = BASE_DIR / "data"
+
+# Load menu options from JSON files
+
+
+def _load_json_menu(filename):
+    """Helper to load JSON menu files"""
+    with open(MODELS_DIR / filename, "r") as f:
+        return json.load(f)
+
+
+# Load general options set
+_general_options = _load_json_menu("menuList_general_options_set.json")
 
 # File Paths
 UI_FILE = UI_DIR / "Expdata Manager.ui"
@@ -46,8 +54,11 @@ class UISizes:
     COMBO_STANDARD = QSize(180, 40)  # Standard combo boxes
     COMBO_WIDE = QSize(200, 40)  # Wide combo boxes
     COMBO_UNIT_WIDTH = 80
+    COMBO_GENOTYPE_WITDH = 140
 
     # Line Edits
+    LINE_EDIT_OS_WIDTH = 80
+    LINE_EDIT_ID_WIDTH = 180
     LINE_EDIT_HEIGHT = 50
     LINE_EDIT_EXPO_WIDTH = 120
     LINE_EDIT_VOLUME_WIDTH = 120
@@ -56,9 +67,10 @@ class UISizes:
     GROUP_BOX_ROW1_HEIGHT = 80
     GROUP_BOX_ROW1_WIDTH = 806
 
-    GROUP_BOX_ROW2_HEIGHT_1 = 150
-    GROUP_BOX_ROW2_HEIGHT_2 = 306
+    GROUP_BOX_ROW2_HEIGHT = 150
     GROUP_BOX_ROW2_WIDTH = 400
+
+    GROUP_BOX_ROW3_HEIGHT = 150
     GROUP_BOX_ROW3_WIDTH = 806
 
     GROUP_BOX_WIDTH_LEFT_COLUMN = 400
@@ -129,37 +141,29 @@ class Colors:
 # Menu Options
 @dataclass
 class MenuOptions:
-    # Excitation options
-    EXCITATION = ["HLG", "LED_GREEN", "LED_BLUE"]
+    # Loaded from general options JSON
+    ACUC_PNS = _general_options["ACUC_PNS"]
+    EXCITATION = _general_options["EXCITATION"]
+    EMISSION = _general_options["EMISSION"]
+    EXPO_UNITS = _general_options["EXPO_UNITS"]
+    CAM_TRIG_MODES = _general_options["CAM_TRIG_MODES"]
+    LOC_TYPES = _general_options["LOC_TYPES"]
+    VOLUME_UNIT = _general_options["VOLUME_UNIT"]
+    INJECTION_MODE = _general_options["INJECTION_MODE"]
+    GENOTYPE = _general_options["GENOTYPE"]
+    SEX = _general_options["SEX"]
+    SPECIES = _general_options["SPECIES"]
+    EXPINFO_DB_TABLES = _general_options["EXPINFO_DB_TABLES"]
 
-    # Emission filter options
-    EMISSION = ["IR", "RED", "GREEN"]
-
-    # Exposure time units
-    EXPO_UNITS = ["ms", "us"]
-
-    # Recording modes
-    CAM_TRIG_MODES = ["EXT_EXP_START", "EXT_EXP_CTRL"]
-
-    # Recording location types
-    LOC_TYPES = ["SITE_", "CELL_"]
-
-    # MenuList files
+    # MenuList files mapping
     MENU_LIST_FILES = {
         "model_menuList_ACUC": "menuList_ACUC.json",
         "model_menuList_virus_R": "menuList_virus_R.json",
         "model_menuList_virus_L": "menuList_virus_L.json",
     }
 
-    VOLUME_UNIT = ["nL", "uL"]
-
-    INJECTION_MODE = ["STEREOTAXIC", "RETRO-ORBITAL"]
-
-    GENOTYPE = ["neoChAT-Hom", "neoChAT-Het", "WT", "R2PV-Het", "mChAT-cre"]
-
-    SEX = ["M", "F"]
-
-    SPECIES = ["Mouse", "Rat"]
-
-    # Database Tables
-    EXPINFO_DB_TABLES = ["ACh_Dynamics", "ACh_Sensor_Specificity"]
+    # Loaded from individual JSON files
+    VIRUSES_R = _load_json_menu("menuList_virus_R.json")
+    VIRUSES_L = _load_json_menu("menuList_virus_L.json")
+    CUSTOM_TEMPLATES = _load_json_menu("menuList_templates.json")
+    IMPORTED_DBS = _load_json_menu("menuList_tables_of_RecDB.json")

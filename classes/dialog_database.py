@@ -5,8 +5,6 @@ from datetime import datetime
 
 ## Third-party imports
 import pandas as pd
-
-## Local application imports
 from PySide6.QtCore import Qt
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel
 from PySide6.QtWidgets import (
@@ -21,6 +19,7 @@ from PySide6.QtWidgets import (
 )
 from rich import print
 
+## Local application imports
 from classes import customized_delegate, dialog_confirm
 from util.constants import MODELS_DIR, STYLE_FILE, UIAlignments, UISizes
 
