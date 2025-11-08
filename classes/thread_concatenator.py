@@ -44,8 +44,9 @@ class ConcatenatorThread(QThread):
             # Concatenate along the first axis (frames)
             concatenated_data = np.concatenate(all_data, axis=0)
 
-            # Write the concatenated data as a single file
-            tifffile.imwrite(output_path, concatenated_data)
+            # Write the concatenated data as a single file without title/subject metadata
+            # Use datetime=True to preserve timestamp, but avoid adding title/subject
+            tifffile.imwrite(output_path, concatenated_data, metadata=None, datetime=True)
 
             elaspse = time() - t_start
             os.utime(output_path, (original_stat.st_atime, original_stat.st_mtime))
