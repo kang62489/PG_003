@@ -13,6 +13,12 @@ class CenterAlignDelegate(QStyledItemDelegate):
         option.displayAlignment = Qt.AlignCenter
 
 
+class RCAlignDelegate(QStyledItemDelegate):
+    def initStyleOption(self, option, index):
+        super().initStyleOption(option, index)
+        option.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
+
+
 class CellEditDelegate(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
         editor = QLineEdit(parent)
@@ -110,9 +116,7 @@ class QListViewItemDelegate(QStyledItemDelegate):
         # Toggle checkbox on mouse release
         if event.type() == QEvent.MouseButtonRelease:
             current_state = index.data(Qt.CheckStateRole)
-            new_state = (
-                0 if current_state == Qt.Checked else 2
-            )  # 0=Unchecked, 2=Checked
+            new_state = 0 if current_state == Qt.Checked else 2  # 0=Unchecked, 2=Checked
             return model.setData(index, new_state, Qt.CheckStateRole)
 
         return True

@@ -1,0 +1,11 @@
+{
+    "028-RED": "hSyn-DIO-mCherry",
+    "050-RED": "CAG-DIO-tdTomato",
+    "137-RED": "ihSyn-tTA-sv40/TRE-RdLight1-minWPRE",
+    "140-RED": "ChAT_enhancer-rACh1h-WPRE3-bGHpA",
+    "142-RED": "D2_enhancer-rdLight1",
+    "143-RED": "ChAT_enhancer-hM4D<Gi>-P2A-tdTomato-minWPRE",
+    "144-RED": "hSyn-DIO-hM4D<Gi>-tdTomato",
+    "44361-RED": "hSyn-DIO-hM3D<Gq>-mCherry",
+    "44362-RED": "hSyn-DIO-hM4D<Gi>-mCherry"
+}

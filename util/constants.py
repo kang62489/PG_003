@@ -17,9 +17,8 @@ UI_DIR = BASE_DIR / "ui"
 STYLES_DIR = BASE_DIR / "styles"
 MODELS_DIR = BASE_DIR / "data"
 
+
 # Load menu options from JSON files
-
-
 def _load_json_menu(filename):
     """Helper to load JSON menu files"""
     with open(MODELS_DIR / filename, "r") as f:
@@ -142,28 +141,35 @@ class Colors:
 @dataclass
 class MenuOptions:
     # Loaded from general options JSON
+    # For EXP tab
     ACUC_PNS = _general_options["ACUC_PNS"]
+    INJECTION_MODE = _general_options["INJECTION_MODE"]
+    SIDE = _general_options["SIDE"]
+    INJECTATE_TYPE = _general_options["INJECTATE_TYPE"]
+    VECTOR_LIST = _general_options["VECTOR_LIST"]
+    MIXING_RATIO = _general_options["MIXING_RATIO"]
+    DILUTION = _general_options["DILUTION"]
+    # For REC tab
     EXCITATION = _general_options["EXCITATION"]
     EMISSION = _general_options["EMISSION"]
     EXPO_UNITS = _general_options["EXPO_UNITS"]
     CAM_TRIG_MODES = _general_options["CAM_TRIG_MODES"]
     LOC_TYPES = _general_options["LOC_TYPES"]
     VOLUME_UNIT = _general_options["VOLUME_UNIT"]
-    INJECTION_MODE = _general_options["INJECTION_MODE"]
     GENOTYPE = _general_options["GENOTYPE"]
     SEX = _general_options["SEX"]
     SPECIES = _general_options["SPECIES"]
     EXPINFO_DB_TABLES = _general_options["EXPINFO_DB_TABLES"]
 
-    # MenuList files mapping
-    MENU_LIST_FILES = {
-        "model_menuList_ACUC": "menuList_ACUC.json",
-        "model_menuList_virus_R": "menuList_virus_R.json",
-        "model_menuList_virus_L": "menuList_virus_L.json",
-    }
+    # MenuList files mapping (model_name: file_names)
+    # MENU_LIST_FILES = {
+    #     "model_menuList_ACUC": "menuList_ACUC.json",
+    #     "model_menuList_virus_R": "menuList_virus_R.json",
+    #     "model_menuList_virus_L": "menuList_virus_L.json",
+    # }
 
     # Loaded from individual JSON files
-    VIRUSES_R = _load_json_menu("menuList_virus_R.json")
-    VIRUSES_L = _load_json_menu("menuList_virus_L.json")
+    # VIRUSES_R = _load_json_menu("menuList_virus_R.json")
+    # VIRUSES_L = _load_json_menu("menuList_virus_L.json")
     CUSTOM_TEMPLATES = _load_json_menu("menuList_templates.json")
     IMPORTED_DBS = _load_json_menu("menuList_tables_of_RecDB.json")

@@ -154,3 +154,10 @@ QListView::indicator:unchecked {
 QListView::indicator:checked {
     image: url(:checkbox/checked.svg);
 }
+
+QTreeView#treeView_injections QHeaderView::section {
+      font-size: 16px;
+      font-weight: bold;
+      color: black;
+      padding: 5px;
+  }
