@@ -85,6 +85,7 @@ class TAB_EXP_Handlers(QObject):
     def openDB(self):
         self.dlg_dbViewer = dialog_database.DatabaseViewer(self.ui, self)
 
+    
     def save_to_DB(self):
         checkSaveToDB = dialog_confirm.Confirm(title="Checking...", msg="Save current expinfo to database?")
         if not checkSaveToDB.exec():
@@ -107,7 +108,7 @@ class TAB_EXP_Handlers(QObject):
             "RecordingOS": self.ui.lineEdit_RecordingOS.text(),
         }
 
-        conn = sqlite3.connect(MODELS_DIR / "expInfo.db")
+        conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
         cursor = conn.cursor()
         table_name = self.ui.comboBox_tableOfExpInfoDB.currentText()
 

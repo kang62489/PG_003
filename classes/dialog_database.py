@@ -13,11 +13,13 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
     QHeaderView,
+    QLabel,
     QPushButton,
     QTableView,
     QVBoxLayout,
 )
 from rich import print
+from tabulate import tabulate
 
 ## Local application imports
 from classes import customized_delegate, dialog_confirm
@@ -27,191 +29,207 @@ from util.constants import MODELS_DIR, STYLE_FILE, UIAlignments, UISizes
 class DatabaseViewer(QDialog):
     """A class of creating a database viewer for manaing the experiment information database"""
 
-    def __init__(self, ui, main):
+    def __init__(self, ui, handlers_EXP):
         super().__init__()
         self.ui = ui
-        self.main = main
+        self.handlers_EXP = handlers_EXP
 
         self.setupUI()
-        self.setup_DB()
+        self.open_DB()
         self.connect_signals()
         self.show()
 
     def setupUI(self):
         self.setup_dialog()
         self.setup_tableView()
+        self.setup_labels()
         self.setup_buttons()
         self.setup_layouts()
 
-    def setup_DB(self):
+    def open_DB(self):
         self.db = QSqlDatabase("QSQLITE")
-        self.db.setDatabaseName(str((MODELS_DIR / "expInfo.db").resolve()))
+        self.db.setDatabaseName(str((MODELS_DIR / "exp_data.db").resolve()))
         self.db.open()
 
-        self.model_expInfoDB = QSqlTableModel(db=self.db)
-        self.tableView_expInfoDB.setModel(self.model_expInfoDB)
-        self.sm_expInfoDB = self.tableView_expInfoDB.selectionModel()
-        self.selected_table = self.ui.comboBox_tableOfExpInfoDB.currentText()
-        self.model_expInfoDB.setTable(self.selected_table)
-        self.model_expInfoDB.setSort(
-            self.model_expInfoDB.fieldIndex("DOR"), Qt.DescendingOrder
-        )
-        self.model_expInfoDB.select()
+        # Create a model for BASIC_INFO table
+        self.model_basic = QSqlTableModel(db=self.db)
+        self.tableView_basic.setModel(self.model_basic)
+        self.sm_basic = self.tableView_basic.selectionModel()
+        self.selected_table = "BASIC_INFO"
+        self.model_basic.setTable(self.selected_table)
+        self.model_basic.setSort(self.model_basic.fieldIndex("DOR"), Qt.DescendingOrder)
+        self.model_basic.select()
+
+        # Create a model for INJECTION_HISTORY table
+        self.model_injections = QSqlTableModel(db=self.db)
+        self.model_injections.setTable("INJECTION_HISTORY")
+        self.tableView_injections.setModel(self.model_injections)
 
     def setup_dialog(self):
         self.setWindowTitle("Database Viewer")
         with open(STYLE_FILE, "r") as f:
             self.setStyleSheet(f.read())
         self.resize(UISizes.DATABASE_VIEWER_WIDTH, UISizes.DATABASE_VIEWER_HEIGHT)
-        self.setModal(True)
+        # self.setModal(True) # This will block the main window
+
+        parent_geometry = self.ui.geometry()
+        child_geometry = self.frameGeometry()
+        # Calculate center position
+        parent_center = parent_geometry.center()
+        child_geometry.moveCenter(parent_center)
+
+        # Move window to centered position
+        self.move(child_geometry.topLeft())
 
     def setup_layouts(self):
         self.layout_main = QVBoxLayout()
         self.layout_btns = QHBoxLayout()
 
-        self.layout_btns.addWidget(self.btn_load)
+        self.layout_btns.addWidget(self.btn_load_for_edit)
         self.layout_btns.addWidget(self.btn_delete)
-        self.layout_btns.addWidget(self.btn_export)
-        self.layout_main.addWidget(self.tableView_expInfoDB)
+        self.layout_btns.addWidget(self.btn_export_selected)
+        self.layout_btns.addWidget(self.btn_export_databases)
+
+        self.layout_main.addWidget(self.lbl_exp_list)
+        self.layout_main.addWidget(self.tableView_basic)
+        self.layout_main.addWidget(self.lbl_inj_history)
+        self.layout_main.addWidget(self.tableView_injections)
         self.layout_main.addLayout(self.layout_btns)
         self.setLayout(self.layout_main)
 
-    def setup_buttons(self):
-        self.btn_load = QPushButton("Load")
-        self.btn_delete = QPushButton("Delete")
-        self.btn_export = QPushButton("Export")
+    def setup_labels(self):
+        self.lbl_exp_list = QLabel("Experiment List")
+        self.lbl_inj_history = QLabel("Injection History")
 
-        buttons = [self.btn_load, self.btn_delete, self.btn_export]
+    def setup_buttons(self):
+        self.btn_load_for_edit = QPushButton("Edit")
+        self.btn_delete = QPushButton("Delete Selected Rows")
+        self.btn_delete.setStyleSheet("color: red;")
+        self.btn_export_selected = QPushButton("Export Selected")
+        self.btn_export_databases = QPushButton("Export Databases")
+
+        buttons = [self.btn_load_for_edit, self.btn_delete, self.btn_export_selected, self.btn_export_databases]
         for btn in buttons:
-            btn.setFixedSize(UISizes.BUTTON_SMALL)
+            btn.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
 
     def setup_tableView(self):
-        self.tableView_expInfoDB = QTableView()
-        self.tableView_expInfoDB.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.tableView_expInfoDB.horizontalHeader().setDefaultAlignment(
-            UIAlignments.CENTER
-        )
-        self.tableView_expInfoDB.verticalHeader().setVisible(False)
-        self.tableView_expInfoDB.horizontalHeader().setSectionResizeMode(
-            QHeaderView.ResizeToContents
-        )
-        self.tableView_expInfoDB.setItemDelegate(
-            customized_delegate.CenterAlignDelegate()
-        )
+        self.tableView_basic = QTableView()
+        self.tableView_basic.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView_basic.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
+        self.tableView_basic.verticalHeader().setVisible(False)
+        self.tableView_basic.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableView_basic.setItemDelegate(customized_delegate.CenterAlignDelegate())
+        self.tableView_basic.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.5)
+
+        self.tableView_injections = QTableView()
+        self.tableView_injections.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tableView_injections.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
+        self.tableView_injections.verticalHeader().setVisible(False)
+        self.tableView_injections.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tableView_injections.setItemDelegate(customized_delegate.CenterAlignDelegate())
+        self.tableView_injections.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.3)
 
     def connect_signals(self):
-        self.btn_load.clicked.connect(self.load)
+        self.sm_basic.selectionChanged.connect(self.preview_inj)
         self.btn_delete.clicked.connect(self.delete)
-        self.btn_export.clicked.connect(self.export)
+        self.btn_export_selected.clicked.connect(self.export_selected)
+        self.btn_export_databases.clicked.connect(self.export_databases)
 
-    def load(self):
-        selected_row = self.sm_expInfoDB.currentIndex().row()
-        if not self.sm_expInfoDB.hasSelection():
+    def preview_inj(self):
+        selected_indexes = self.sm_basic.selectedIndexes()
+        if not selected_indexes:
             print("No row is selected")
             return
-        primary_key = self.model_expInfoDB.index(selected_row, 0).data()
 
-        # connect to database for retrieving the data
-        conn = sqlite3.connect(str((MODELS_DIR / "expInfo.db").resolve()))
-        df = pd.read_sql_query(
-            f"SELECT * FROM {self.selected_table} WHERE id = {primary_key}", conn
-        )
-        conn.close()
+        # Get unique Animal_IDs from selected rows (column 1)
+        animal_ids = list({self.model_basic.index(idx.row(), 1).data() for idx in selected_indexes})
 
-        self.ui.dateEdit_DOR.setDate(datetime.strptime(df["DOR"][0], "%Y_%m_%d"))
-        self.ui.lineEdit_experimenters.setText(df["Experimenters"][0])
-        self.ui.comboBox_ACUC.setCurrentText(df["ACUC_Protocol"][0])
-        self.ui.lineEdit_animalID.setText(df["Animal_ID"][0])
-        self.ui.comboBox_species.setCurrentText(df["Species"][0])
-        self.ui.comboBox_genotype.setCurrentText(df["Genotype"][0])
-        self.ui.comboBox_sex.setCurrentText(df["Sex"][0])
-        self.ui.dateEdit_DOB.setDate(datetime.strptime(df["DOB"][0], "%Y_%m_%d"))
-        self.ui.dateEdit_DOI.setDate(datetime.strptime(df["DOI"][0], "%Y_%m_%d"))
-        self.ui.lineEdit_CuttingOS.setText(df["CuttingOS"][0])
-        self.ui.lineEdit_HoldingOS.setText(df["HoldingOS"][0])
-        self.ui.lineEdit_RecordingOS.setText(df["RecordingOS"][0])
-
-        if df["Enable_R"][0] == "True":
-            self.ui.checkBox_ST_R.setCheckState(Qt.Checked)
-            self.main.groupBox_R_available(Qt.Checked)
-            self.ui.lineEdit_volume_R.setText(df["Inj_Volume_R"][0])
-            self.ui.comboBox_volumeUnit_R.setCurrentText(df["Inj_Volume_Unit_R"][0])
-            self.ui.comboBox_injectionMode_R.setCurrentText(df["Inj_Mode_R"][0])
-            self.ui.lineEdit_Coord_DV_R.setText(df["Inj_Coord_DV_R"][0])
-            self.ui.lineEdit_Coord_ML_R.setText(df["Inj_Coord_ML_R"][0])
-            self.ui.lineEdit_Coord_AP_R.setText(df["Inj_Coord_AP_R"][0])
-            self.ui.comboBox_virus_R.setCurrentText(df["Inj_virus_R"][0])
-        else:
-            self.ui.checkBox_ST_R.setCheckState(Qt.Unchecked)
-            self.main.groupBox_R_available(Qt.Unchecked)
-
-        if df["Enable_L"][0] == "True":
-            self.ui.checkBox_ST_L.setCheckState(Qt.Checked)
-            self.main.groupBox_L_available(Qt.Checked)
-            self.ui.lineEdit_volume_L.setText(df["Inj_Volume_L"][0])
-            self.ui.comboBox_volumeUnit_L.setCurrentText(df["Inj_Volume_Unit_L"][0])
-            self.ui.comboBox_injectionMode_L.setCurrentText(df["Inj_Mode_L"][0])
-            self.ui.lineEdit_Coord_DV_L.setText(df["Inj_Coord_DV_L"][0])
-            self.ui.lineEdit_Coord_ML_L.setText(df["Inj_Coord_ML_L"][0])
-            self.ui.lineEdit_Coord_AP_L.setText(df["Inj_Coord_AP_L"][0])
-            self.ui.comboBox_virus_L.setCurrentText(df["Inj_virus_L"][0])
-        else:
-            self.ui.checkBox_ST_L.setCheckState(Qt.Unchecked)
-            self.main.groupBox_L_available(Qt.Unchecked)
-
-        print("Date loaded!")
-        self.close()
+        # Build filter
+        ids_str = "', '".join(animal_ids)
+        self.model_injections.setFilter(f"Animal_ID IN ('{ids_str}')")
+        self.model_injections.select()
 
     def delete(self):
-        selected_indexes = self.sm_expInfoDB.selectedIndexes()
-        if selected_indexes == []:
+        # Determine which table has focus - prioritize focus over selection
+        if self.tableView_injections.hasFocus():
+            model = self.model_injections
+            table_name = "INJECTION_HISTORY"
+            selected_indexes = self.tableView_injections.selectionModel().selectedIndexes()
+            use_passcode = False
+        elif self.tableView_basic.hasFocus():
+            model = self.model_basic
+            table_name = "BASIC_INFO"
+            selected_indexes = self.sm_basic.selectedIndexes()
+            use_passcode = True
+        elif self.tableView_injections.selectionModel().hasSelection():
+            model = self.model_injections
+            table_name = "INJECTION_HISTORY"
+            selected_indexes = self.tableView_injections.selectionModel().selectedIndexes()
+            use_passcode = False
+        elif self.sm_basic.hasSelection():
+            model = self.model_basic
+            table_name = "BASIC_INFO"
+            selected_indexes = self.sm_basic.selectedIndexes()
+            use_passcode = True
+        else:
             print("No row is selected")
             return
 
-        checkDeletion = dialog_confirm.Confirm(
-            title="Checking...", msg="Delete selected rows?"
-        )
+        if not selected_indexes:
+            print("No row is selected")
+            return
+
+        # Choose confirmation dialog based on table
+        if use_passcode:
+            checkDeletion = dialog_confirm.ConfirmWithPasscode(
+                title="⚠️ Delete Confirmation",
+                msg=f"Delete selected rows from {table_name}?\nThis will also delete related injection history!\nThis action cannot be undone!",
+                passcode="kang",
+            )
+        else:
+            checkDeletion = dialog_confirm.Confirm(title="Checking...", msg=f"Delete selected rows from {table_name}?")
+
         if not checkDeletion.exec():
             print("Delete Cancelled!")
             return
 
-        rows_to_be_removed = sorted(
-            set(index.row() for index in selected_indexes), reverse=True
-        )
+        # For BASIC_INFO: manually delete related INJECTION_HISTORY first
+        if table_name == "BASIC_INFO":
+            # Get Animal_IDs to be deleted
+            rows = sorted(set(index.row() for index in selected_indexes))
+            animal_ids = [model.index(row, 1).data() for row in rows]  # Column 1 is Animal_ID
+
+            # Delete related injection history first
+            conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
+            cursor = conn.cursor()
+            for animal_id in animal_ids:
+                cursor.execute("DELETE FROM INJECTION_HISTORY WHERE Animal_ID = ?", (animal_id,))
+                print(f"[yellow]Deleted injection history for Animal_ID: {animal_id}[/yellow]")
+            conn.commit()
+            conn.close()
+
+            # Refresh injection model
+            self.model_injections.select()
+
+        # Now delete from the selected table
+        rows_to_be_removed = sorted(set(index.row() for index in selected_indexes), reverse=True)
         for row in rows_to_be_removed:
-            self.model_expInfoDB.removeRows(row, 1)
+            model.removeRows(row, 1)
 
         # Submit and save the changes to the sql table model
-        if self.model_expInfoDB.submitAll():
-            print("[bold green]Data deleted from database![/bold green]")
+        if model.submitAll():
+            print(f"[bold green]Data deleted from {table_name}![/bold green]")
         else:
-            print(
-                "[bold red]Failed to delete data from database! The model is reverted![/bold red]"
-            )
-            self.model_expInfoDB.revertAll()
+            print(f"[bold red]Failed to delete data from {table_name}! The model is reverted![/bold red]")
+            model.revertAll()
 
         # Refresh the view
-        self.model_expInfoDB.select()
+        model.select()
 
-    def export(self):
-        selected_row = self.sm_expInfoDB.currentIndex().row()
-        if not self.sm_expInfoDB.hasSelection():
-            print("No row is selected")
-            return
-
-        primary_key = self.model_expInfoDB.index(selected_row, 0).data()
-
-        # connect to database for retrieving the data
-        conn = sqlite3.connect(str((MODELS_DIR / "expInfo.db").resolve()))
-        df = pd.read_sql_query(
-            f"SELECT * FROM {self.selected_table} WHERE id = {primary_key}", conn
-        )
-        conn.close()
-
+    def export_selected(self):
+        selected_indexes = self.sm_basic.selectedIndexes()
         dlg_get_outputDir = QFileDialog()
-        dlg_get_outputDir.setWindowTitle(
-            "Select the output directory of the markdown file of selected expinfo!"
-        )
+        dlg_get_outputDir.setWindowTitle("Select the output directory")
         dlg_get_outputDir.setFileMode(QFileDialog.FileMode.Directory)
         dlg_get_outputDir.setDirectory("")
 
@@ -220,30 +238,106 @@ class DatabaseViewer(QDialog):
             return
 
         dir_output = dlg_get_outputDir.selectedFiles()[0]
-        props = df.columns.tolist()
-        values = df.values.tolist()[0]
 
-        with open(
-            os.path.join(dir_output, df["DOR"][0] + "_expInfo.md"),
-            "w",
-            encoding="utf-8",
-        ) as f:
-            f.write("---\n")
-            for prop, value in zip(props, values):
-                if prop in ["id", "Enable_R", "Enable_L"]:
-                    continue
-                elif value is None:
-                    continue
-                elif prop in ["Ages", "Incubation"]:
-                    value = f"{value} weeks"
-                elif prop == "Inj_Volume_R" or prop == "Inj_Volume_L":
-                    unit_name = f"{prop}".replace("Volume", "Volume_Unit")
-                    value = f"{value} {df[unit_name][0]}"
-                elif prop == "Inj_Volume_Unit_R" or prop == "Inj_Volume_Unit_L":
-                    continue
+        if not selected_indexes:
+            print("No row is selected")
+            return
 
-                f.write(f"{prop}: {value}")
-                f.write("\n")
-            f.write("---\n")
-            print("File exported!")
+        # Get unique Animal_IDs from selected rows (column 1)
+        animal_ids = list({self.model_basic.index(idx.row(), 1).data() for idx in selected_indexes})
+
+        for animal_id in animal_ids:
+            # connect to database for retrieving the data
+            conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
+            query_basic = """
+                SELECT b.* FROM BASIC_INFO b
+                WHERE b.Animal_ID = ?
+            """
+
+            query_injection = """
+                SELECT i.* FROM INJECTION_HISTORY i
+                WHERE i.Animal_ID = ?
+            """
+            df_basic = pd.read_sql_query(query_basic, conn, params=(animal_id,))
+            df_injection = pd.read_sql_query(query_injection, conn, params=(animal_id,))
+            conn.close()
+
+            with open(
+                os.path.join(dir_output, df_basic["DOR"][0] + "_expInfo.md"),
+                "w",
+                encoding="utf-8",
+            ) as f:
+                f.write("# Experiment Information\n")
+                f.write("Date of Recording: " + df_basic["DOR"][0] + "\n")
+                f.write("Project Code: " + df_basic["Project_Code"][0] + "\n\n")
+
+                f.write("# ACSF Solutions\n")
+                f.write("Cutting Solution: " + df_basic["CuttingOS"][0].astype(str) + " mOsm/L" + "\n")
+                f.write("Holding Solution: " + df_basic["HoldingOS"][0].astype(str) + " mOsm/L" + "\n")
+                f.write("Recording Solution: " + df_basic["RecordingOS"][0].astype(str) + " mOsm/L" + "\n\n")
+
+                f.write("# Animal Information\n")
+                f.write("Animal ID: " + df_basic["Animal_ID"][0] + "\n")
+                f.write("Date of Birth: " + df_basic["DOB"][0] + "\n")
+                f.write("Ages: " + df_basic["Ages"][0] + "\n")
+                f.write("Genotype: " + df_basic["Genotype"][0] + "\n")
+                f.write("Species: " + df_basic["Species"][0] + "\n")
+                f.write("Sex: " + df_basic["Sex"][0] + "\n")
+                f.write("Protocol: " + df_basic["ACUC_Protocol"][0] + "\n\n")
+
+                f.write("=" * 65 + "  Injection History  " + "=" * 65 + "\n\n\n")
+                if df_injection.empty:
+                    f.write("No injection history\n")
+                else:
+                    df_to_be_written_summary = df_injection.drop(
+                        columns=[
+                            "Animal_ID",
+                            "Virus_Full",
+                            "Injectate_Type",
+                            "Mix_Ratio",
+                            "Volume_Per_Shot",
+                            "Num_Of_Sites",
+                            "Inj_Coords",
+                        ]
+                    )
+                    f.write(tabulate(df_to_be_written_summary, headers="keys", tablefmt="pretty"))
+
+                    f.write("\n\n\n")
+                    df_to_be_written_details = df_injection.drop(
+                        columns=[
+                            "Animal_ID",
+                            "DOI",
+                            "Inj_Mode",
+                            "Side",
+                            "Virus_Short",
+                            "Incubated",
+                        ]
+                    )
+                    f.write(tabulate(df_to_be_written_details, headers="keys", tablefmt="pretty"))
+
+        print("File exported!")
         self.close()
+
+    def export_databases(self):
+        dlg_get_outputDir = QFileDialog()
+        dlg_get_outputDir.setWindowTitle("Select the output directory")
+        dlg_get_outputDir.setFileMode(QFileDialog.FileMode.Directory)
+        dlg_get_outputDir.setDirectory("")
+
+        if not dlg_get_outputDir.exec():
+            print("Export cancelled!")
+            return
+
+        dir_output = dlg_get_outputDir.selectedFiles()[0]
+        conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
+        df_basic = pd.read_sql_query("SELECT * FROM BASIC_INFO", conn)
+        df_injection = pd.read_sql_query("SELECT * FROM INJECTION_HISTORY", conn)
+        conn.close()
+
+        df_basic.to_excel(
+            os.path.join(dir_output, f"OUTPUT {datetime.now().strftime('%Y%m%d_%H%M%S')}_BASIC_INFO.xlsx"), index=False
+        )
+        df_injection.to_excel(
+            os.path.join(dir_output, f"OUTPUT {datetime.now().strftime('%Y%m%d_%H%M%S')}_INJECTION_HISTORY.xlsx"),
+            index=False,
+        )

@@ -2,10 +2,10 @@
     "ACUC_PNS": ["ACUP-2021-011-2", "ACUP-2024-001"],
     "INJECTION_MODE": ["STEREOTAXIC", "RETRO-ORBITAL"],
     "SIDE": ["R", "L"],
+    "NUM_OF_SITES": ["1 site", "2 sites", "3 sites"],
     "INJECTATE_TYPE": ["MIXED", "SINGLE"],
     "MIXING_RATIO": ["--- Select Ratio ---","1:1"],
-    "DILUTION": ["--- Select Dilution ---","0.1X GACh3.0"],
-    "VECTOR_LIST": ["AAV1", "AAV8", "AAV9", "AAV_PHP.eb"],
+    "VECTOR_LIST": ["AAV1", "0.1X_AAV1", "0.5X_AAV1", "AAV8", "AAV9", "AAV_PHP.eb"],
     "EXCITATION": ["HLG", "LED_GREEN", "LED_BLUE"],
     "EMISSION": ["IR", "RED", "GREEN"],
     "EXPO_UNITS": ["ms", "us"],
@@ -14,6 +14,5 @@
     "VOLUME_UNIT": ["nL", "uL"],
     "GENOTYPE": ["neoChAT-Hom", "neoChAT-Het", "WT", "R2PV-Het", "mChAT-cre"],
     "SEX": ["M", "F"],
-    "SPECIES": ["Mouse", "Rat"],
-    "EXPINFO_DB_TABLES": ["ACh_Dynamics", "ACh_Sensor_Specificity"]
+    "SPECIES": ["Mouse", "Rat"]
 }

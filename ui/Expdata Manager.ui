@@ -34,19 +34,16 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <widget class="QComboBox" name="comboBox_tableOfExpInfoDB"/>
-             </item>
-             <item>
               <widget class="QPushButton" name="btn_openDB">
                <property name="text">
-                <string>Open DB</string>
+                <string>Open Database</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="btn_saveToDB">
                <property name="text">
-                <string>Save to DB</string>
+                <string>Save to Database</string>
                </property>
               </widget>
              </item>
@@ -101,12 +98,12 @@
              <item row="1" column="0">
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Experimenters</string>
+                <string>Project</string>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEdit_experimenters"/>
+              <widget class="QLineEdit" name="lineEdit_project"/>
              </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_5">

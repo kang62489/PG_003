@@ -70,7 +70,7 @@ class ADD_INJECTION_HANDLERS(QObject):
         self.DOR = self.ui.dateEdit_DOR.date().toPython()
         self.DOI = self.view_addInj.dateEdit_inj_DOI.date().toPython()
         self.duration = pendulum.instance(self.DOR) - pendulum.instance(self.DOI)
-        self.view_addInj.lbl_disp_incubated.setText(f"{self.duration.in_weeks()}w{self.duration.remaining_days}d")
+        self.view_addInj.lbl_incubated_disp.setText(f"{self.duration.in_weeks()}w{self.duration.remaining_days}d")
 
     def accept_adding_injection(self):
         """Build injection tree with conditional children based on user selections"""
@@ -141,9 +141,9 @@ class ADD_INJECTION_HANDLERS(QObject):
         parent.setChild(child_row, 1, QStandardItem(construction_full))
         child_row += 1
 
-        # 2. Total Volume (always shown)
+        # 2. Volume Per Shot (always shown)
         volume = self.view_addInj.lineEdit_volume_total.text() or "undefined"
-        label_volume = QStandardItem("Total Volume")
+        label_volume = QStandardItem("Volume Per Shot")
         label_volume.setFont(child_label_font)
         label_volume.setForeground(QColor("#8A2BE2"))
         parent.setChild(child_row, 0, label_volume)
@@ -163,29 +163,32 @@ class ADD_INJECTION_HANDLERS(QObject):
             parent.setChild(child_row, 1, QStandardItem(ratio))
             child_row += 1
 
-        # 4. Dilution (only if selected)
-        dilution = self.view_addInj.comboBox_dilution.currentText()
-        if dilution and dilution not in ["", "None", "N/A", "--- Select Dilution ---"]:
-            label_dilution = QStandardItem("Dilution")
-            label_dilution.setFont(child_label_font)
-            label_dilution.setForeground(QColor("#8A2BE2"))
-            parent.setChild(child_row, 0, label_dilution)
-            parent.setChild(child_row, 1, QStandardItem(dilution))
+        # 4. Coordinates (only for Stereotaxic, not Retro-orbital)
+        if inj_mode.lower() == "stereotaxic":
+            # Get number of sites
+            num_of_sites = self.view_addInj.comboBox_num_of_sites.currentText()
+            label_n_sites = QStandardItem("Number of Sites")
+            label_n_sites.setFont(child_label_font)
+            label_n_sites.setForeground(QColor("#8A2BE2"))
+            parent.setChild(child_row, 0, label_n_sites)
+            parent.setChild(child_row, 1, QStandardItem(num_of_sites))
             child_row += 1
 
-        # 5. Coordinates (only for Stereotaxic, not Retro-orbital)
-        if inj_mode.lower() == "stereotaxic":
+            # Get coordinates
             dv = self.view_addInj.lineEdit_DV.text() or "undefined"
             ml = self.view_addInj.lineEdit_ML.text() or "undefined"
             ap = self.view_addInj.lineEdit_AP.text() or "undefined"
 
-            coords = f"(DV, ML, AP) = ({dv}, {ml}, {ap})"
+            coords = f"[DV, ML, AP] = [{dv}, {ml}, {ap}]"
             label_coords = QStandardItem("Coordinates")
             label_coords.setFont(child_label_font)
             label_coords.setForeground(QColor("#8A2BE2"))
             parent.setChild(child_row, 0, label_coords)
             parent.setChild(child_row, 1, QStandardItem(coords))
             child_row += 1
+
+        # ========== Sort model by DOI (column 0, descending = newest first) ==========
+        self.model.sort(0, Qt.DescendingOrder)
 
         # ========== Update TreeView ==========
         self.ui.treeView_injections.setModel(self.model)

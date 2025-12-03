@@ -40,27 +40,37 @@ class UISizes:
     BUTTON_LARGE = QSize(180, 80)  # Main action buttons
     BUTTON_MEDIUM = QSize(100, 80)  # Secondary action buttons
     BUTTON_SMALL = QSize(90, 40)  # Navigation buttons
-    BUTTON_TINY = QSize(60, 25)  # Utility buttons (plus, minus, etc.)
+    BUTTON_TINY = QSize(60, 30)  # Utility buttons (plus, minus, etc.)
     BUTTON_WIDE = QSize(125, 40)  # Wide buttons (copyTag, clearTag)
-    BUTTON_TINY_SQUARE = QSize(25, 25)
+    BUTTON_TINY_SQUARE = QSize(30, 30)
     BUTTON_LONG_HEIGHT = 50
+    BUTTON_GENERAL_HEIGHT = 40
+    BUTTON_REFRESH = QSize(100, 30)
 
     # Labels
     LABEL_STANDARD = QSize(180, 40)  # Standard labels
     LABEL_WIDE = QSize(200, 40)  # Wide labels
+    LABEL_INCUBATED_DISP = QSize(180, 40)  # Incubated label
 
     # Combo Boxes
     COMBO_STANDARD = QSize(180, 40)  # Standard combo boxes
     COMBO_WIDE = QSize(200, 40)  # Wide combo boxes
     COMBO_UNIT_WIDTH = 80
     COMBO_GENOTYPE_WITDH = 140
+    COMBO_INJECTATE_WIDTH = 180
+    COMBO_RATIO_WIDTH = 180
+    COMBO_VECTOR_WIDTH = 150
+    COMBO_CLONE_WIDTH = 180
+    COMBO_SIDE_WIDTH = 150
+    COMBO_INJ_MODE_WIDTH = 250
 
     # Line Edits
     LINE_EDIT_OS_WIDTH = 80
     LINE_EDIT_ID_WIDTH = 180
     LINE_EDIT_HEIGHT = 50
     LINE_EDIT_EXPO_WIDTH = 120
-    LINE_EDIT_VOLUME_WIDTH = 120
+    LINE_EDIT_VOLUME_WIDTH = 150
+    LINE_EDIT_COORDINATE_WIDTH = 100
 
     # Group Boxes
     GROUP_BOX_ROW1_HEIGHT = 80
@@ -77,14 +87,17 @@ class UISizes:
     GROUP_BOX_STATUS_HEIGHT = 150
 
     # Database Viewer
-    DATABASE_VIEWER_WIDTH = 800
-    DATABASE_VIEWER_HEIGHT = 300
+    DATABASE_VIEWER_WIDTH = 1200
+    DATABASE_VIEWER_HEIGHT = 800
 
     # Progress Bar
     PROGRESSBAR_HEIGHT = 40
 
     # Checkbox
     CHECKBOX_LARGE = QSize(24, 24)
+
+    # DateEdit
+    DATE_EDIT_WIDTH = 250
 
 
 # UI Alignments
@@ -145,10 +158,10 @@ class MenuOptions:
     ACUC_PNS = _general_options["ACUC_PNS"]
     INJECTION_MODE = _general_options["INJECTION_MODE"]
     SIDE = _general_options["SIDE"]
+    NUM_OF_SITES = _general_options["NUM_OF_SITES"]
     INJECTATE_TYPE = _general_options["INJECTATE_TYPE"]
     VECTOR_LIST = _general_options["VECTOR_LIST"]
     MIXING_RATIO = _general_options["MIXING_RATIO"]
-    DILUTION = _general_options["DILUTION"]
     # For REC tab
     EXCITATION = _general_options["EXCITATION"]
     EMISSION = _general_options["EMISSION"]
@@ -159,7 +172,6 @@ class MenuOptions:
     GENOTYPE = _general_options["GENOTYPE"]
     SEX = _general_options["SEX"]
     SPECIES = _general_options["SPECIES"]
-    EXPINFO_DB_TABLES = _general_options["EXPINFO_DB_TABLES"]
 
     # MenuList files mapping (model_name: file_names)
     # MENU_LIST_FILES = {

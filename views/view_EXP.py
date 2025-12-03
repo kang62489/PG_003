@@ -3,6 +3,7 @@
 from datetime import datetime
 
 # Third-party imports
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QAbstractItemView, QHeaderView
 
@@ -39,7 +40,7 @@ class TAB_EXP_View:
             dateEdit.setCalendarPopup(True)
 
     def setup_lineedits(self):
-        self.ui.lineEdit_experimenters.setText("Kang")
+        self.ui.lineEdit_project.setText("SPIKE_TRIGGERED_ACH_DOMAIN")
 
         self.ui.lineEdit_cuttingOS.setFixedWidth(UISizes.LINE_EDIT_OS_WIDTH)
         self.ui.lineEdit_holdingOS.setFixedWidth(UISizes.LINE_EDIT_OS_WIDTH)
@@ -54,7 +55,6 @@ class TAB_EXP_View:
         self.ui.comboBox_species.addItems(MenuOptions.SPECIES)
         self.ui.comboBox_genotype.addItems(MenuOptions.GENOTYPE)
         self.ui.comboBox_sex.addItems(MenuOptions.SEX)
-        self.ui.comboBox_tableOfExpInfoDB.addItems(MenuOptions.EXPINFO_DB_TABLES)
 
         self.ui.comboBox_genotype.setFixedWidth(UISizes.COMBO_GENOTYPE_WITDH)
 

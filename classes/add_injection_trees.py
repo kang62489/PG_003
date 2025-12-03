@@ -14,7 +14,7 @@ class ADD_INJECTION_TREES:
         self.model = model
         self.clone_list = self.prepare_clone_list()
         # Initiate the input panel when click the button "Add"
-        self.view_addInj = ADD_INJECTION_VIEW(self.clone_list)
+        self.view_addInj = ADD_INJECTION_VIEW(self.clone_list, parent=self.ui)
 
         # Initiate handlers
         self.handlers_addInj = ADD_INJECTION_HANDLERS(self, self.view_addInj, self.ui, self.model)
