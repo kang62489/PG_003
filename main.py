@@ -57,7 +57,7 @@ class MainPanel:
         TAB_REC_View(self.ui)
         TAB_REC_DB_View(self.ui)
 
-        # Initialize tab handlers
+        # Initialize tab handlers (need to add handler instances to self to access uis in self.ui)
         self.handlers_expInfo = TAB_EXP_Handlers(self.ui)
         self.handlers_recTagger = TAB_REC_Handlers(self.ui)
         self.handlers_recDB = TAB_REC_DB_Handlers(self.ui)

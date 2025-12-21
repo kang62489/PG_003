@@ -5,7 +5,7 @@ from datetime import datetime
 
 ## Third-party imports
 import pandas as pd
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QItemSelectionModel, Qt
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -102,7 +102,7 @@ class DatabaseViewer(QDialog):
         self.lbl_inj_history = QLabel("Injection History")
 
     def setup_buttons(self):
-        self.btn_load_for_edit = QPushButton("Edit")
+        self.btn_load_for_edit = QPushButton("Edit in Main Window")
         self.btn_delete = QPushButton("Delete Selected Rows")
         self.btn_delete.setStyleSheet("color: red;")
         self.btn_export_selected = QPushButton("Export Selected")
@@ -120,6 +120,13 @@ class DatabaseViewer(QDialog):
         self.tableView_basic.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.tableView_basic.setItemDelegate(customized_delegate.CenterAlignDelegate())
         self.tableView_basic.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.5)
+        # Make selection more prominent
+        self.tableView_basic.setStyleSheet("""
+            QTableView::item:selected {
+                background-color: #4A90E2;
+                color: white;
+            }
+        """)
 
         self.tableView_injections = QTableView()
         self.tableView_injections.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -128,9 +135,17 @@ class DatabaseViewer(QDialog):
         self.tableView_injections.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.tableView_injections.setItemDelegate(customized_delegate.CenterAlignDelegate())
         self.tableView_injections.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.3)
+        # Make selection more prominent
+        self.tableView_injections.setStyleSheet("""
+            QTableView::item:selected {
+                background-color: #4A90E2;
+                color: white;
+            }
+        """)
 
     def connect_signals(self):
         self.sm_basic.selectionChanged.connect(self.preview_inj)
+        self.btn_load_for_edit.clicked.connect(self.load_to_main_window)
         self.btn_delete.clicked.connect(self.delete)
         self.btn_export_selected.clicked.connect(self.export_selected)
         self.btn_export_databases.clicked.connect(self.export_databases)
@@ -148,6 +163,100 @@ class DatabaseViewer(QDialog):
         ids_str = "', '".join(animal_ids)
         self.model_injections.setFilter(f"Animal_ID IN ('{ids_str}')")
         self.model_injections.select()
+
+    def load_to_main_window(self):
+        """Load the selected experiment to the main window for editing"""
+        # Determine which table has focus - prioritize focus over selection
+        if self.tableView_injections.hasFocus():
+            model = self.model_injections
+            table_name = "INJECTION_HISTORY"
+            selected_indexes = self.tableView_injections.selectionModel().selectedIndexes()
+        elif self.tableView_basic.hasFocus():
+            model = self.model_basic
+            table_name = "BASIC_INFO"
+            selected_indexes = self.sm_basic.selectedIndexes()
+        elif self.tableView_injections.selectionModel().hasSelection():
+            model = self.model_injections
+            table_name = "INJECTION_HISTORY"
+            selected_indexes = self.tableView_injections.selectionModel().selectedIndexes()
+        elif self.sm_basic.hasSelection():
+            model = self.model_basic
+            table_name = "BASIC_INFO"
+            selected_indexes = self.sm_basic.selectedIndexes()
+        else:
+            print("No row is selected")
+            return
+
+        if not selected_indexes:
+            print("No row is selected")
+            return
+
+        # Get the LASTLY (most recently) selected row - the current index
+        if table_name == "BASIC_INFO":
+            last_row = self.sm_basic.currentIndex().row()
+        else:  # INJECTION_HISTORY
+            last_row = self.tableView_injections.selectionModel().currentIndex().row()
+
+        # Show only the row is selected lastly - clear other selections
+        if table_name == "BASIC_INFO":
+            # Bitwise OR combines flags is used for "model" selection, for select the entire row not just one cell
+            # There is another way to do this: self.tableView_basic.selectRow(last_row) from the perspective of view
+            self.sm_basic.clearSelection()
+            self.sm_basic.select(
+                self.model_basic.index(last_row, 0), QItemSelectionModel.Select | QItemSelectionModel.Rows
+            )
+            animal_id = self.model_basic.index(last_row, 1).data()  # Column 1 of BASIC_INFO is Animal_ID
+        else:  # INJECTION_HISTORY
+            self.tableView_injections.selectionModel().clearSelection()
+            self.tableView_injections.selectionModel().select(
+                self.model_injections.index(last_row, 0),
+                QItemSelectionModel.Select | QItemSelectionModel.Rows,
+            )
+
+            # Find the corresponding row in BASIC_INFO table
+            animal_id = self.model_injections.index(last_row, 0).data()  # Column 0 of INJECTION_HISTORY is Animal_ID
+            print(f"Animal_ID: {animal_id}")
+            row_in_basic_info = self.model_basic.match(
+                self.model_basic.index(0, 1), Qt.DisplayRole, animal_id, 1, Qt.MatchExactly
+            )[0].row()
+            self.tableView_basic.selectRow(row_in_basic_info)
+
+        # Filled in the main window based on selected tables
+        conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
+        query_basic = """
+                SELECT b.* FROM BASIC_INFO b
+                WHERE b.Animal_ID = ?
+            """
+
+        query_injection = """
+            SELECT i.* FROM INJECTION_HISTORY i
+            WHERE i.Animal_ID = ?
+        """
+        df_basic_selected = pd.read_sql_query(query_basic, conn, params=(animal_id,))
+        df_injection_selected = pd.read_sql_query(query_injection, conn, params=(animal_id,))
+        conn.close()
+
+        basic_columns = df_basic_selected.columns.to_list()
+        injection_columns = df_injection_selected.columns.to_list()
+        print("Properties in BASIC_INFO:", basic_columns)
+        print("Properties in INJECTION_HISTORY:", injection_columns)
+
+        self.ui.dateEdit_DOR.setDate(datetime.strptime(df_basic_selected["DOR"][0], "%Y_%m_%d"))
+        self.ui.lineEdit_project.setText(df_basic_selected["Project_Code"][0])
+        self.ui.comboBox_ACUC.setCurrentIndex(self.ui.comboBox_ACUC.findText(df_basic_selected["ACUC_Protocol"][0]))
+        self.ui.lineEdit_cuttingOS.setText(df_basic_selected["CuttingOS"][0].astype(str))
+        self.ui.lineEdit_holdingOS.setText(df_basic_selected["HoldingOS"][0].astype(str))
+        self.ui.lineEdit_recordingOS.setText(df_basic_selected["RecordingOS"][0].astype(str))
+
+        self.ui.lineEdit_animalID.setText(df_basic_selected["Animal_ID"][0])
+        self.ui.comboBox_genotype.setCurrentIndex(self.ui.comboBox_genotype.findText(df_basic_selected["Genotype"][0]))
+        self.ui.comboBox_species.setCurrentIndex(self.ui.comboBox_species.findText(df_basic_selected["Species"][0]))
+
+        self.ui.dateEdit_DOB.setDate(datetime.strptime(df_basic_selected["DOB"][0], "%Y_%m_%d"))
+        self.ui.lbl_ages.setText(df_basic_selected["Ages"][0])
+        self.ui.comboBox_sex.setCurrentIndex(self.ui.comboBox_sex.findText(df_basic_selected["Sex"][0]))
+
+        ## TODO: Modify the view_add_injection class to make it be able to add injection for loading function <-- NOW HERE
 
     def delete(self):
         # Determine which table has focus - prioritize focus over selection
