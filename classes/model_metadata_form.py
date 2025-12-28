@@ -9,7 +9,7 @@ from tabulate import tabulate
 # Suppress FutureWarning
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-class TableModel(QAbstractTableModel):
+class ModelMetadataForm(QAbstractTableModel):
     """Create a table model for add customized properties"""
     def __init__(self, data=None):
         super().__init__()

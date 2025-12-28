@@ -1,8 +1,10 @@
-## Modules
+# Third-party imports
 from util.constants import UISizes
-from classes import customized_delegate
 
-class ConcatenatorView:
+# Local application imports
+from classes import DelegateCheckableListItem
+
+class ViewTiffStacker:
     def __init__(self, ui):
         self.ui = ui
         self.setup_ui()
@@ -15,7 +17,7 @@ class ConcatenatorView:
     
     
     def setup_listview(self):
-        checkbox_delegate = customized_delegate.QListViewItemDelegate()
+        checkbox_delegate = DelegateCheckableListItem()
         self.ui.listView_recFiles.setItemDelegate(checkbox_delegate)
         # pass
     

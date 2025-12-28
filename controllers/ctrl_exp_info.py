@@ -9,11 +9,12 @@ from PySide6.QtGui import QStandardItemModel
 from rich import print
 
 # Local application imports
-from classes import add_injection_trees, dialog_confirm, dialog_database
+from classes import DialogConfirm, DialogExpDb
+from classes.dialog_inj_manager import DialogInjManager
 from util.constants import MODELS_DIR
 
 
-class TAB_EXP_Handlers(QObject):
+class CtrlExpInfo(QObject):
     def __init__(self, ui):
         super().__init__()
         self.ui = ui
@@ -45,7 +46,7 @@ class TAB_EXP_Handlers(QObject):
         self.ui.lbl_ages.setText(self.ages)
 
     def add_injections(self):
-        self.dlg_addTree = add_injection_trees.ADD_INJECTION_TREES(self.ui, self.model_injections)
+        self.dlg_addTree = DialogInjManager(self.ui, self.model_injections)
 
     def rm_injections(self):
         """Remove selected injection(s) - finds root parents and removes entire tree"""
@@ -83,11 +84,11 @@ class TAB_EXP_Handlers(QObject):
         print(f"[bold green]Removed {len(root_rows)} injection(s)[/bold green]")
 
     def openDB(self):
-        self.dlg_dbViewer = dialog_database.DatabaseViewer(self.ui, self)
+        self.dlg_dbViewer = DialogExpDb(self.ui, self)
 
     
     def save_to_DB(self):
-        checkSaveToDB = dialog_confirm.Confirm(title="Checking...", msg="Save current expinfo to database?")
+        checkSaveToDB = DialogConfirm(title="Checking...", msg="Save current expinfo to database?")
         if not checkSaveToDB.exec():
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return

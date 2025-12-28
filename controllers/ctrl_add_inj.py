@@ -4,10 +4,10 @@ from PySide6.QtCore import QObject, Qt
 from PySide6.QtGui import QColor, QFont, QStandardItem
 
 ## Local application imports
-from classes.dialog_cloneInfo import CloneInfo
+from classes import DialogCloneInfo
 
 
-class ADD_INJECTION_HANDLERS(QObject):
+class CtrlAddInj(QObject):
     """A class of creating a input panel for adding"""
 
     def __init__(self, parent, view_addInj, ui, model):
@@ -63,7 +63,7 @@ class ADD_INJECTION_HANDLERS(QObject):
         self.view_addInj.comboBox_clone_2.addItems(self.clone_codes)
 
     def show_clone_info(self):
-        self.dlg_cloneInfo = CloneInfo()
+        self.dlg_cloneInfo = DialogCloneInfo()
         self.dlg_cloneInfo.show()
 
     def auto_cal_incubation(self):

@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QFileDialog
 
-class GetPath(QFileDialog):
+class DialogGetPath(QFileDialog):
     def __init__(self, title="Please select the folder contains .rec files", init_dir=''):
         super().__init__()
         self.setFileMode(QFileDialog.Directory)

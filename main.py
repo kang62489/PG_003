@@ -10,18 +10,18 @@ from PySide6.QtWidgets import QApplication
 
 # Local application imports
 from controllers import (
-    TAB_EXP_Handlers,
-    TAB_REC_DB_Handlers,
-    TAB_REC_Handlers,
+    CtrlExpInfo,
+    CtrlRecImport,
+    CtrlRecWriter,
 )
 from resources import (
     resources,  # noqa: F401 (Import resources.py for qss file,using # noqa to ignore unused import warning)
 )
 from util.constants import APP_NAME, APP_STATUS_MESSAGE, DEFAULTS, STYLE_FILE, UI_FILE
 from views import (
-    TAB_EXP_View,
-    TAB_REC_DB_View,
-    TAB_REC_View,
+    ViewExpInfo,
+    ViewRecImport,
+    ViewRecWriter,
 )
 
 loader = QUiLoader()
@@ -53,14 +53,14 @@ class MainPanel:
         self.ui.statusbar.showMessage(APP_STATUS_MESSAGE)
 
         # Initialize tab managers
-        TAB_EXP_View(self.ui)
-        TAB_REC_View(self.ui)
-        TAB_REC_DB_View(self.ui)
+        ViewExpInfo(self.ui)
+        ViewRecWriter(self.ui)
+        ViewRecImport(self.ui)
 
         # Initialize tab handlers (need to add handler instances to self to access uis in self.ui)
-        self.handlers_expInfo = TAB_EXP_Handlers(self.ui)
-        self.handlers_recTagger = TAB_REC_Handlers(self.ui)
-        self.handlers_recDB = TAB_REC_DB_Handlers(self.ui)
+        self.handlers_expInfo = CtrlExpInfo(self.ui)
+        self.handlers_recTagger = CtrlRecWriter(self.ui)
+        self.handlers_recDB = CtrlRecImport(self.ui)
         # Set default tab index
         self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])
 

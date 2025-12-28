@@ -2,10 +2,10 @@ import os
 from PySide6.QtCore import QRegularExpression
 from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout, QLabel, QLineEdit
-from classes.dialog_confirm import Confirm
+from .dialog_confirm import DialogConfirm
 from rich import print
 
-class SaveTemplate(QDialog):
+class DialogSaveTemplate(QDialog):
     """A class for build a dialog for saving template"""
     def __init__(self, caption="Saving..."):
         super().__init__()
@@ -51,7 +51,7 @@ class SaveTemplate(QDialog):
             print("[bold green]Template Saved!![/bold green]")
             return
             
-        self.dlg_overwriteCheck = Confirm(title="Warning", msg="Warning! Template name is exist, continue overwritting?")
+        self.dlg_overwriteCheck = DialogConfirm(title="Warning", msg="Warning! Template name is exist, continue overwritting?")
         proceedOverwriteWithSameName = self.dlg_overwriteCheck.exec()
         if proceedOverwriteWithSameName:
             currentTemplate.to_json(filePath, orient='columns', indent=4)

@@ -7,7 +7,7 @@ import tifffile
 from PySide6.QtCore import QThread, Signal
 
 
-class ConcatenatorThread(QThread):
+class ThreadTiffStacker(QThread):
     """Thread to concatenate TIFF files in the background."""
 
     progress_update = Signal(str, str)  # message, color

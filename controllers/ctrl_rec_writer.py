@@ -11,24 +11,24 @@ from PySide6.QtWidgets import QApplication, QDialog
 from rich import print
 
 from classes import (
-    dialog_confirm,
-    dialog_getPath,
-    dialog_insertProperties,
-    dialog_saveTemplate,
-    model_list_1,
-    model_table_1,
+    DialogConfirm,
+    DialogGetPath,
+    DialogInsertProps,
+    DialogSaveTemplate,
+    ModelDynamicList,
+    ModelMetadataForm,
 )
 from util.constants import DISPLAY_DATE_FORMAT, MODELS_DIR, SERIAL_NAME_REGEX
 
 
-class TAB_REC_Handlers:
+class CtrlRecWriter:
     def __init__(self, ui):
         self.ui = ui
-        self.model_tableView_customized = model_table_1.TableModel()
+        self.model_tableView_customized = ModelMetadataForm()
         self.ui.tableView_customized.setModel(self.model_tableView_customized)
         self.sm_customized = self.ui.tableView_customized.selectionModel()
 
-        self.model_menuList_templates = model_list_1.ListModel()
+        self.model_menuList_templates = ModelDynamicList()
         self.ui.comboBox_tagTemplates.setModel(self.model_menuList_templates)
 
         # Set validtor for cheking filename-SN.tif
@@ -176,14 +176,14 @@ class TAB_REC_Handlers:
             print("[bold red]Template doesn't exist![/bold red]")
             return
 
-        self.saveCheck = dialog_confirm.Confirm(
+        self.saveCheck = DialogConfirm(
             title="Checking...", msg="Save current template?"
         )
         if not self.saveCheck.exec():
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return
 
-        self.saveDialog = dialog_saveTemplate.SaveTemplate()
+        self.saveDialog = DialogSaveTemplate()
         if not self.saveDialog.exec():
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return
@@ -206,7 +206,7 @@ class TAB_REC_Handlers:
         filename = self.model_menuList_templates.list_of_options[
             self.ui.comboBox_tagTemplates.currentIndex()
         ]
-        self.deleteCheck = dialog_confirm.Confirm(
+        self.deleteCheck = DialogConfirm(
             title="Checking...", msg="Delete current template?"
         )
 
@@ -237,7 +237,7 @@ class TAB_REC_Handlers:
                 self.model_tableView_customized.rowCount(QModelIndex()) - 1
             )
 
-        self.dlg_insertion = dialog_insertProperties.InsertProp()
+        self.dlg_insertion = DialogInsertProps()
         if not self.dlg_insertion.exec() == QDialog.Accepted:
             print("Cancel Insertion!")
             return
@@ -304,7 +304,7 @@ class TAB_REC_Handlers:
             )
 
     def browseRecDirectory(self):
-        self.dlg_requestRecDirectory = dialog_getPath.GetPath()
+        self.dlg_requestRecDirectory = DialogGetPath()
         self.directory = self.dlg_requestRecDirectory.get_path()
         if self.directory == "":
             self.ui.lineEdit_recDir.setText("No selected directory")
@@ -419,7 +419,7 @@ class TAB_REC_Handlers:
         )
 
         # Confirm write operation
-        dlg_checkWriteTags = dialog_confirm.Confirm(
+        dlg_checkWriteTags = DialogConfirm(
             title="Checking...", msg=f"Write tags to the {self.rec_filename}?"
         )
 
@@ -438,7 +438,7 @@ class TAB_REC_Handlers:
 
         # Handle case with existing tags
         if self.tags_read:
-            dlg_checkOverwriteTags = dialog_confirm.Confirm(
+            dlg_checkOverwriteTags = DialogConfirm(
                 title="Checking...", msg="Overwrite existing tags?"
             )
 
@@ -528,7 +528,7 @@ class TAB_REC_Handlers:
             )
             self.ui.textBrowser_status.moveCursor(QTextCursor.End)
 
-        dlg_checkRecover = dialog_confirm.Confirm(
+        dlg_checkRecover = DialogConfirm(
             title="Checking...",
             msg=f"Recover {self.rec_filename} to the original state?",
         )

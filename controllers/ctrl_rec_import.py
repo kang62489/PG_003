@@ -12,17 +12,17 @@ from PySide6.QtSql import QSqlDatabase, QSqlTableModel
 from rich import print
 from tabulate import tabulate
 
-from classes import dialog_confirm, dialog_getPath, model_list_1
+from classes import DialogConfirm, DialogGetPath, ModelDynamicList
 from util.constants import MODELS_DIR
 
 
-class TAB_REC_DB_Handlers:
+class CtrlRecImport:
     def __init__(self, ui):
         self.ui = ui
 
         self.setup_DB()
 
-        self.model_tablesOfRecDB = model_list_1.ListModel(name="model_tablesOfRecDB")
+        self.model_tablesOfRecDB = ModelDynamicList(name="model_tablesOfRecDB")
         self.ui.comboBox_tableOfRecDB.setModel(self.model_tablesOfRecDB)
 
         self.reload_menuList_tablesOfRecDB()
@@ -106,7 +106,7 @@ class TAB_REC_DB_Handlers:
         return result_of_scanning
 
     def import_recDB(self):
-        dlg_get_inputDir = dialog_getPath.GetPath(
+        dlg_get_inputDir = DialogGetPath(
             title="Please select the folder contains .rec files"
         )
         input_dir = dlg_get_inputDir.get_path()
@@ -198,7 +198,7 @@ class TAB_REC_DB_Handlers:
             self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
             return
 
-        checkDeletion = dialog_confirm.Confirm(
+        checkDeletion = DialogConfirm(
             title="Warning...", msg="Delete selected table? This cannot be undone!"
         )
         if not checkDeletion.exec():
@@ -234,7 +234,7 @@ class TAB_REC_DB_Handlers:
             self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
             return
 
-        dlg_get_outputDir = dialog_getPath.GetPath(
+        dlg_get_outputDir = DialogGetPath(
             title="Select the output directory of the csv file of selected table!"
         )
         output_dir = dlg_get_outputDir.get_path()

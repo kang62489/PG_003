@@ -4,7 +4,7 @@ from datetime import datetime
 
 from PySide6.QtWidgets import QAbstractItemView, QButtonGroup, QHeaderView
 
-from classes.customized_delegate import CellEditDelegate
+from classes import DelegateCellEdit
 from util.constants import (
     BASE_DIR,
     DEFAULTS,
@@ -15,7 +15,7 @@ from util.constants import (
 )
 
 
-class TAB_REC_View:
+class ViewRecWriter:
     """Handles UI configuration for Template Manager tab (tab_0)"""
 
     def __init__(self, ui):
@@ -124,7 +124,7 @@ class TAB_REC_View:
         table.setEditTriggers(
             QAbstractItemView.DoubleClicked | QAbstractItemView.EditKeyPressed
         )
-        table.setItemDelegate(CellEditDelegate())
+        table.setItemDelegate(DelegateCellEdit())
 
     def setup_comboboxes(self):
         self.ui.comboBox_EXC.addItems(MenuOptions.EXCITATION)

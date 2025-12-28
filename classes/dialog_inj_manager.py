@@ -3,21 +3,21 @@
 import json
 
 # Local application imports
-from controllers.controllers_add_injection import ADD_INJECTION_HANDLERS
+from controllers.ctrl_add_inj import CtrlAddInj
 from util.constants import MODELS_DIR
-from views.view_add_injections import ADD_INJECTION_VIEW
+from views.view_add_inj import ViewAddInj
 
 
-class ADD_INJECTION_TREES:
+class DialogInjManager:
     def __init__(self, ui, model):
         self.ui = ui
         self.model = model
         self.clone_list = self.prepare_clone_list()
         # Initiate the input panel when click the button "Add"
-        self.view_addInj = ADD_INJECTION_VIEW(self.clone_list, parent=self.ui)
+        self.view_addInj = ViewAddInj(self.clone_list, parent=self.ui)
 
         # Initiate handlers
-        self.handlers_addInj = ADD_INJECTION_HANDLERS(self, self.view_addInj, self.ui, self.model)
+        self.handlers_addInj = CtrlAddInj(self, self.view_addInj, self.ui, self.model)
 
     def _load_clone_JSON_file(self, filename):
         with open(MODELS_DIR / filename, "r") as f:

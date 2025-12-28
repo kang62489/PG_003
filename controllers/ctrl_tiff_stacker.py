@@ -4,13 +4,13 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCursor
 
-from classes import dialog_getPath, model_list_2, thread_concatenator
+from classes import DialogGetPath, ModelCheckableList, ThreadTiffStacker
 
 
-class ConcatenatorHandlers:
+class CtrlTiffStacker:
     def __init__(self, ui):
         self.ui = ui
-        self.model_recFileList = model_list_2.ListModel(name="model_recFileList")
+        self.model_recFileList = ModelCheckableList(name="model_recFileList")
         self.ui.listView_recFiles.setModel(self.model_recFileList)
 
         self.ui.checkBox_selectAllFiles.setVisible(False)
@@ -24,7 +24,7 @@ class ConcatenatorHandlers:
         self.ui.btn_start_concatenation.clicked.connect(self.start_concatenation)
 
     def browse_tiffs(self):
-        dlg_get_inputDir = dialog_getPath.GetPath(
+        dlg_get_inputDir = DialogGetPath(
             title="Please select the folder contains .rec and .tif files"
         )
         self.input_dir = Path(dlg_get_inputDir.get_path())
@@ -96,7 +96,7 @@ class ConcatenatorHandlers:
         self.ui.textBrowser_concatenator.moveCursor(QTextCursor.End)
 
         # Create and set up the worker thread
-        self.concatenator_thread = thread_concatenator.ConcatenatorThread(
+        self.concatenator_thread = ThreadTiffStacker(
             to_be_concatenated, str(self.input_dir)
         )
         self.concatenator_thread.progress_update.connect(

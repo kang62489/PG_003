@@ -1,5 +1,13 @@
-from .view_EXP import TAB_EXP_View
-from .view_REC import TAB_REC_View
-from .view_REC_DB import TAB_REC_DB_View
+from .view_add_inj import ViewAddInj
+from .view_exp_info import ViewExpInfo
+from .view_rec_import import ViewRecImport
+from .view_rec_writer import ViewRecWriter
+from .view_tiff_stacker import ViewTiffStacker
 
-__all__ = ["TAB_EXP_View", "TAB_REC_View", "TAB_REC_DB_View"]
+__all__ = [
+    "ViewAddInj",
+    "ViewExpInfo",
+    "ViewRecImport",
+    "ViewRecWriter",
+    "ViewTiffStacker",
+]

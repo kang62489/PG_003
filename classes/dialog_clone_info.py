@@ -15,11 +15,12 @@ from PySide6.QtWidgets import (
 )
 
 # Local application imports
-from classes import customized_delegate, model_table_1
+from .delegate_custom import DelegateAlignRightCenter
+from .model_metadata_form import ModelMetadataForm
 from util.constants import MODELS_DIR, UIAlignments
 
 
-class CloneInfo(QDialog):
+class DialogCloneInfo(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Clone Information")
@@ -37,7 +38,7 @@ class CloneInfo(QDialog):
         self.tableView_cloneInfo.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.tableView_cloneInfo.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableView_cloneInfo.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.tableView_cloneInfo.setItemDelegateForColumn(0, customized_delegate.RCAlignDelegate())
+        self.tableView_cloneInfo.setItemDelegateForColumn(0, DelegateAlignRightCenter())
         self.tableView_cloneInfo.setStyleSheet("""
             QTableView {
                 font-size: 14px;
@@ -53,7 +54,7 @@ class CloneInfo(QDialog):
             }
         """)
 
-        self.model_tableView_cloneInfo = model_table_1.TableModel(clones_all_table)
+        self.model_tableView_cloneInfo = ModelMetadataForm(clones_all_table)
         self.tableView_cloneInfo.setModel(self.model_tableView_cloneInfo)
 
         self.buttons = QDialogButtonBox.Ok

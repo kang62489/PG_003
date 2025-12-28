@@ -6,7 +6,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QDialog, QDialogButtonBox, QLabel, QLineEdit, QVBoxLayout
 
 
-class Confirm(QDialog):
+class DialogConfirm(QDialog):
     def __init__(self, title="Dialog", msg="Question"):
         super().__init__()
         self.setWindowTitle(title)
@@ -24,7 +24,7 @@ class Confirm(QDialog):
         self.setLayout(self.layout)
 
 
-class ConfirmWithPasscode(QDialog):
+class DialogConfirmPasscode(QDialog):
     def __init__(self, title="Dialog", msg="Question", passcode="kang"):
         super().__init__()
         self.setWindowTitle(title)

@@ -23,7 +23,7 @@ from PySide6.QtWidgets import (
 from util.constants import MenuOptions, UIAlignments, UISizes
 
 
-class ADD_INJECTION_VIEW(QMainWindow):
+class ViewAddInj(QMainWindow):
     def __init__(self, clone_list, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Add Injection Info...")

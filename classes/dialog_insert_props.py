@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QApplication
 )
 
-class InsertProp(QDialog):
+class DialogInsertProps(QDialog):
     """A class for creating an inputing window for QTableView"""
     def __init__(self, parent=None, propertyNum=1, valueNum=1):
         super().__init__(parent)

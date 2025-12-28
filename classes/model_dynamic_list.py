@@ -2,7 +2,7 @@
 from PySide6.QtCore import QAbstractListModel, Qt
 
 
-class ListModel(QAbstractListModel):
+class ModelDynamicList(QAbstractListModel):
     """Create a list model for combobox menu which can be updated automatically"""
 
     def __init__(self, list_of_options=None, name=None):

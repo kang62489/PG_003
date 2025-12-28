@@ -10,12 +10,12 @@ from PySide6.QtWidgets import QApplication, QComboBox
 from util.constants import MODELS_DIR, MenuOptions
 
 
-class EditableComboBox(QObject):
+class HelperComboEditor(QObject):
     def __init__(self, target_combobox, target_combobox_model, parent_widget):
         """
         target_combobox: the target combobox to be made editable
-        target_combobox_model: the model of the target combobox, created by the ListModel class in model_list_1.py,
-        this model was initialized in the class TAB_EXP_View. A loadMenu function in the class was also removed.
+        target_combobox_model: the model of the target combobox, created by the ModelDynamicList class in model_dynamic_list.py,
+        this model was initialized in the class ViewExpInfo. A loadMenu function in the class was also removed.
         parent_widget: for set eventfilter (detect ESC key)
         """
         super().__init__()
@@ -93,7 +93,7 @@ class EditableComboBox(QObject):
             with open(file_path, "w") as f:
                 json.dump(self.target_combobox_model.list_of_options, f, indent=4)
 
-            # The updateList method defined in model_list_1.py. It is used to sort the list_of_options
+            # The updateList method defined in model_dynamic_list.py. It is used to sort the list_of_options
             # That's also why emit layoutChanged here (Not at the self.target_combobox_model.list_of_options.apppend(new_item))
             # Therefore the new searching item index in on_edit_done() can work properly
             self.target_combobox_model.updateList(self.target_combobox_model.list_of_options)

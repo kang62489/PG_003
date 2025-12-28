@@ -22,11 +22,12 @@ from rich import print
 from tabulate import tabulate
 
 ## Local application imports
-from classes import customized_delegate, dialog_confirm
+from .delegate_custom import DelegateCenterAlign
+from .dialog_confirm import DialogConfirm, DialogConfirmPasscode
 from util.constants import MODELS_DIR, STYLE_FILE, UIAlignments, UISizes
 
 
-class DatabaseViewer(QDialog):
+class DialogExpDb(QDialog):
     """A class of creating a database viewer for manaing the experiment information database"""
 
     def __init__(self, ui, handlers_EXP):
@@ -118,7 +119,7 @@ class DatabaseViewer(QDialog):
         self.tableView_basic.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
         self.tableView_basic.verticalHeader().setVisible(False)
         self.tableView_basic.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.tableView_basic.setItemDelegate(customized_delegate.CenterAlignDelegate())
+        self.tableView_basic.setItemDelegate(DelegateCenterAlign())
         self.tableView_basic.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.5)
         # Make selection more prominent
         self.tableView_basic.setStyleSheet("""
@@ -133,7 +134,7 @@ class DatabaseViewer(QDialog):
         self.tableView_injections.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
         self.tableView_injections.verticalHeader().setVisible(False)
         self.tableView_injections.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.tableView_injections.setItemDelegate(customized_delegate.CenterAlignDelegate())
+        self.tableView_injections.setItemDelegate(DelegateCenterAlign())
         self.tableView_injections.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.3)
         # Make selection more prominent
         self.tableView_injections.setStyleSheet("""
@@ -256,7 +257,7 @@ class DatabaseViewer(QDialog):
         self.ui.lbl_ages.setText(df_basic_selected["Ages"][0])
         self.ui.comboBox_sex.setCurrentIndex(self.ui.comboBox_sex.findText(df_basic_selected["Sex"][0]))
 
-        ## TODO: Modify the view_add_injection class to make it be able to add injection for loading function <-- NOW HERE
+        ## TODO: Modify the view_add_inj class to make it be able to add injection for loading function <-- NOW HERE
 
     def delete(self):
         # Determine which table has focus - prioritize focus over selection
@@ -290,13 +291,13 @@ class DatabaseViewer(QDialog):
 
         # Choose confirmation dialog based on table
         if use_passcode:
-            checkDeletion = dialog_confirm.ConfirmWithPasscode(
+            checkDeletion = DialogConfirmPasscode(
                 title="⚠️ Delete Confirmation",
                 msg=f"Delete selected rows from {table_name}?\nThis will also delete related injection history!\nThis action cannot be undone!",
                 passcode="kang",
             )
         else:
-            checkDeletion = dialog_confirm.Confirm(title="Checking...", msg=f"Delete selected rows from {table_name}?")
+            checkDeletion = DialogConfirm(title="Checking...", msg=f"Delete selected rows from {table_name}?")
 
         if not checkDeletion.exec():
             print("Delete Cancelled!")

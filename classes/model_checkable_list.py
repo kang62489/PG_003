@@ -1,7 +1,7 @@
 ## Modules
 from PySide6.QtCore import Qt, QAbstractListModel, Signal
 
-class ListModel(QAbstractListModel):
+class ModelCheckableList(QAbstractListModel):
     """Create a checkable list model for QListView file browser"""
     
     # Add a custom signal to check if all items are selected in setData

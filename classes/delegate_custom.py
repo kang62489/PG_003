@@ -7,19 +7,19 @@ from PySide6.QtWidgets import (
 )
 
 
-class CenterAlignDelegate(QStyledItemDelegate):
+class DelegateCenterAlign(QStyledItemDelegate):
     def initStyleOption(self, option, index):
         super().initStyleOption(option, index)
         option.displayAlignment = Qt.AlignCenter
 
 
-class RCAlignDelegate(QStyledItemDelegate):
+class DelegateAlignRightCenter(QStyledItemDelegate):
     def initStyleOption(self, option, index):
         super().initStyleOption(option, index)
         option.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
 
 
-class CellEditDelegate(QStyledItemDelegate):
+class DelegateCellEdit(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
         editor = QLineEdit(parent)
         return editor
@@ -37,7 +37,7 @@ class CellEditDelegate(QStyledItemDelegate):
         option.font.setFamily("Calibri")
 
 
-class QListViewItemDelegate(QStyledItemDelegate):
+class DelegateCheckableListItem(QStyledItemDelegate):
     """Delegate to control text positioning in QListView items"""
 
     def __init__(self, text_margin=30, parent=None):

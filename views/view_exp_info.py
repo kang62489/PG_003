@@ -10,7 +10,7 @@ from PySide6.QtWidgets import QAbstractItemView, QHeaderView
 from util.constants import MenuOptions, UISizes
 
 
-class TAB_EXP_View:
+class ViewExpInfo:
     def __init__(self, ui):
         self.ui = ui
         self.setup_ui()
