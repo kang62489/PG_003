@@ -56,7 +56,7 @@ class UISizes:
     COMBO_STANDARD = QSize(180, 40)  # Standard combo boxes
     COMBO_WIDE = QSize(200, 40)  # Wide combo boxes
     COMBO_UNIT_WIDTH = 80
-    COMBO_GENOTYPE_WITDH = 140
+    COMBO_GENOTYPE_WIDTH = 140
     COMBO_INJECTATE_WIDTH = 180
     COMBO_RATIO_WIDTH = 180
     COMBO_VECTOR_WIDTH = 150
@@ -120,7 +120,7 @@ DISPLAY_DATE_FORMAT = "%Y_%m_%d"
 DEFAULTS = {
     "SERIAL": 0,
     "TAB_INDEX": 0,
-    "LIGHT_INENSITY": "LV6",
+    "LIGHT_INTENSITY": "LV6",
     "EXPOSURE_TIME": "50",
     "FRAMES": "1200p",
     "FPS": "20Hz",

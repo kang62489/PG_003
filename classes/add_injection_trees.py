@@ -3,7 +3,7 @@
 import json
 
 # Local application imports
-from controllers.handlers_add_injection import ADD_INJECTION_HANDLERS
+from controllers.controllers_add_injection import ADD_INJECTION_HANDLERS
 from util.constants import MODELS_DIR
 from views.view_add_injections import ADD_INJECTION_VIEW
 

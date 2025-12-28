@@ -62,7 +62,7 @@ class TAB_REC_View:
         self.ui.radioBtn_60X.setChecked(True)
 
     def setup_lineedits(self):
-        self.ui.lineEdit_LEVEL.setText(DEFAULTS["LIGHT_INENSITY"])
+        self.ui.lineEdit_LEVEL.setText(DEFAULTS["LIGHT_INTENSITY"])
         self.ui.lineEdit_EXPO.setText(DEFAULTS["EXPOSURE_TIME"])
         self.ui.lineEdit_EXPO.setFixedWidth(UISizes.LINE_EDIT_EXPO_WIDTH)
         self.ui.lineEdit_FRAMES.setText(DEFAULTS["FRAMES"])

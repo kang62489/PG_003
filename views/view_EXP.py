@@ -55,7 +55,7 @@ class TAB_EXP_View:
         self.ui.comboBox_genotype.addItems(MenuOptions.GENOTYPE)
         self.ui.comboBox_sex.addItems(MenuOptions.SEX)
 
-        self.ui.comboBox_genotype.setFixedWidth(UISizes.COMBO_GENOTYPE_WITDH)
+        self.ui.comboBox_genotype.setFixedWidth(UISizes.COMBO_GENOTYPE_WIDTH)
 
     def setup_treeview(self):
         # Set column resize mode
