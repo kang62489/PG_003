@@ -9,9 +9,9 @@ from util.constants import UIAlignments, UISizes
 class ViewRecImport:
     def __init__(self, ui):
         self.ui = ui
-        self.setupUI()
+        self.setup_uis()
 
-    def setupUI(self):
+    def setup_uis(self):
         self.setup_buttons()
         self.setup_tableview()
         self.setup_groupbox()

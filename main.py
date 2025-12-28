@@ -27,7 +27,7 @@ from views import (
 loader = QUiLoader()
 
 
-class MainPanel:
+class Main:
     def __init__(self) -> None:
         # Load the UI
         self.ui = loader.load(UI_FILE, None)
@@ -72,5 +72,5 @@ os.environ["QT_QPA_PLATFORM"] = "windows:darkmode=0"
 
 app = QApplication([])
 app.setStyle("fusion")
-window = MainPanel()
+window = Main()
 app.exec()

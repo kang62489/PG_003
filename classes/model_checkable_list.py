@@ -36,7 +36,7 @@ class ModelCheckableList(QAbstractListModel):
             return True
         return False
     
-    def loadFileList(self, file_list, all_is_checked=True):
+    def set_tiff_list(self, file_list, all_is_checked=True):
         self.beginResetModel()
         self.list_of_files = file_list
         if all_is_checked:
@@ -45,11 +45,11 @@ class ModelCheckableList(QAbstractListModel):
             self.checked_states = [False] * len(file_list)
         self.endResetModel()
         
-    def getCheckedItems(self):
+    def get_checked(self):
         """Return a list of checked items"""
         return [item for item, checked in zip(self.list_of_files, self.checked_states) if checked]
     
-    def setAllChecked(self, checked):
+    def set_all_checked(self, checked):
         self.beginResetModel()
         self.checked_states = [checked] * len(self.list_of_files)
         self.endResetModel()

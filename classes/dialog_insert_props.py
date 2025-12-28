@@ -55,12 +55,12 @@ class DialogInsertProps(QDialog):
         self.layout_main.addLayout(self.layout_inputting)
         
         # Add a button for adding a row
-        self.btn_addRow = QPushButton("Add Row")
-        self.btn_addRow.clicked.connect(self.addRow)
+        self.btn_add_row = QPushButton("Add Row")
+        self.btn_add_row.clicked.connect(self.add_row)
         
         # Add a button for removing a row
-        self.btn_removeRow = QPushButton("Remove Row")
-        self.btn_removeRow.clicked.connect(self.removeRow)
+        self.btn_rm_row = QPushButton("Remove Row")
+        self.btn_rm_row.clicked.connect(self.rm_row)
         
         # Add a OK button
         self.btn_ok = QPushButton("OK")
@@ -71,16 +71,16 @@ class DialogInsertProps(QDialog):
         self.btn_cancel.clicked.connect(self.cancel)
         
         self.layout_buttons = QHBoxLayout()
-        self.layout_buttons.addWidget(self.btn_addRow)
-        self.layout_buttons.addWidget(self.btn_removeRow)
+        self.layout_buttons.addWidget(self.btn_add_row)
+        self.layout_buttons.addWidget(self.btn_rm_row)
         self.layout_buttons.addWidget(self.btn_ok)
         self.layout_buttons.addWidget(self.btn_cancel)
         self.layout_main.addLayout(self.layout_buttons)
         
-        self.setUI()
+        self.setup_uis()
         self.setLayout(self.layout_main)
         
-    def addRow(self):
+    def add_row(self):
         # Add a new row to the bottom
         lineEdit_prop = QLineEdit()
         current_row_number = len(self.properties)
@@ -100,7 +100,7 @@ class DialogInsertProps(QDialog):
         self.adjustSize()
         self.btn_ok.setDefault(True)
         
-    def removeRow(self):
+    def rm_row(self):
         if len(self.properties) > 1:
             # Disable updates to prevent flickering
             self.setUpdatesEnabled(False)
@@ -151,7 +151,7 @@ class DialogInsertProps(QDialog):
     def cancel(self):
         self.reject()
         
-    def setUI(self):
+    def setup_uis(self):
         min_width = 400
         max_width = 800
     

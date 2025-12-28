@@ -29,7 +29,7 @@ class CtrlExpInfo(QObject):
     def connect_signals(self):
         self.ui.btn_add_vir_tree.clicked.connect(self.add_injections)
         self.ui.btn_rm_vir_tree.clicked.connect(self.rm_injections)
-        self.ui.btn_openDB.clicked.connect(self.openDB)
+        self.ui.btn_openDB.clicked.connect(self.open_exp_db)
         self.ui.btn_saveToDB.clicked.connect(self.save_to_DB)
 
         self.ui.dateEdit_DOR.dateChanged.connect(self.auto_calculation)
@@ -83,7 +83,7 @@ class CtrlExpInfo(QObject):
 
         print(f"[bold green]Removed {len(root_rows)} injection(s)[/bold green]")
 
-    def openDB(self):
+    def open_exp_db(self):
         self.dlg_dbViewer = DialogExpDb(self.ui, self)
 
     

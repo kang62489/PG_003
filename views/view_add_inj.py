@@ -29,7 +29,7 @@ class ViewAddInj(QMainWindow):
         self.setWindowTitle("Add Injection Info...")
 
         self.clone_list = clone_list
-        self.setupUIs()
+        self.setup_uis()
         self.show()
 
         # Center the window on parent after show() so geometry is calculated
@@ -52,7 +52,7 @@ class ViewAddInj(QMainWindow):
         # Move window to centered position
         self.move(child_geometry.topLeft())
 
-    def setupUIs(self):
+    def setup_uis(self):
         self.setup_toolbar()
         self.setup_ui_containers()
         self.setup_layouts()

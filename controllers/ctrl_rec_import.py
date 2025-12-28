@@ -45,7 +45,7 @@ class CtrlRecImport:
         conn.close()
         self.list_of_recDB_tables = sorted([item[0] for item in fetched])
 
-        self.model_tablesOfRecDB.updateList(self.list_of_recDB_tables)
+        self.model_tablesOfRecDB.update_list(self.list_of_recDB_tables)
         self.model_tablesOfRecDB.layoutChanged.emit()
 
         with open(MODELS_DIR / "menuList_tables_of_RecDB.json", "w") as f:
@@ -53,7 +53,7 @@ class CtrlRecImport:
 
     def connect_signals(self):
         self.ui.btn_importRecDB.clicked.connect(self.import_recDB)
-        self.ui.btn_loadRecDB.clicked.connect(self.loadRecDB)
+        self.ui.btn_loadRecDB.clicked.connect(self.load_rec_table)
         self.ui.btn_deleteTable.clicked.connect(self.delete_table)
         self.ui.btn_exportSummary.clicked.connect(self.export_summary)
 
@@ -171,7 +171,7 @@ class CtrlRecImport:
         self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
         conn.close()
 
-    def loadRecDB(self):
+    def load_rec_table(self):
         self.selected_table = self.ui.comboBox_tableOfRecDB.currentText()
         if self.selected_table == "":
             self.ui.textBrowser_recDB.append(

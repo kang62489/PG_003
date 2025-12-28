@@ -93,10 +93,10 @@ class HelperComboEditor(QObject):
             with open(file_path, "w") as f:
                 json.dump(self.target_combobox_model.list_of_options, f, indent=4)
 
-            # The updateList method defined in model_dynamic_list.py. It is used to sort the list_of_options
+            # The update_list method defined in model_dynamic_list.py. It is used to sort the list_of_options
             # That's also why emit layoutChanged here (Not at the self.target_combobox_model.list_of_options.apppend(new_item))
             # Therefore the new searching item index in on_edit_done() can work properly
-            self.target_combobox_model.updateList(self.target_combobox_model.list_of_options)
+            self.target_combobox_model.update_list(self.target_combobox_model.list_of_options)
             self.target_combobox_model.layoutChanged.emit()
 
     def remove_new_item_from_menu(self):

@@ -65,7 +65,7 @@ class ModelMetadataForm(QAbstractTableModel):
         self._data = new_table
         self.endResetModel()
         
-    def moveRows(self, rows, step):
+    def mv_rows(self, rows, step):
         """Move multiple rows up or down by the specified step
         
         Args:
@@ -117,14 +117,14 @@ class ModelMetadataForm(QAbstractTableModel):
         # Return the new positions of the moved rows
         return list(range(target_row, target_row + len(selected_df)))
         
-    def addRows(self, SourceParent, start_from_this_row, dataFrameToBeAdded):
+    def add_rows(self, SourceParent, start_from_this_row, dataFrameToBeAdded):
         print("Data to be added:")
         print(tabulate(dataFrameToBeAdded, headers="keys", tablefmt="simple"))
         
         count = dataFrameToBeAdded.shape[0]
         # Check if we need to add columns for inserting new rows
         if dataFrameToBeAdded.shape[1] > self._data.shape[1]:
-            self.addCols(SourceParent, self._data.shape[1]-1, (dataFrameToBeAdded.shape[1] - self._data.shape[1]))
+            self.add_cols(SourceParent, self._data.shape[1]-1, (dataFrameToBeAdded.shape[1] - self._data.shape[1]))
         
         self.beginInsertRows(SourceParent, start_from_this_row, start_from_this_row + count - 1)
         rowNames = self._data.index.tolist()
@@ -135,13 +135,13 @@ class ModelMetadataForm(QAbstractTableModel):
         print(tabulate(self._data, headers="keys", tablefmt="simple"))
         
         self.endInsertRows()
-        self.selfClean()
+        self.fill_na()
         self.layoutChanged.emit()
         
-    def rmRows(self, SourceParent, start_from_this_row, count):
-        self.beginRemoveRows(SourceParent, start_from_this_row, start_from_this_row + count - 1)
+    def rm_rows(self, SourceParent, start_from_this_row, count):
+        self.beginRemv_rows(SourceParent, start_from_this_row, start_from_this_row + count - 1)
         self._data = self._data.drop(self._data.index[start_from_this_row:start_from_this_row + count])
-        self.endRemoveRows()
+        self.endRemv_rows()
         
         columns = self._data.columns.to_list()
         if len(columns) > 1:
@@ -151,7 +151,7 @@ class ModelMetadataForm(QAbstractTableModel):
         
         self.layoutChanged.emit()
         
-    def addCols(self, SourceParent, colNumber, count):
+    def add_cols(self, SourceParent, colNumber, count):
         columnWidth = len(self._data.columns.tolist())
         rowNames = self._data.index.tolist()
         emptyValueList = [["" for i in range(self._data.shape[0])] for j in range(count)]
@@ -168,7 +168,7 @@ class ModelMetadataForm(QAbstractTableModel):
         self._data.index = rowNames
         self.layoutChanged.emit()
         
-    def selfClean(self):
+    def fill_na(self):
        self._data.fillna('', inplace=True)
        
 

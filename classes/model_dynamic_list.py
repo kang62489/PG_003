@@ -17,7 +17,7 @@ class ModelDynamicList(QAbstractListModel):
     def rowCount(self, index):
         return len(self.list_of_options)
 
-    def updateList(self, new_list):
+    def update_list(self, new_list):
         self.beginResetModel()
         self.list_of_options = sorted(new_list)
         self.endResetModel()

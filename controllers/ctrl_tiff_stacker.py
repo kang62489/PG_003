@@ -19,7 +19,7 @@ class CtrlTiffStacker:
 
     def connect_signals(self):
         self.ui.btn_browse_tiffs.clicked.connect(self.browse_tiffs)
-        self.ui.checkBox_selectAllFiles.stateChanged.connect(self.selectAllFiles)
+        self.ui.checkBox_selectAllFiles.stateChanged.connect(self.select_all_files)
         self.model_recFileList.allSelectedCheck.connect(self.check_all_selected)
         self.ui.btn_start_concatenation.clicked.connect(self.start_concatenation)
 
@@ -53,23 +53,23 @@ class CtrlTiffStacker:
             self.ui.textBrowser_concatenator.moveCursor(QTextCursor.End)
             self.ui.checkBox_selectAllFiles.setVisible(False)
             self.ui.checkBox_selectAllFiles.setChecked(False)
-            self.model_recFileList.loadFileList([], False)
+            self.model_recFileList.set_tiff_list([], False)
             return
 
         self.ui.checkBox_selectAllFiles.setVisible(True)
         self.ui.checkBox_selectAllFiles.setChecked(True)
 
         all_is_checked = self.ui.checkBox_selectAllFiles.checkState() == Qt.Checked
-        self.model_recFileList.loadFileList(list_of_discrete_tiffs, all_is_checked)
+        self.model_recFileList.set_tiff_list(list_of_discrete_tiffs, all_is_checked)
         self.ui.groupBox_tiffBrowser.setTitle(str(self.input_dir))
         self.ui.textBrowser_concatenator.append(
             f"<span style='color: lime;'>[INFO] Directory selected: {str(self.input_dir)}</span>"
         )
         self.ui.textBrowser_concatenator.moveCursor(QTextCursor.End)
 
-    def selectAllFiles(self):
+    def select_all_files(self):
         """Select or deselect all files in the list view."""
-        self.model_recFileList.setAllChecked(
+        self.model_recFileList.set_all_checked(
             self.ui.checkBox_selectAllFiles.isChecked()
         )
 
@@ -80,7 +80,7 @@ class CtrlTiffStacker:
 
     def start_concatenation(self):
         """Use a class to handle the concatenation process in a separate thread to avoid freezing main program."""
-        to_be_concatenated = self.model_recFileList.getCheckedItems()
+        to_be_concatenated = self.model_recFileList.get_checked()
         if to_be_concatenated == []:
             self.ui.textBrowser_concatenator.append(
                 "<span style='color: yellow;'>[WARNING] No files selected for concatenation</span>"

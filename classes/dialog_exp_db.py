@@ -35,12 +35,12 @@ class DialogExpDb(QDialog):
         self.ui = ui
         self.handlers_EXP = handlers_EXP
 
-        self.setupUI()
+        self.setup_uis()
         self.open_DB()
         self.connect_signals()
         self.show()
 
-    def setupUI(self):
+    def setup_uis(self):
         self.setup_dialog()
         self.setup_tableView()
         self.setup_labels()
