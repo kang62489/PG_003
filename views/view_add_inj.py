@@ -132,12 +132,12 @@ class ViewAddInj(QMainWindow):
     def setup_comboboxes(self):
         # Define comboboxes: (attribute_name, items, column)
         comboboxes = [
-            ("comboBox_inj_mode", MenuOptions.INJECTION_MODE, 1, 1),
-            ("comboBox_inj_side", MenuOptions.SIDE, 1, 2),
-            ("comboBox_injectate_type", MenuOptions.INJECTATE_TYPE, 1, 3),
-            ("comboBox_vector_1", MenuOptions.VECTOR_LIST, 1, 4),
-            ("comboBox_mixing_ratio", MenuOptions.MIXING_RATIO, 3, 3),
-            ("comboBox_vector_2", MenuOptions.VECTOR_LIST, 3, 4),
+            ("cb_InjectionModeCtrl", MenuOptions.INJECTION_MODE, 1, 1),
+            ("cb_inj_side", MenuOptions.SIDE, 1, 2),
+            ("cb_InjectateTypeCtrl", MenuOptions.INJECTATE_TYPE, 1, 3),
+            ("cb_vector_1", MenuOptions.VECTOR_LIST, 1, 4),
+            ("cb_mixing_ratio", MenuOptions.MIXING_RATIO, 3, 3),
+            ("cb_vector_2", MenuOptions.VECTOR_LIST, 3, 4),
         ]
         self.create_combobox(comboboxes)
         for attr_name, _, row, col in comboboxes:
@@ -145,33 +145,33 @@ class ViewAddInj(QMainWindow):
             self.layout_grid.addWidget(combobox, row, col, UIAlignments.CENTER)
 
         comboboxes_in_containers = [
-            ("comboBox_clone_1", self.clone_list, 0, 0),
-            ("comboBox_clone_2", self.clone_list, 0, 0),
-            ("comboBox_num_of_sites", MenuOptions.NUM_OF_SITES, 0, 0),
+            ("cb_clone_1", self.clone_list, 0, 0),
+            ("cb_clone_2", self.clone_list, 0, 0),
+            ("cb_num_of_sites", MenuOptions.NUM_OF_SITES, 0, 0),
         ]
         self.create_combobox(comboboxes_in_containers)
-        self.layout_container_1.addWidget(self.comboBox_clone_1)
-        self.layout_container_2.addWidget(self.comboBox_clone_2)
-        self.layout_coordinates.addWidget(self.comboBox_num_of_sites)
+        self.layout_container_1.addWidget(self.cb_clone_1)
+        self.layout_container_2.addWidget(self.cb_clone_2)
+        self.layout_coordinates.addWidget(self.cb_num_of_sites)
 
-        self.comboBox_inj_mode.setFixedWidth(UISizes.COMBO_INJ_MODE_WIDTH)
-        self.comboBox_inj_side.setFixedWidth(UISizes.COMBO_SIDE_WIDTH)
-        self.comboBox_injectate_type.setFixedWidth(UISizes.COMBO_INJECTATE_WIDTH)
-        self.comboBox_vector_1.setFixedWidth(UISizes.COMBO_VECTOR_WIDTH)
-        self.comboBox_vector_2.setFixedWidth(UISizes.COMBO_VECTOR_WIDTH)
+        self.cb_InjectionModeCtrl.setFixedWidth(UISizes.COMBO_INJ_MODE_WIDTH)
+        self.cb_inj_side.setFixedWidth(UISizes.COMBO_SIDE_WIDTH)
+        self.cb_InjectateTypeCtrl.setFixedWidth(UISizes.COMBO_INJECTATE_WIDTH)
+        self.cb_vector_1.setFixedWidth(UISizes.COMBO_VECTOR_WIDTH)
+        self.cb_vector_2.setFixedWidth(UISizes.COMBO_VECTOR_WIDTH)
 
-        self.comboBox_mixing_ratio.setFixedWidth(UISizes.COMBO_RATIO_WIDTH)
-        self.comboBox_clone_1.setFixedWidth(UISizes.COMBO_CLONE_WIDTH)
-        self.comboBox_clone_2.setFixedWidth(UISizes.COMBO_CLONE_WIDTH)
+        self.cb_mixing_ratio.setFixedWidth(UISizes.COMBO_RATIO_WIDTH)
+        self.cb_clone_1.setFixedWidth(UISizes.COMBO_CLONE_WIDTH)
+        self.cb_clone_2.setFixedWidth(UISizes.COMBO_CLONE_WIDTH)
 
     def setup_dateedit(self):
-        self.dateEdit_inj_DOI = QDateEdit()
-        self.dateEdit_inj_DOI.setDate(datetime.today())
-        self.dateEdit_inj_DOI.setCalendarPopup(True)
+        self.de_inj_DOI = QDateEdit()
+        self.de_inj_DOI.setDate(datetime.today())
+        self.de_inj_DOI.setCalendarPopup(True)
 
-        self.layout_grid.addWidget(self.dateEdit_inj_DOI, 1, 0)
-        self.dateEdit_inj_DOI.setFixedWidth(UISizes.DATE_EDIT_WIDTH)
-        self.dateEdit_inj_DOI.setAlignment(UIAlignments.CENTER)
+        self.layout_grid.addWidget(self.de_inj_DOI, 1, 0)
+        self.de_inj_DOI.setFixedWidth(UISizes.DATE_EDIT_WIDTH)
+        self.de_inj_DOI.setAlignment(UIAlignments.CENTER)
 
     def setup_ui_containers(self):
         # Container 1 & 2 for clone selection
@@ -180,27 +180,27 @@ class ViewAddInj(QMainWindow):
         self.container_3 = QWidget()
 
     def setup_lineedits(self):
-        self.lineEdit_DV = QLineEdit(placeholderText="DV(mm)")
-        self.lineEdit_ML = QLineEdit(placeholderText="ML(mm)")
-        self.lineEdit_AP = QLineEdit(placeholderText="AP(mm)")
+        self.le_DV = QLineEdit(placeholderText="DV(mm)")
+        self.le_ML = QLineEdit(placeholderText="ML(mm)")
+        self.le_AP = QLineEdit(placeholderText="AP(mm)")
 
-        self.layout_coordinates.addWidget(self.lineEdit_DV)
-        self.layout_coordinates.addWidget(self.lineEdit_ML)
-        self.layout_coordinates.addWidget(self.lineEdit_AP)
+        self.layout_coordinates.addWidget(self.le_DV)
+        self.layout_coordinates.addWidget(self.le_ML)
+        self.layout_coordinates.addWidget(self.le_AP)
 
-        self.lineEdit_DV.setAlignment(UIAlignments.CENTER)
-        self.lineEdit_ML.setAlignment(UIAlignments.CENTER)
-        self.lineEdit_AP.setAlignment(UIAlignments.CENTER)
+        self.le_DV.setAlignment(UIAlignments.CENTER)
+        self.le_ML.setAlignment(UIAlignments.CENTER)
+        self.le_AP.setAlignment(UIAlignments.CENTER)
 
-        self.lineEdit_DV.setFixedWidth(UISizes.LINE_EDIT_COORDINATE_WIDTH)
-        self.lineEdit_ML.setFixedWidth(UISizes.LINE_EDIT_COORDINATE_WIDTH)
-        self.lineEdit_AP.setFixedWidth(UISizes.LINE_EDIT_COORDINATE_WIDTH)
+        self.le_DV.setFixedWidth(UISizes.LINE_EDIT_COORDINATE_WIDTH)
+        self.le_ML.setFixedWidth(UISizes.LINE_EDIT_COORDINATE_WIDTH)
+        self.le_AP.setFixedWidth(UISizes.LINE_EDIT_COORDINATE_WIDTH)
 
-        self.lineEdit_volume_total = QLineEdit(placeholderText="Volume(unit)")
-        self.layout_grid.addWidget(self.lineEdit_volume_total, 3, 2)
+        self.le_volume_total = QLineEdit(placeholderText="Volume(unit)")
+        self.layout_grid.addWidget(self.le_volume_total, 3, 2)
 
-        self.lineEdit_volume_total.setAlignment(UIAlignments.CENTER)
-        self.lineEdit_volume_total.setFixedWidth(UISizes.LINE_EDIT_VOLUME_WIDTH)
+        self.le_volume_total.setAlignment(UIAlignments.CENTER)
+        self.le_volume_total.setFixedWidth(UISizes.LINE_EDIT_VOLUME_WIDTH)
 
     def setup_buttons(self):
         self.btn_refresh_clone_1 = QPushButton("Refresh")

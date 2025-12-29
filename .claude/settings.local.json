@@ -3,7 +3,9 @@
     "allow": [
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(python:*)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(ls:*)",
+      "Bash(dir \"D:\\\\MyDB\\\\2_Programs\\\\PG_003\\\\*.py\")"
     ],
     "deny": []
   }

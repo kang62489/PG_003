@@ -23,7 +23,7 @@ class CtrlRecImport:
         self.setup_DB()
 
         self.model_tablesOfRecDB = ModelDynamicList(name="model_tablesOfRecDB")
-        self.ui.comboBox_tableOfRecDB.setModel(self.model_tablesOfRecDB)
+        self.ui.cb_REC_DB_TABLE.setModel(self.model_tablesOfRecDB)
 
         self.reload_menuList_tablesOfRecDB()
         self.connect_signals()
@@ -34,8 +34,8 @@ class CtrlRecImport:
         self.db.open()
 
         self.model_recDB = QSqlTableModel(db=self.db)
-        self.ui.tableView_recDB.setModel(self.model_recDB)
-        self.sm_recDB = self.ui.tableView_recDB.selectionModel()
+        self.ui.tv_recDB.setModel(self.model_recDB)
+        self.sm_recDB = self.ui.tv_recDB.selectionModel()
 
     def reload_menuList_tablesOfRecDB(self):
         conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
@@ -52,10 +52,10 @@ class CtrlRecImport:
             json.dump(self.list_of_recDB_tables, f, indent=4)
 
     def connect_signals(self):
-        self.ui.btn_importRecDB.clicked.connect(self.import_recDB)
-        self.ui.btn_loadRecDB.clicked.connect(self.load_rec_table)
-        self.ui.btn_deleteTable.clicked.connect(self.delete_table)
-        self.ui.btn_exportSummary.clicked.connect(self.export_summary)
+        self.ui.btn_ImportRecDb.clicked.connect(self.import_recDB)
+        self.ui.btn_LoadRecTable.clicked.connect(self.load_rec_table)
+        self.ui.btn_DeleteTable.clicked.connect(self.delete_table)
+        self.ui.btn_ExportSummary.clicked.connect(self.export_summary)
 
     def rec_content_scanner(self, list_of_rec_paths):
         list_of_metadata = []
@@ -111,12 +111,12 @@ class CtrlRecImport:
         )
         input_dir = dlg_get_inputDir.get_path()
         if input_dir == "":
-            self.ui.textBrowser_recDB.setText(
+            self.ui.tb_recDB.setText(
                 "<span style='color: white;'>[MESSAGE] No directory is selected</span>"
             )
             return
         else:
-            self.ui.textBrowser_recDB.setText(
+            self.ui.tb_recDB.setText(
                 f"<span style='color: lime;'>[INFO] Importing from {input_dir}</span>"
             )
 
@@ -128,10 +128,10 @@ class CtrlRecImport:
             )
             return
         else:
-            self.ui.textBrowser_recDB.append(
+            self.ui.tb_recDB.append(
                 "<span style='color: lime;'>[INFO] .rec files are found, scanning...</span>"
             )
-            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+            self.ui.tb_recDB.moveCursor(QTextCursor.End)
 
         list_of_metadata, rec_filenames, timestamps = self.rec_content_scanner(
             list_of_rec_paths
@@ -139,10 +139,10 @@ class CtrlRecImport:
         df_summary = self.generate_summary_dateFrame_of_metadata(
             list_of_metadata, rec_filenames, timestamps
         )
-        self.ui.textBrowser_recDB.append(
+        self.ui.tb_recDB.append(
             "<span style='color: lime;'>[INFO] Scanning completed! Summary generated!</span>"
         )
-        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+        self.ui.tb_recDB.moveCursor(QTextCursor.End)
 
         # Save to database
         conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
@@ -150,62 +150,62 @@ class CtrlRecImport:
         table_name_to_be_written = "REC_" + df_summary["Filename"][0].split("-")[0]
         if table_name_to_be_written not in self.list_of_recDB_tables:
             df_summary.to_sql(table_name_to_be_written, conn, index=False)
-            self.ui.textBrowser_recDB.append(
+            self.ui.tb_recDB.append(
                 f"<span style='color: lime;'>[INFO] New table '{table_name_to_be_written}' created in database!</span>"
             )
-            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+            self.ui.tb_recDB.moveCursor(QTextCursor.End)
             conn.close()
             self.reload_menuList_tablesOfRecDB()
             return
 
-        self.ui.textBrowser_recDB.append(
+        self.ui.tb_recDB.append(
             f"<span style='color: yellow;'>[Warning] Table '{table_name_to_be_written}' already exists in database, replacing...</span>"
         )
-        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+        self.ui.tb_recDB.moveCursor(QTextCursor.End)
         df_summary.to_sql(
             table_name_to_be_written, conn, if_exists="replace", index=False
         )
-        self.ui.textBrowser_recDB.append(
+        self.ui.tb_recDB.append(
             "<span style='color: lime;'>[INFO] Summary successfully saved to database!</span>"
         )
-        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+        self.ui.tb_recDB.moveCursor(QTextCursor.End)
         conn.close()
 
     def load_rec_table(self):
-        self.selected_table = self.ui.comboBox_tableOfRecDB.currentText()
+        self.selected_table = self.ui.cb_REC_DB_TABLE.currentText()
         if self.selected_table == "":
-            self.ui.textBrowser_recDB.append(
+            self.ui.tb_recDB.append(
                 "<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>"
             )
-            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+            self.ui.tb_recDB.moveCursor(QTextCursor.End)
             return
         self.model_recDB.setTable(self.selected_table)
         self.model_recDB.setSort(
             self.model_recDB.fieldIndex("Timestamp"), Qt.AscendingOrder
         )
         self.model_recDB.select()
-        self.ui.textBrowser_recDB.append(
+        self.ui.tb_recDB.append(
             f"<span style='color: lime;'>[INFO] Table '{self.selected_table}' loaded!</span>"
         )
-        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+        self.ui.tb_recDB.moveCursor(QTextCursor.End)
 
     def delete_table(self):
-        self.selected_table = self.ui.comboBox_tableOfRecDB.currentText()
+        self.selected_table = self.ui.cb_REC_DB_TABLE.currentText()
         if self.selected_table == "":
-            self.ui.textBrowser_recDB.append(
+            self.ui.tb_recDB.append(
                 "<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>"
             )
-            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+            self.ui.tb_recDB.moveCursor(QTextCursor.End)
             return
 
         checkDeletion = DialogConfirm(
             title="Warning...", msg="Delete selected table? This cannot be undone!"
         )
         if not checkDeletion.exec():
-            self.ui.textBrowser_recDB.append(
+            self.ui.tb_recDB.append(
                 "<span style='color: white;'>[MESSAGE] Deletion Cancelled!</span>"
             )
-            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+            self.ui.tb_recDB.moveCursor(QTextCursor.End)
             return
 
         conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
@@ -214,10 +214,10 @@ class CtrlRecImport:
         conn.commit()
         conn.close()
 
-        self.ui.textBrowser_recDB.append(
+        self.ui.tb_recDB.append(
             f"<span style='color: lime;'>[INFO] Table '{self.selected_table}' deleted from database!</span>"
         )
-        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+        self.ui.tb_recDB.moveCursor(QTextCursor.End)
         self.reload_menuList_tablesOfRecDB()
         self.clear_tableview_recDB()
 
@@ -226,12 +226,12 @@ class CtrlRecImport:
         self.model_recDB.select()
 
     def export_summary(self):
-        selected_table = self.ui.comboBox_tableOfRecDB.currentText()
+        selected_table = self.ui.cb_REC_DB_TABLE.currentText()
         if selected_table == "":
-            self.ui.textBrowser_recDB.append(
+            self.ui.tb_recDB.append(
                 "<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>"
             )
-            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+            self.ui.tb_recDB.moveCursor(QTextCursor.End)
             return
 
         dlg_get_outputDir = DialogGetPath(
@@ -239,10 +239,10 @@ class CtrlRecImport:
         )
         output_dir = dlg_get_outputDir.get_path()
         if output_dir == "":
-            self.ui.textBrowser_recDB.append(
+            self.ui.tb_recDB.append(
                 "<span style='color: white;'>[MESSAGE] Export canceled</span>"
             )
-            self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+            self.ui.tb_recDB.moveCursor(QTextCursor.End)
             return
 
         conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
@@ -250,9 +250,9 @@ class CtrlRecImport:
         conn.close()
 
         df.to_excel(os.path.join(output_dir, f"{selected_table}.xlsx"), index=False)
-        self.ui.textBrowser_recDB.append(
+        self.ui.tb_recDB.append(
             f"<span style='color: lime;'>[INFO] Table '{selected_table}' exported to {output_dir}</span>"
         )
-        self.ui.textBrowser_recDB.moveCursor(QTextCursor.End)
+        self.ui.tb_recDB.moveCursor(QTextCursor.End)
 
         pass

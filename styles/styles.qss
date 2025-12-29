@@ -77,18 +77,18 @@ QPushButton#btn_deleteCurrentTemplate:disabled{
 }
 
 
-QLineEdit#lineEdit_filenameSN {
+QLineEdit#le_filenameSN {
     font-size: 20px;
     font-weight: bold;
     font-style: italic;
     color: green;
 }
 
-QPushButton#btn_copyFilenameSN:enabled {
+QPushButton#btn_SnCopy:enabled {
     color: green;
 }
 
-QPushButton#btn_copyFilenameSN:disabled {
+QPushButton#btn_SnCopy:disabled {
     color: gray;
 }
 
@@ -99,7 +99,7 @@ QTextBrowser {
     background-color: black;
 }
 
-QTextEdit#textEdit_tags {
+QTextEdit#te_tags {
     font-size: 16px;
     font-weight: bold;
     color: purple;
@@ -155,7 +155,7 @@ QListView::indicator:checked {
     image: url(:checkbox/checked.svg);
 }
 
-QTreeView#treeView_injections QHeaderView::section {
+QTreeView#tree_injections QHeaderView::section {
       font-size: 16px;
       font-weight: bold;
       color: black;

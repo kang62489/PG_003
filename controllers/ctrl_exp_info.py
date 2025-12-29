@@ -27,19 +27,19 @@ class CtrlExpInfo(QObject):
         self.model_injections.setHorizontalHeaderLabels(["Injection History", "Description"])
 
     def connect_signals(self):
-        self.ui.btn_add_vir_tree.clicked.connect(self.add_injections)
-        self.ui.btn_rm_vir_tree.clicked.connect(self.rm_injections)
-        self.ui.btn_openDB.clicked.connect(self.open_exp_db)
-        self.ui.btn_saveToDB.clicked.connect(self.save_to_DB)
+        self.ui.btn_AddInjections.clicked.connect(self.add_injections)
+        self.ui.btn_RmInjections.clicked.connect(self.rm_injections)
+        self.ui.btn_OpenExpDb.clicked.connect(self.open_exp_db)
+        self.ui.btn_SaveToDb.clicked.connect(self.save_to_DB)
 
-        self.ui.dateEdit_DOR.dateChanged.connect(self.auto_calculation)
-        self.ui.dateEdit_DOB.dateChanged.connect(self.auto_calculation)
+        self.ui.de_DOR.dateChanged.connect(self.auto_calculation)
+        self.ui.de_DOB.dateChanged.connect(self.auto_calculation)
 
     def auto_calculation(self):
         """Calculation of ages of and incubated weeks of the animals"""
 
-        dor = pendulum.instance(self.ui.dateEdit_DOR.date().toPython())
-        dob = pendulum.instance(self.ui.dateEdit_DOB.date().toPython())
+        dor = pendulum.instance(self.ui.de_DOR.date().toPython())
+        dob = pendulum.instance(self.ui.de_DOB.date().toPython())
 
         duration = dor - dob
         self.ages = f"{duration.in_weeks()}w{duration.remaining_days}d"
@@ -52,7 +52,7 @@ class CtrlExpInfo(QObject):
         """Remove selected injection(s) - finds root parents and removes entire tree"""
 
         # Get all selected indexes (Return [QModelIndex(row=..., column=...)])
-        selected_indexes = self.ui.treeView_injections.selectedIndexes()
+        selected_indexes = self.ui.tree_injections.selectedIndexes()
 
         if not selected_indexes:
             print("[bold yellow]No injection selected![/bold yellow]")
@@ -95,23 +95,23 @@ class CtrlExpInfo(QObject):
 
         # get data from UIs
         data_main = {
-            "DOR": self.ui.dateEdit_DOR.date().toPython().strftime("%Y_%m_%d"),
-            "Experimenters": self.ui.lineEdit_experimenters.text(),
-            "ACUC_Protocol": self.ui.comboBox_ACUC.currentText(),
-            "Animal_ID": self.ui.lineEdit_animalID.text(),
-            "Species": self.ui.comboBox_species.currentText(),
-            "Genotype": self.ui.comboBox_genotype.currentText(),
-            "Sex": self.ui.comboBox_sex.currentText(),
-            "DOB": self.ui.dateEdit_DOB.date().toPython().strftime("%Y_%m_%d"),
+            "DOR": self.ui.de_DOR.date().toPython().strftime("%Y_%m_%d"),
+            "Experimenters": self.ui.le_experimenters.text(),
+            "ACUC_Protocol": self.ui.cb_ACUC.currentText(),
+            "Animal_ID": self.ui.le_animalID.text(),
+            "Species": self.ui.cb_SPECIES.currentText(),
+            "Genotype": self.ui.cb_GENOTYPE.currentText(),
+            "Sex": self.ui.cb_SEX.currentText(),
+            "DOB": self.ui.de_DOB.date().toPython().strftime("%Y_%m_%d"),
             "Ages": self.ui.lbl_ages.text(),
-            "CuttingOS": self.ui.lineEdit_CuttingOS.text(),
-            "HoldingOS": self.ui.lineEdit_HoldingOS.text(),
-            "RecordingOS": self.ui.lineEdit_RecordingOS.text(),
+            "CuttingOS": self.ui.le_cuttingOS.text(),
+            "HoldingOS": self.ui.le_holdingOS.text(),
+            "RecordingOS": self.ui.le_recordingOS.text(),
         }
 
         conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
         cursor = conn.cursor()
-        table_name = self.ui.comboBox_tableOfExpInfoDB.currentText()
+        table_name = self.ui.cb_EXP_DB_TABLE.currentText()
 
         # Check if record exists using DOR and Animal_ID as unique identifier
         check_query = f"SELECT id FROM {table_name} WHERE DOR = ? AND Animal_ID = ?"

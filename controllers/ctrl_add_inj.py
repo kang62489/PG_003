@@ -19,13 +19,13 @@ class CtrlAddInj(QObject):
         self.connect_signals()
         self.refresh_clone_menus()
         self.auto_cal_incubation()
-        self.view_addInj.comboBox_injectate_type.setCurrentIndex(1)
+        self.view_addInj.cb_InjectateTypeCtrl.setCurrentIndex(1)
 
     def connect_signals(self):
-        self.view_addInj.dateEdit_inj_DOI.dateChanged.connect(self.auto_cal_incubation)
+        self.view_addInj.de_inj_DOI.dateChanged.connect(self.auto_cal_incubation)
 
-        self.view_addInj.comboBox_inj_mode.currentIndexChanged.connect(self.injection_mode_ctrl)
-        self.view_addInj.comboBox_injectate_type.currentIndexChanged.connect(self.injectate_type_ctrl)
+        self.view_addInj.cb_InjectionModeCtrl.currentIndexChanged.connect(self.injection_mode_ctrl)
+        self.view_addInj.cb_InjectateTypeCtrl.currentIndexChanged.connect(self.injectate_type_ctrl)
 
         self.view_addInj.btn_cloneInfo.triggered.connect(self.show_clone_info)
         self.view_addInj.btn_refresh_clone_1.clicked.connect(self.refresh_clone_menus)
@@ -41,13 +41,13 @@ class CtrlAddInj(QObject):
 
     def injectate_type_ctrl(self, index):
         if index == 1:
-            self.view_addInj.comboBox_vector_2.setEnabled(False)
+            self.view_addInj.cb_vector_2.setEnabled(False)
             self.view_addInj.container_2.setEnabled(False)
-            self.view_addInj.comboBox_mixing_ratio.setEnabled(False)
+            self.view_addInj.cb_mixing_ratio.setEnabled(False)
         else:
-            self.view_addInj.comboBox_vector_2.setEnabled(True)
+            self.view_addInj.cb_vector_2.setEnabled(True)
             self.view_addInj.container_2.setEnabled(True)
-            self.view_addInj.comboBox_mixing_ratio.setEnabled(True)
+            self.view_addInj.cb_mixing_ratio.setEnabled(True)
 
     def refresh_clone_menus(self):
         self.clone_red = self.parent._load_clone_JSON_file("menuList_clones_red.json")
@@ -57,18 +57,18 @@ class CtrlAddInj(QObject):
         self.clone_dict = self.clone_red | self.clone_green
 
         self.clone_codes = (self.clone_red | self.clone_green).keys()
-        self.view_addInj.comboBox_clone_1.clear()
-        self.view_addInj.comboBox_clone_1.addItems(self.clone_codes)
-        self.view_addInj.comboBox_clone_2.clear()
-        self.view_addInj.comboBox_clone_2.addItems(self.clone_codes)
+        self.view_addInj.cb_clone_1.clear()
+        self.view_addInj.cb_clone_1.addItems(self.clone_codes)
+        self.view_addInj.cb_clone_2.clear()
+        self.view_addInj.cb_clone_2.addItems(self.clone_codes)
 
     def show_clone_info(self):
         self.dlg_cloneInfo = DialogCloneInfo()
         self.dlg_cloneInfo.show()
 
     def auto_cal_incubation(self):
-        self.DOR = self.ui.dateEdit_DOR.date().toPython()
-        self.DOI = self.view_addInj.dateEdit_inj_DOI.date().toPython()
+        self.DOR = self.ui.de_DOR.date().toPython()
+        self.DOI = self.view_addInj.de_inj_DOI.date().toPython()
         self.duration = pendulum.instance(self.DOR) - pendulum.instance(self.DOI)
         self.view_addInj.lbl_incubated_disp.setText(f"{self.duration.in_weeks()}w{self.duration.remaining_days}d")
 
@@ -76,9 +76,9 @@ class CtrlAddInj(QObject):
         """Build injection tree with conditional children based on user selections"""
 
         # ========== Gather Data ==========
-        inj_mode = self.view_addInj.comboBox_inj_mode.currentText()
-        inj_side = self.view_addInj.comboBox_inj_side.currentText()
-        injectate_type = self.view_addInj.comboBox_injectate_type.currentText()
+        inj_mode = self.view_addInj.cb_InjectionModeCtrl.currentText()
+        inj_side = self.view_addInj.cb_inj_side.currentText()
+        injectate_type = self.view_addInj.cb_InjectateTypeCtrl.currentText()
 
         # Get injection mode abbreviation
         if inj_mode.lower() == "stereotaxic":
@@ -90,20 +90,20 @@ class CtrlAddInj(QObject):
 
         # ========== Build Injectate Info ==========
         if injectate_type == "SINGLE":
-            clone_code = self.view_addInj.comboBox_clone_1.currentText()
+            clone_code = self.view_addInj.cb_clone_1.currentText()
             clone_construct = self.clone_dict[clone_code]
-            serotype = self.view_addInj.comboBox_vector_1.currentText()
+            serotype = self.view_addInj.cb_vector_1.currentText()
 
             injectate_short = f"{serotype}-{clone_code}"
             construction_full = f"{serotype}-{clone_construct}"
 
         else:  # MIXED
-            clone_code_1 = self.view_addInj.comboBox_clone_1.currentText()
-            clone_code_2 = self.view_addInj.comboBox_clone_2.currentText()
+            clone_code_1 = self.view_addInj.cb_clone_1.currentText()
+            clone_code_2 = self.view_addInj.cb_clone_2.currentText()
             clone_construct_1 = self.clone_dict[clone_code_1]
             clone_construct_2 = self.clone_dict[clone_code_2]
-            serotype_1 = self.view_addInj.comboBox_vector_1.currentText()
-            serotype_2 = self.view_addInj.comboBox_vector_2.currentText()
+            serotype_1 = self.view_addInj.cb_vector_1.currentText()
+            serotype_2 = self.view_addInj.cb_vector_2.currentText()
 
             injectate_short = f"{serotype_1}-{clone_code_1} + {serotype_2}-{clone_code_2}"
             construction_full = f"{serotype_1}-{clone_construct_1} + {serotype_2}-{clone_construct_2}"
@@ -142,7 +142,7 @@ class CtrlAddInj(QObject):
         child_row += 1
 
         # 2. Volume Per Shot (always shown)
-        volume = self.view_addInj.lineEdit_volume_total.text() or "undefined"
+        volume = self.view_addInj.le_volume_total.text() or "undefined"
         label_volume = QStandardItem("Volume Per Shot")
         label_volume.setFont(child_label_font)
         label_volume.setForeground(QColor("#8A2BE2"))
@@ -152,7 +152,7 @@ class CtrlAddInj(QObject):
 
         # 3. Mixing Ratio (only for MIXED)
         if injectate_type == "MIXED":
-            ratio = self.view_addInj.comboBox_mixing_ratio.currentText()
+            ratio = self.view_addInj.cb_mixing_ratio.currentText()
             if ratio in ["", "--- Select Ratio ---"]:
                 ratio = "undefined"
 
@@ -166,7 +166,7 @@ class CtrlAddInj(QObject):
         # 4. Coordinates (only for Stereotaxic, not Retro-orbital)
         if inj_mode.lower() == "stereotaxic":
             # Get number of sites
-            num_of_sites = self.view_addInj.comboBox_num_of_sites.currentText()
+            num_of_sites = self.view_addInj.cb_num_of_sites.currentText()
             label_n_sites = QStandardItem("Number of Sites")
             label_n_sites.setFont(child_label_font)
             label_n_sites.setForeground(QColor("#8A2BE2"))
@@ -175,9 +175,9 @@ class CtrlAddInj(QObject):
             child_row += 1
 
             # Get coordinates
-            dv = self.view_addInj.lineEdit_DV.text() or "undefined"
-            ml = self.view_addInj.lineEdit_ML.text() or "undefined"
-            ap = self.view_addInj.lineEdit_AP.text() or "undefined"
+            dv = self.view_addInj.le_DV.text() or "undefined"
+            ml = self.view_addInj.le_ML.text() or "undefined"
+            ap = self.view_addInj.le_AP.text() or "undefined"
 
             coords = f"[DV, ML, AP] = [{dv}, {ml}, {ap}]"
             label_coords = QStandardItem("Coordinates")
@@ -191,7 +191,7 @@ class CtrlAddInj(QObject):
         self.model.sort(0, Qt.DescendingOrder)
 
         # ========== Update TreeView ==========
-        self.ui.treeView_injections.setModel(self.model)
+        self.ui.tree_injections.setModel(self.model)
         self.view_addInj.close()
 
     def cancel_adding_injection(self):

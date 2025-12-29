@@ -244,18 +244,18 @@ class DialogExpDb(QDialog):
 
         self.ui.dateEdit_DOR.setDate(datetime.strptime(df_basic_selected["DOR"][0], "%Y_%m_%d"))
         self.ui.lineEdit_project.setText(df_basic_selected["Project_Code"][0])
-        self.ui.comboBox_ACUC.setCurrentIndex(self.ui.comboBox_ACUC.findText(df_basic_selected["ACUC_Protocol"][0]))
+        self.ui.cb_ACUC.setCurrentIndex(self.ui.cb_ACUC.findText(df_basic_selected["ACUC_Protocol"][0]))
         self.ui.lineEdit_cuttingOS.setText(df_basic_selected["CuttingOS"][0].astype(str))
         self.ui.lineEdit_holdingOS.setText(df_basic_selected["HoldingOS"][0].astype(str))
         self.ui.lineEdit_recordingOS.setText(df_basic_selected["RecordingOS"][0].astype(str))
 
         self.ui.lineEdit_animalID.setText(df_basic_selected["Animal_ID"][0])
-        self.ui.comboBox_genotype.setCurrentIndex(self.ui.comboBox_genotype.findText(df_basic_selected["Genotype"][0]))
-        self.ui.comboBox_species.setCurrentIndex(self.ui.comboBox_species.findText(df_basic_selected["Species"][0]))
+        self.ui.cb_GENOTYPE.setCurrentIndex(self.ui.cb_GENOTYPE.findText(df_basic_selected["Genotype"][0]))
+        self.ui.cb_SPECIES.setCurrentIndex(self.ui.cb_SPECIES.findText(df_basic_selected["Species"][0]))
 
         self.ui.dateEdit_DOB.setDate(datetime.strptime(df_basic_selected["DOB"][0], "%Y_%m_%d"))
         self.ui.lbl_ages.setText(df_basic_selected["Ages"][0])
-        self.ui.comboBox_sex.setCurrentIndex(self.ui.comboBox_sex.findText(df_basic_selected["Sex"][0]))
+        self.ui.cb_SEX.setCurrentIndex(self.ui.cb_SEX.findText(df_basic_selected["Sex"][0]))
 
         ## TODO: Modify the view_add_inj class to make it be able to add injection for loading function <-- NOW HERE
 
