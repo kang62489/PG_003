@@ -61,7 +61,7 @@ class ViewAddInj(QMainWindow):
         self.setup_lineedits()
         self.setup_dateedit()
         self.setup_buttons()
-        self.setup_buttonBox()
+        self.setup_buttonbox()
 
     def setup_toolbar(self):
         # Add action toolbar for showing clone fullnames
@@ -212,7 +212,7 @@ class ViewAddInj(QMainWindow):
         self.btn_refresh_clone_1.setFixedSize(UISizes.BUTTON_REFRESH)
         self.btn_refresh_clone_2.setFixedSize(UISizes.BUTTON_REFRESH)
 
-    def setup_buttonBox(self):
+    def setup_buttonbox(self):
         self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.buttonBox.setOrientation(Qt.Vertical)  # Set vertical layout
         self.layout_main.addWidget(self.buttonBox, 0, UIAlignments.CENTER)

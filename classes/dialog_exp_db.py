@@ -6,6 +6,7 @@ from datetime import datetime
 ## Third-party imports
 import pandas as pd
 from PySide6.QtCore import QItemSelectionModel, Qt
+from PySide6.QtGui import QColor, QFont, QStandardItem, QStandardItemModel
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -22,40 +23,42 @@ from rich import print
 from tabulate import tabulate
 
 ## Local application imports
+from util.constants import MODELS_DIR, STYLE_FILE, UIAlignments, UISizes
+
 from .delegate_custom import DelegateCenterAlign
 from .dialog_confirm import DialogConfirm, DialogConfirmPasscode
-from util.constants import MODELS_DIR, STYLE_FILE, UIAlignments, UISizes
 
 
 class DialogExpDb(QDialog):
     """A class of creating a database viewer for manaing the experiment information database"""
 
-    def __init__(self, ui, handlers_EXP):
+    def __init__(self, ui, ctrl_exp_info):
         super().__init__()
         self.ui = ui
-        self.handlers_EXP = handlers_EXP
+        self.ctrl_exp_info_ins = ctrl_exp_info
+        self.tree_model = self.ctrl_exp_info_ins.model_injections
 
         self.setup_uis()
-        self.open_DB()
+        self.open_db()
         self.connect_signals()
         self.show()
 
     def setup_uis(self):
         self.setup_dialog()
-        self.setup_tableView()
+        self.setup_tableview()
         self.setup_labels()
         self.setup_buttons()
         self.setup_layouts()
 
-    def open_DB(self):
+    def open_db(self):
         self.db = QSqlDatabase("QSQLITE")
         self.db.setDatabaseName(str((MODELS_DIR / "exp_data.db").resolve()))
         self.db.open()
 
         # Create a model for BASIC_INFO table
         self.model_basic = QSqlTableModel(db=self.db)
-        self.tableView_basic.setModel(self.model_basic)
-        self.sm_basic = self.tableView_basic.selectionModel()
+        self.tv_basic.setModel(self.model_basic)
+        self.sm_basic = self.tv_basic.selectionModel()
         self.selected_table = "BASIC_INFO"
         self.model_basic.setTable(self.selected_table)
         self.model_basic.setSort(self.model_basic.fieldIndex("DOR"), Qt.DescendingOrder)
@@ -64,7 +67,7 @@ class DialogExpDb(QDialog):
         # Create a model for INJECTION_HISTORY table
         self.model_injections = QSqlTableModel(db=self.db)
         self.model_injections.setTable("INJECTION_HISTORY")
-        self.tableView_injections.setModel(self.model_injections)
+        self.tv_injections.setModel(self.model_injections)
 
     def setup_dialog(self):
         self.setWindowTitle("Database Viewer")
@@ -86,15 +89,15 @@ class DialogExpDb(QDialog):
         self.layout_main = QVBoxLayout()
         self.layout_btns = QHBoxLayout()
 
-        self.layout_btns.addWidget(self.btn_load_for_edit)
+        self.layout_btns.addWidget(self.btn_LoadToTab0)
         self.layout_btns.addWidget(self.btn_delete)
         self.layout_btns.addWidget(self.btn_export_selected)
         self.layout_btns.addWidget(self.btn_export_databases)
 
         self.layout_main.addWidget(self.lbl_exp_list)
-        self.layout_main.addWidget(self.tableView_basic)
+        self.layout_main.addWidget(self.tv_basic)
         self.layout_main.addWidget(self.lbl_inj_history)
-        self.layout_main.addWidget(self.tableView_injections)
+        self.layout_main.addWidget(self.tv_injections)
         self.layout_main.addLayout(self.layout_btns)
         self.setLayout(self.layout_main)
 
@@ -103,41 +106,41 @@ class DialogExpDb(QDialog):
         self.lbl_inj_history = QLabel("Injection History")
 
     def setup_buttons(self):
-        self.btn_load_for_edit = QPushButton("Edit in Main Window")
+        self.btn_LoadToTab0 = QPushButton("Edit in Main Window")
         self.btn_delete = QPushButton("Delete Selected Rows")
         self.btn_delete.setStyleSheet("color: red;")
         self.btn_export_selected = QPushButton("Export Selected")
         self.btn_export_databases = QPushButton("Export Databases")
 
-        buttons = [self.btn_load_for_edit, self.btn_delete, self.btn_export_selected, self.btn_export_databases]
+        buttons = [self.btn_LoadToTab0, self.btn_delete, self.btn_export_selected, self.btn_export_databases]
         for btn in buttons:
             btn.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
 
-    def setup_tableView(self):
-        self.tableView_basic = QTableView()
-        self.tableView_basic.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.tableView_basic.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
-        self.tableView_basic.verticalHeader().setVisible(False)
-        self.tableView_basic.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.tableView_basic.setItemDelegate(DelegateCenterAlign())
-        self.tableView_basic.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.5)
+    def setup_tableview(self):
+        self.tv_basic = QTableView()
+        self.tv_basic.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tv_basic.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
+        self.tv_basic.verticalHeader().setVisible(False)
+        self.tv_basic.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tv_basic.setItemDelegate(DelegateCenterAlign())
+        self.tv_basic.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.5)
         # Make selection more prominent
-        self.tableView_basic.setStyleSheet("""
+        self.tv_basic.setStyleSheet("""
             QTableView::item:selected {
                 background-color: #4A90E2;
                 color: white;
             }
         """)
 
-        self.tableView_injections = QTableView()
-        self.tableView_injections.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.tableView_injections.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
-        self.tableView_injections.verticalHeader().setVisible(False)
-        self.tableView_injections.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.tableView_injections.setItemDelegate(DelegateCenterAlign())
-        self.tableView_injections.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.3)
+        self.tv_injections = QTableView()
+        self.tv_injections.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.tv_injections.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
+        self.tv_injections.verticalHeader().setVisible(False)
+        self.tv_injections.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tv_injections.setItemDelegate(DelegateCenterAlign())
+        self.tv_injections.setFixedHeight(UISizes.DATABASE_VIEWER_HEIGHT * 0.3)
         # Make selection more prominent
-        self.tableView_injections.setStyleSheet("""
+        self.tv_injections.setStyleSheet("""
             QTableView::item:selected {
                 background-color: #4A90E2;
                 color: white;
@@ -146,7 +149,7 @@ class DialogExpDb(QDialog):
 
     def connect_signals(self):
         self.sm_basic.selectionChanged.connect(self.preview_inj)
-        self.btn_load_for_edit.clicked.connect(self.load_to_main_window)
+        self.btn_LoadToTab0.clicked.connect(self.load_to_tab0)
         self.btn_delete.clicked.connect(self.delete)
         self.btn_export_selected.clicked.connect(self.export_selected)
         self.btn_export_databases.clicked.connect(self.export_databases)
@@ -165,23 +168,19 @@ class DialogExpDb(QDialog):
         self.model_injections.setFilter(f"Animal_ID IN ('{ids_str}')")
         self.model_injections.select()
 
-    def load_to_main_window(self):
+    def load_to_tab0(self):
         """Load the selected experiment to the main window for editing"""
         # Determine which table has focus - prioritize focus over selection
-        if self.tableView_injections.hasFocus():
-            model = self.model_injections
+        if self.tv_injections.hasFocus():
             table_name = "INJECTION_HISTORY"
-            selected_indexes = self.tableView_injections.selectionModel().selectedIndexes()
-        elif self.tableView_basic.hasFocus():
-            model = self.model_basic
+            selected_indexes = self.tv_injections.selectionModel().selectedIndexes()
+        elif self.tv_basic.hasFocus():
             table_name = "BASIC_INFO"
             selected_indexes = self.sm_basic.selectedIndexes()
-        elif self.tableView_injections.selectionModel().hasSelection():
-            model = self.model_injections
+        elif self.tv_injections.selectionModel().hasSelection():
             table_name = "INJECTION_HISTORY"
-            selected_indexes = self.tableView_injections.selectionModel().selectedIndexes()
+            selected_indexes = self.tv_injections.selectionModel().selectedIndexes()
         elif self.sm_basic.hasSelection():
-            model = self.model_basic
             table_name = "BASIC_INFO"
             selected_indexes = self.sm_basic.selectedIndexes()
         else:
@@ -196,20 +195,20 @@ class DialogExpDb(QDialog):
         if table_name == "BASIC_INFO":
             last_row = self.sm_basic.currentIndex().row()
         else:  # INJECTION_HISTORY
-            last_row = self.tableView_injections.selectionModel().currentIndex().row()
+            last_row = self.tv_injections.selectionModel().currentIndex().row()
 
         # Show only the row is selected lastly - clear other selections
         if table_name == "BASIC_INFO":
             # Bitwise OR combines flags is used for "model" selection, for select the entire row not just one cell
-            # There is another way to do this: self.tableView_basic.selectRow(last_row) from the perspective of view
+            # There is another way to do this: self.tv_basic.selectRow(last_row) from the perspective of view
             self.sm_basic.clearSelection()
             self.sm_basic.select(
                 self.model_basic.index(last_row, 0), QItemSelectionModel.Select | QItemSelectionModel.Rows
             )
             animal_id = self.model_basic.index(last_row, 1).data()  # Column 1 of BASIC_INFO is Animal_ID
         else:  # INJECTION_HISTORY
-            self.tableView_injections.selectionModel().clearSelection()
-            self.tableView_injections.selectionModel().select(
+            self.tv_injections.selectionModel().clearSelection()
+            self.tv_injections.selectionModel().select(
                 self.model_injections.index(last_row, 0),
                 QItemSelectionModel.Select | QItemSelectionModel.Rows,
             )
@@ -220,7 +219,7 @@ class DialogExpDb(QDialog):
             row_in_basic_info = self.model_basic.match(
                 self.model_basic.index(0, 1), Qt.DisplayRole, animal_id, 1, Qt.MatchExactly
             )[0].row()
-            self.tableView_basic.selectRow(row_in_basic_info)
+            self.tv_basic.selectRow(row_in_basic_info)
 
         # Filled in the main window based on selected tables
         conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
@@ -242,39 +241,132 @@ class DialogExpDb(QDialog):
         print("Properties in BASIC_INFO:", basic_columns)
         print("Properties in INJECTION_HISTORY:", injection_columns)
 
-        self.ui.dateEdit_DOR.setDate(datetime.strptime(df_basic_selected["DOR"][0], "%Y_%m_%d"))
-        self.ui.lineEdit_project.setText(df_basic_selected["Project_Code"][0])
+        self.ui.de_DOR.setDate(datetime.strptime(df_basic_selected["DOR"][0], "%Y_%m_%d"))
+        self.ui.le_project.setText(df_basic_selected["Project_Code"][0])
         self.ui.cb_ACUC.setCurrentIndex(self.ui.cb_ACUC.findText(df_basic_selected["ACUC_Protocol"][0]))
-        self.ui.lineEdit_cuttingOS.setText(df_basic_selected["CuttingOS"][0].astype(str))
-        self.ui.lineEdit_holdingOS.setText(df_basic_selected["HoldingOS"][0].astype(str))
-        self.ui.lineEdit_recordingOS.setText(df_basic_selected["RecordingOS"][0].astype(str))
+        self.ui.le_cuttingOS.setText(df_basic_selected["CuttingOS"][0].astype(str))
+        self.ui.le_holdingOS.setText(df_basic_selected["HoldingOS"][0].astype(str))
+        self.ui.le_recordingOS.setText(df_basic_selected["RecordingOS"][0].astype(str))
 
-        self.ui.lineEdit_animalID.setText(df_basic_selected["Animal_ID"][0])
+        self.ui.le_animalID.setText(df_basic_selected["Animal_ID"][0])
         self.ui.cb_GENOTYPE.setCurrentIndex(self.ui.cb_GENOTYPE.findText(df_basic_selected["Genotype"][0]))
         self.ui.cb_SPECIES.setCurrentIndex(self.ui.cb_SPECIES.findText(df_basic_selected["Species"][0]))
 
-        self.ui.dateEdit_DOB.setDate(datetime.strptime(df_basic_selected["DOB"][0], "%Y_%m_%d"))
+        self.ui.de_DOB.setDate(datetime.strptime(df_basic_selected["DOB"][0], "%Y_%m_%d"))
         self.ui.lbl_ages.setText(df_basic_selected["Ages"][0])
         self.ui.cb_SEX.setCurrentIndex(self.ui.cb_SEX.findText(df_basic_selected["Sex"][0]))
 
-        ## TODO: Modify the view_add_inj class to make it be able to add injection for loading function <-- NOW HERE
+        ## Injection History
+        # Clear existing injection tree
+        self.tree_model.removeRows(0, self.tree_model.rowCount())
+        # ========== Gather Data ==========
+        for i in range(df_injection_selected.shape[0]):
+            inj_side = df_injection_selected["Side"][i]
+            injectate_type = df_injection_selected["Injectate_Type"][i]
+
+            mode_abbr = df_injection_selected["Inj_Mode"][i]
+
+            # ========== Build Injectate Info ==========
+            injectate_short = df_injection_selected["Virus_Short"][i]
+            construction_full = df_injection_selected["Virus_Full"][i]
+
+            # ========== Create Parent Row ==========
+            incubation_text = df_injection_selected["Incubated"][i]
+
+            # Create parent font (14px, bold)
+            parent_font = QFont()
+            parent_font.setPointSize(12)
+            parent_font.setBold(True)
+
+            item_DOI = QStandardItem(df_injection_selected["DOI"][i])
+            item_DOI.setFont(parent_font)
+            item_DOI.setForeground(Qt.darkGreen)  # Green color for Injection History column
+
+            item_summary = QStandardItem(f"{mode_abbr}_{inj_side}_{injectate_short} [{incubation_text}]")
+            item_summary.setFont(parent_font)
+
+            self.tree_model.appendRow([item_DOI, item_summary])
+            parent = item_DOI
+
+            # ========== Add Children (Conditionally) ==========
+            # Create child font for column 0 labels (bold, dark red)
+            child_label_font = QFont()
+            child_label_font.setBold(True)
+
+            child_row = 0
+
+            # 1. Construction (shown in one row for both SINGLE and MIXED)
+            label_construction = QStandardItem("Construction")
+            label_construction.setFont(child_label_font)
+            label_construction.setForeground(QColor("#8A2BE2"))
+            parent.setChild(child_row, 0, label_construction)
+            parent.setChild(child_row, 1, QStandardItem(construction_full))
+            child_row += 1
+
+            # 2. Volume Per Shot (always shown)
+            volume = df_injection_selected["Volume_Per_Shot"][i]
+            label_volume = QStandardItem("Volume Per Shot")
+            label_volume.setFont(child_label_font)
+            label_volume.setForeground(QColor("#8A2BE2"))
+            parent.setChild(child_row, 0, label_volume)
+            parent.setChild(child_row, 1, QStandardItem(volume))
+            child_row += 1
+
+            # 3. Mixing Ratio (only for MIXED)
+            if injectate_type == "MIXED":
+                ratio = df_injection_selected["Mix_Ratio"][i]
+
+                label_ratio = QStandardItem("Mixing Ratio")
+                label_ratio.setFont(child_label_font)
+                label_ratio.setForeground(QColor("#8A2BE2"))
+                parent.setChild(child_row, 0, label_ratio)
+                parent.setChild(child_row, 1, QStandardItem(ratio))
+                child_row += 1
+
+            # 4. Coordinates (only for Stereotaxic, not Retro-orbital)
+            if mode_abbr == "ST":
+                # Get number of sites
+                num_of_sites = df_injection_selected["Num_Of_Sites"][i]
+                label_n_sites = QStandardItem("Number of Sites")
+                label_n_sites.setFont(child_label_font)
+                label_n_sites.setForeground(QColor("#8A2BE2"))
+                parent.setChild(child_row, 0, label_n_sites)
+                parent.setChild(child_row, 1, QStandardItem(num_of_sites))
+                child_row += 1
+
+                # Get coordinates
+                Inj_Coords = df_injection_selected["Inj_Coords"][i]
+                coords = f"[DV, ML, AP] = {Inj_Coords}"
+                label_coords = QStandardItem("Coordinates")
+                label_coords.setFont(child_label_font)
+                label_coords.setForeground(QColor("#8A2BE2"))
+                parent.setChild(child_row, 0, label_coords)
+                parent.setChild(child_row, 1, QStandardItem(coords))
+                child_row += 1
+
+        # ========== Sort model by DOI (column 0, descending = newest first) ==========
+        self.tree_model.sort(0, Qt.DescendingOrder)
+
+        # ========== Update TreeView ==========
+        self.ui.tree_injections.setModel(self.tree_model)
+        self.close()
 
     def delete(self):
         # Determine which table has focus - prioritize focus over selection
-        if self.tableView_injections.hasFocus():
+        if self.tv_injections.hasFocus():
             model = self.model_injections
             table_name = "INJECTION_HISTORY"
-            selected_indexes = self.tableView_injections.selectionModel().selectedIndexes()
+            selected_indexes = self.tv_injections.selectionModel().selectedIndexes()
             use_passcode = False
-        elif self.tableView_basic.hasFocus():
+        elif self.tv_basic.hasFocus():
             model = self.model_basic
             table_name = "BASIC_INFO"
             selected_indexes = self.sm_basic.selectedIndexes()
             use_passcode = True
-        elif self.tableView_injections.selectionModel().hasSelection():
+        elif self.tv_injections.selectionModel().hasSelection():
             model = self.model_injections
             table_name = "INJECTION_HISTORY"
-            selected_indexes = self.tableView_injections.selectionModel().selectedIndexes()
+            selected_indexes = self.tv_injections.selectionModel().selectedIndexes()
             use_passcode = False
         elif self.sm_basic.hasSelection():
             model = self.model_basic

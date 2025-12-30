@@ -67,7 +67,7 @@ class CtrlRecWriter:
         self.ui.cb_TemplateLoad.activated.connect(self.template_load)
         self.ui.btn_TemplateSave.clicked.connect(self.template_save)
         self.ui.btn_TemplateDelete.clicked.connect(self.template_delete)
-        self.ui.btn_InsertCustomizedProperties.clicked.connect(self.insert_customized_properties)
+        self.ui.btn_InsertCustomProps.clicked.connect(self.insert_custom_props)
         self.ui.btn_RmSelectedRows.clicked.connect(self.rm_selected_rows)
         self.ui.btn_MvRowsUp.clicked.connect(self.mv_rows_up)
         self.ui.btn_MvRowsDown.clicked.connect(self.mv_rows_down)
@@ -225,7 +225,7 @@ class CtrlRecWriter:
     def is_table_view_empty(self):
         return self.model_tv_customized._data.empty
 
-    def insert_customized_properties(self):
+    def insert_custom_props(self):
         if self.is_table_view_empty():
             print("[bold red]Please load a template first![/bold red]")
             return

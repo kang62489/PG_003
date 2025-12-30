@@ -13,7 +13,7 @@ class ViewTiffStacker:
         # NOTE: The following widgets do not exist in the current UI file (Expdata Manager.ui)
         # A tab with TIFF stacker functionality needs to be added to the UI file
         # Required widgets: lv_recFiles, gb_concat_status, pb_concatenation,
-        # btn_browse_tiffs, btn_start_concatenation
+        # btn_BrowseTiffs, btn_StartConcat
         pass
         # self.setup_listview()
         # self.setup_groupbox()
@@ -34,6 +34,6 @@ class ViewTiffStacker:
         self.ui.pb_concatenation.setFixedHeight(UISizes.PROGRESSBAR_HEIGHT)
 
     def setup_pushbuttons(self):
-        # WARNING: Widgets 'btn_browse_tiffs' and 'btn_start_concatenation' do not exist in current UI
-        self.ui.btn_browse_tiffs.setFixedSize(UISizes.BUTTON_SMALL)
-        self.ui.btn_start_concatenation.setFixedHeight(UISizes.BUTTON_LONG_HEIGHT)
+        # WARNING: Widgets 'btn_BrowseTiffs' and 'btn_StartConcat' do not exist in current UI
+        self.ui.btn_BrowseTiffs.setFixedSize(UISizes.BUTTON_SMALL)
+        self.ui.btn_StartConcat.setFixedHeight(UISizes.BUTTON_LONG_HEIGHT)

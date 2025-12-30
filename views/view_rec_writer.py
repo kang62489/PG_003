@@ -82,7 +82,7 @@ class ViewRecWriter:
 
         buttons_for_editting = [
             self.ui.btn_RmSelectedRows,
-            self.ui.btn_InsertCustomizedProperties,
+            self.ui.btn_InsertCustomProps,
             self.ui.btn_MvRowsUp,
             self.ui.btn_MvRowsDown,
         ]

@@ -17,35 +17,35 @@ class DialogSaveTemplate(QDialog):
         
         self.lbl_message = QLabel("Please input the filename: ")
         
-        self.lineEdit_filename = QLineEdit()
-        self.lineEdit_filename.setMaxLength(30)
-        self.lineEdit_filename.setPlaceholderText('Enter your filename here.')
-        self.lineEdit_filename.returnPressed.connect(self.accept)
+        self.le_filename = QLineEdit()
+        self.le_filename.setMaxLength(30)
+        self.le_filename.setPlaceholderText('Enter your filename here.')
+        self.le_filename.returnPressed.connect(self.accept)
         
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.lbl_message)
-        self.layout.addWidget(self.lineEdit_filename)
+        self.layout.addWidget(self.le_filename)
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
-        
+
         # Set input validator
         regex = QRegularExpression(r"patch_default|puff_default")
         self.validator  = QRegularExpressionValidator(regex)
-        self.lineEdit_filename.textChanged.connect(self.validate_input)
-                
+        self.le_filename.textChanged.connect(self.validate_input)
+
     def validate_input(self, text):
-        self.lineEdit_filename.setValidator(self.validator)
-        if self.lineEdit_filename.hasAcceptableInput():
+        self.le_filename.setValidator(self.validator)
+        if self.le_filename.hasAcceptableInput():
             print("[bold red]Input filename is not acceptable[/bold red]")
             self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(False)
-            self.lineEdit_filename.setValidator(None)
+            self.le_filename.setValidator(None)
             return
-        
-        self.lineEdit_filename.setValidator(None)
+
+        self.le_filename.setValidator(None)
         self.buttonBox.button(QDialogButtonBox.Ok).setEnabled(True)
 
     def savefile(self, path, currentTemplate):
-        filePath = os.path.join(path, 'template_' + self.lineEdit_filename.text() +'.json')
+        filePath = os.path.join(path, 'template_' + self.le_filename.text() +'.json')
         if not os.path.isfile(filePath):
             currentTemplate.to_json(filePath, orient='columns', indent=4)
             print("[bold green]Template Saved!![/bold green]")

@@ -11,7 +11,7 @@ class DialogConfirm(QDialog):
         super().__init__()
         self.setWindowTitle(title)
 
-        self.message = QLabel(msg)
+        self.lbl_message = QLabel(msg)
 
         self.buttons = QDialogButtonBox.Yes | QDialogButtonBox.No
         self.buttonBox = QDialogButtonBox(self.buttons)
@@ -19,7 +19,7 @@ class DialogConfirm(QDialog):
         self.buttonBox.rejected.connect(self.reject)
 
         self.layout = QVBoxLayout()
-        self.layout.addWidget(self.message)
+        self.layout.addWidget(self.lbl_message)
         self.layout.addWidget(self.buttonBox, 0, Qt.AlignCenter)
         self.setLayout(self.layout)
 
@@ -30,10 +30,10 @@ class DialogConfirmPasscode(QDialog):
         self.setWindowTitle(title)
         self.correct_passcode = passcode
 
-        self.message = QLabel(msg)
-        self.passcode_label = QLabel("Enter passcode to confirm:")
-        self.passcode_input = QLineEdit()
-        self.passcode_input.setEchoMode(QLineEdit.Password)
+        self.lbl_message = QLabel(msg)
+        self.lbl_passcode = QLabel("Enter passcode to confirm:")
+        self.le_passcode = QLineEdit()
+        self.le_passcode.setEchoMode(QLineEdit.Password)
 
         self.buttons = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         self.buttonBox = QDialogButtonBox(self.buttons)
@@ -41,15 +41,15 @@ class DialogConfirmPasscode(QDialog):
         self.buttonBox.rejected.connect(self.reject)
 
         self.layout = QVBoxLayout()
-        self.layout.addWidget(self.message)
-        self.layout.addWidget(self.passcode_label)
-        self.layout.addWidget(self.passcode_input)
+        self.layout.addWidget(self.lbl_message)
+        self.layout.addWidget(self.lbl_passcode)
+        self.layout.addWidget(self.le_passcode)
         self.layout.addWidget(self.buttonBox, 0, Qt.AlignCenter)
         self.setLayout(self.layout)
 
     def check_passcode(self):
-        if self.passcode_input.text() == self.correct_passcode:
+        if self.le_passcode.text() == self.correct_passcode:
             self.accept()
         else:
-            self.passcode_label.setText("❌ Wrong passcode! Try again:")
-            self.passcode_input.clear()
+            self.lbl_passcode.setText("❌ Wrong passcode! Try again:")
+            self.le_passcode.clear()

@@ -78,14 +78,14 @@ class HelperComboEditor(QObject):
         new_item = self.target_combobox.currentText()
         self.target_combobox_model.list_of_options.append(new_item)
         """Update the menulist of the combobox saved in the JSON file"""
-        self.update_menuList_JSON_files()
+        self.update_menu_list_json_files()
         self.target_combobox.setEditable(False)
         """Set the new item as the current item, now the saved items are sorted, need to find it's index"""
         # self.target_combobox.setCurrentIndex(self.target_combobox.count() - 1)
         index_of_new_item = self.target_combobox_model.list_of_options.index(new_item)
         self.target_combobox.setCurrentIndex(index_of_new_item)
 
-    def update_menuList_JSON_files(self):
+    def update_menu_list_json_files(self):
         for model_name, file_name in MenuOptions.MENU_LIST_FILES.items():
             if model_name == self.target_combobox_model.name:
                 file_path = MODELS_DIR / file_name
@@ -102,5 +102,5 @@ class HelperComboEditor(QObject):
     def remove_new_item_from_menu(self):
         item_to_be_removed = self.target_combobox.currentText()
         self.target_combobox_model.list_of_options.remove(item_to_be_removed)
-        self.update_menuList_JSON_files()
+        self.update_menu_list_json_files()
         self.target_combobox.setCurrentIndex(0)

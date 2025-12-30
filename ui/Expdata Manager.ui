@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_EXP">
        <attribute name="title">
@@ -489,7 +489,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="btn_InsertCustomizedProperties">
+                <widget class="QPushButton" name="btn_InsertCustomProps">
                  <property name="text">
                   <string>Insert</string>
                  </property>

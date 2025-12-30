@@ -30,7 +30,7 @@ class CtrlExpInfo(QObject):
         self.ui.btn_AddInjections.clicked.connect(self.add_injections)
         self.ui.btn_RmInjections.clicked.connect(self.rm_injections)
         self.ui.btn_OpenExpDb.clicked.connect(self.open_exp_db)
-        self.ui.btn_SaveToDb.clicked.connect(self.save_to_DB)
+        self.ui.btn_SaveToDb.clicked.connect(self.save_to_db)
 
         self.ui.de_DOR.dateChanged.connect(self.auto_calculation)
         self.ui.de_DOB.dateChanged.connect(self.auto_calculation)
@@ -87,7 +87,7 @@ class CtrlExpInfo(QObject):
         self.dlg_dbViewer = DialogExpDb(self.ui, self)
 
     
-    def save_to_DB(self):
+    def save_to_db(self):
         checkSaveToDB = DialogConfirm(title="Checking...", msg="Save current expinfo to database?")
         if not checkSaveToDB.exec():
             print("[bold yellow]Save Cancelled![/bold yellow]")

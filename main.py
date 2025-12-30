@@ -1,6 +1,7 @@
 ## Modules
 # Standard library imports
 import os
+import sys
 from pathlib import Path
 
 # Third-party imports
@@ -68,7 +69,8 @@ class Main:
         self.ui.show()
 
 
-os.environ["QT_QPA_PLATFORM"] = "windows:darkmode=0"
+if sys.platform == "win32":
+    os.environ["QT_QPA_PLATFORM"] = "windows:darkmode=0"
 
 app = QApplication([])
 app.setStyle("fusion")

@@ -30,8 +30,8 @@ class CtrlAddInj(QObject):
         self.view_addInj.btn_cloneInfo.triggered.connect(self.show_clone_info)
         self.view_addInj.btn_refresh_clone_1.clicked.connect(self.refresh_clone_menus)
         self.view_addInj.btn_refresh_clone_2.clicked.connect(self.refresh_clone_menus)
-        self.view_addInj.buttonBox.accepted.connect(self.accept_adding_injection)
-        self.view_addInj.buttonBox.rejected.connect(self.cancel_adding_injection)
+        self.view_addInj.buttonBox.accepted.connect(self.accept_inj)
+        self.view_addInj.buttonBox.rejected.connect(self.cancel_inj)
 
     def injection_mode_ctrl(self, index):
         if index == 1:
@@ -50,10 +50,10 @@ class CtrlAddInj(QObject):
             self.view_addInj.cb_mixing_ratio.setEnabled(True)
 
     def refresh_clone_menus(self):
-        self.clone_red = self.parent._load_clone_JSON_file("menuList_clones_red.json")
-        self.parent._update_clone_JSON_files("menuList_clones_red.json", self.clone_red)
-        self.clone_green = self.parent._load_clone_JSON_file("menuList_clones_green.json")
-        self.parent._update_clone_JSON_files("menuList_clones_green.json", self.clone_green)
+        self.clone_red = self.parent._json_load_clones("menuList_clones_red.json")
+        self.parent._json_update_clones("menuList_clones_red.json", self.clone_red)
+        self.clone_green = self.parent._json_load_clones("menuList_clones_green.json")
+        self.parent._json_update_clones("menuList_clones_green.json", self.clone_green)
         self.clone_dict = self.clone_red | self.clone_green
 
         self.clone_codes = (self.clone_red | self.clone_green).keys()
@@ -72,7 +72,7 @@ class CtrlAddInj(QObject):
         self.duration = pendulum.instance(self.DOR) - pendulum.instance(self.DOI)
         self.view_addInj.lbl_incubated_disp.setText(f"{self.duration.in_weeks()}w{self.duration.remaining_days}d")
 
-    def accept_adding_injection(self):
+    def accept_inj(self):
         """Build injection tree with conditional children based on user selections"""
 
         # ========== Gather Data ==========
@@ -194,5 +194,5 @@ class CtrlAddInj(QObject):
         self.ui.tree_injections.setModel(self.model)
         self.view_addInj.close()
 
-    def cancel_adding_injection(self):
+    def cancel_inj(self):
         self.view_addInj.close()
