@@ -41,8 +41,10 @@ class CtrlExpInfo(QObject):
         dor = pendulum.instance(self.ui.de_DOR.date().toPython())
         dob = pendulum.instance(self.ui.de_DOB.date().toPython())
 
-        duration = dor - dob
-        self.ages = f"{duration.in_weeks()}w{duration.remaining_days}d"
+        total_days = (dor - dob).days
+        weeks = total_days // 7
+        days = total_days % 7
+        self.ages = f"{weeks}w{days}d"
         self.ui.lbl_ages.setText(self.ages)
 
     def add_injections(self):
@@ -93,28 +95,28 @@ class CtrlExpInfo(QObject):
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return
 
-        # get data from UIs
+        # get data from UIs (matching fields from load_to_tab0 and UI widgets)
         data_main = {
             "DOR": self.ui.de_DOR.date().toPython().strftime("%Y_%m_%d"),
-            "Experimenters": self.ui.le_experimenters.text(),
+            "Project_Code": self.ui.le_project.text(),
             "ACUC_Protocol": self.ui.cb_ACUC.currentText(),
-            "Animal_ID": self.ui.le_animalID.text(),
-            "Species": self.ui.cb_SPECIES.currentText(),
-            "Genotype": self.ui.cb_GENOTYPE.currentText(),
-            "Sex": self.ui.cb_SEX.currentText(),
-            "DOB": self.ui.de_DOB.date().toPython().strftime("%Y_%m_%d"),
-            "Ages": self.ui.lbl_ages.text(),
             "CuttingOS": self.ui.le_cuttingOS.text(),
             "HoldingOS": self.ui.le_holdingOS.text(),
             "RecordingOS": self.ui.le_recordingOS.text(),
+            "Animal_ID": self.ui.le_animalID.text(),
+            "Genotype": self.ui.cb_GENOTYPE.currentText(),
+            "Species": self.ui.cb_SPECIES.currentText(),
+            "DOB": self.ui.de_DOB.date().toPython().strftime("%Y_%m_%d"),
+            "Ages": self.ui.lbl_ages.text(),
+            "Sex": self.ui.cb_SEX.currentText(),
         }
 
         conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
         cursor = conn.cursor()
-        table_name = self.ui.cb_EXP_DB_TABLE.currentText()
+        table_name = "BASIC_INFO"  # Fixed table name since cb_EXP_DB_TABLE doesn't exist in UI
 
         # Check if record exists using DOR and Animal_ID as unique identifier
-        check_query = f"SELECT id FROM {table_name} WHERE DOR = ? AND Animal_ID = ?"
+        check_query = f"SELECT rowid FROM {table_name} WHERE DOR = ? AND Animal_ID = ?"
         cursor.execute(check_query, (data_main["DOR"], data_main["Animal_ID"]))
         existing_record = cursor.fetchone()
 
@@ -123,9 +125,9 @@ class CtrlExpInfo(QObject):
             record_id = existing_record[0]
             set_clause = ", ".join([f"{key} = ?" for key in data_main.keys()])
             values_to_update = tuple(data_main.values()) + (record_id,)
-            sql_command = f"UPDATE {table_name} SET {set_clause} WHERE id = ?"
+            sql_command = f"UPDATE {table_name} SET {set_clause} WHERE rowid = ?"
             cursor.execute(sql_command, values_to_update)
-            print("[bold green]Data updated in database![/bold green]")
+            print("[bold green]Basic info updated in database![/bold green]")
         else:
             # Record doesn't exist - INSERT
             columns_to_be_inserted = ", ".join(data_main.keys())
@@ -135,7 +137,105 @@ class CtrlExpInfo(QObject):
                 f"INSERT INTO {table_name} ({columns_to_be_inserted}) VALUES ({placeholders_for_inserting_values})"
             )
             cursor.execute(sql_command, values_to_be_inserted)
-            print("[bold green]Data saved to database![/bold green]")
+            print("[bold green]Basic info saved to database![/bold green]")
+
+        # ========== Save Injection History (Approach 1: DELETE + INSERT) ==========
+        animal_id = data_main["Animal_ID"]
+
+        # Step 1: Delete all existing injection records for this Animal_ID
+        cursor.execute("DELETE FROM INJECTION_HISTORY WHERE Animal_ID = ?", (animal_id,))
+
+        # Step 2: Insert all injections from the tree model
+        injection_count = 0
+        for row in range(self.model_injections.rowCount()):
+            # Get parent items (DOI and Summary)
+            parent_item = self.model_injections.item(row, 0)
+            summary_item = self.model_injections.item(row, 1)
+
+            if not parent_item or not summary_item:
+                continue
+
+            doi = parent_item.text()
+            summary = summary_item.text()
+
+            # Parse summary: "ST_Left_AAV9-ABC123 [Incubated 3w2d]"
+            parts = summary.split("[")
+            if len(parts) < 2:
+                continue
+
+            info_parts = parts[0].strip().split("_", 2)  # Split into mode, side, virus
+            if len(info_parts) < 3:
+                continue
+
+            inj_mode = info_parts[0]
+            side = info_parts[1]
+            virus_short = info_parts[2]
+            incubated = parts[1].replace("]", "").replace("Incubated", "").strip()
+
+            # Extract child data
+            virus_full = ""
+            volume_per_shot = ""
+            mix_ratio = ""
+            num_of_sites = ""
+            inj_coords = ""
+            injectate_type = "SINGLE"  # Default
+
+            for child_row in range(parent_item.rowCount()):
+                label_item = parent_item.child(child_row, 0)
+                value_item = parent_item.child(child_row, 1)
+
+                if not label_item or not value_item:
+                    continue
+
+                label = label_item.text()
+                value = value_item.text()
+
+                if label == "Construction":
+                    virus_full = value
+                    # Detect if it's MIXED type (contains "+")
+                    if "+" in value:
+                        injectate_type = "MIXED"
+                elif label == "Volume Per Shot":
+                    volume_per_shot = value
+                elif label == "Mixing Ratio":
+                    mix_ratio = value
+                elif label == "Number of Sites":
+                    num_of_sites = value
+                elif label == "Coordinates":
+                    # Extract just the coordinates part: "[DV, ML, AP] = [-5.2, 1.5, -2.0]"
+                    if "=" in value:
+                        inj_coords = value.split("=")[1].strip()
+
+            # Insert into INJECTION_HISTORY
+            data_injection = {
+                "Animal_ID": animal_id,
+                "DOI": doi,
+                "Inj_Mode": inj_mode,
+                "Side": side,
+                "Virus_Short": virus_short,
+                "Incubated": incubated,
+                "Virus_Full": virus_full,
+                "Injectate_Type": injectate_type,
+                "Mix_Ratio": mix_ratio,
+                "Volume_Per_Shot": volume_per_shot,
+                "Num_Of_Sites": num_of_sites,
+                "Inj_Coords": inj_coords,
+            }
+
+            columns = ", ".join(data_injection.keys())
+            placeholders = ", ".join(["?"] * len(data_injection))
+            values = tuple(data_injection.values())
+
+            cursor.execute(
+                f"INSERT INTO INJECTION_HISTORY ({columns}) VALUES ({placeholders})",
+                values
+            )
+            injection_count += 1
+
+        if injection_count > 0:
+            print(f"[bold green]Saved {injection_count} injection(s) to database![/bold green]")
+        else:
+            print("[bold yellow]No injection history to save[/bold yellow]")
 
         conn.commit()
         conn.close()

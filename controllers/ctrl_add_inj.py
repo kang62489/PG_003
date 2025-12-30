@@ -69,8 +69,10 @@ class CtrlAddInj(QObject):
     def auto_cal_incubation(self):
         self.DOR = self.ui.de_DOR.date().toPython()
         self.DOI = self.view_addInj.de_inj_DOI.date().toPython()
-        self.duration = pendulum.instance(self.DOR) - pendulum.instance(self.DOI)
-        self.view_addInj.lbl_incubated_disp.setText(f"{self.duration.in_weeks()}w{self.duration.remaining_days}d")
+        self.total_incubation_days = (pendulum.instance(self.DOR) - pendulum.instance(self.DOI)).days
+        weeks = self.total_incubation_days // 7
+        days = self.total_incubation_days % 7
+        self.view_addInj.lbl_incubated_disp.setText(f"{weeks}w{days}d")
 
     def accept_inj(self):
         """Build injection tree with conditional children based on user selections"""
@@ -109,7 +111,9 @@ class CtrlAddInj(QObject):
             construction_full = f"{serotype_1}-{clone_construct_1} + {serotype_2}-{clone_construct_2}"
 
         # ========== Create Parent Row ==========
-        incubation_text = f"Incubated {self.duration.in_weeks()}w{self.duration.remaining_days}d"
+        weeks = self.total_incubation_days // 7
+        days = self.total_incubation_days % 7
+        incubation_text = f"Incubated {weeks}w{days}d"
 
         # Create parent font (14px, bold)
         parent_font = QFont()
