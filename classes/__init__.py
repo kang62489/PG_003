@@ -4,6 +4,7 @@ from .delegate_custom import (
     DelegateCellEdit,
     DelegateCenterAlign,
     DelegateCheckableListItem,
+    DelegateWordWrap,
 )
 
 # Dialogs
@@ -32,6 +33,7 @@ __all__ = [
     "DelegateCellEdit",
     "DelegateCenterAlign",
     "DelegateCheckableListItem",
+    "DelegateWordWrap",
     # Dialogs
     "DialogCloneInfo",
     "DialogConfirm",

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>722</width>
-    <height>881</height>
+    <width>600</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_EXP">
        <attribute name="title">
@@ -26,230 +26,221 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QGroupBox" name="gb_fileIO">
-            <property name="title">
-             <string>File IO</string>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <item>
-              <widget class="QPushButton" name="btn_OpenExpDb">
-               <property name="text">
-                <string>Open Database</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_SaveToDb">
-               <property name="text">
-                <string>Save to Database</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QGroupBox" name="gb_basics">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>150</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Basics</string>
+          </property>
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="1">
+            <widget class="QDateEdit" name="de_DOR">
+             <property name="calendarPopup">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="lbl_DOR">
+             <property name="text">
+              <string>Date of Recording</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lbl_project">
+             <property name="text">
+              <string>Project</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="le_project"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lbl_ACUC">
+             <property name="text">
+              <string>ACUC protocol</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="cb_ACUC"/>
+           </item>
+          </layout>
+         </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
-           <widget class="QGroupBox" name="gb_basics">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="title">
-             <string>Basics</string>
-            </property>
-            <layout class="QFormLayout" name="formLayout_4">
-             <item row="0" column="1">
-              <widget class="QDateEdit" name="de_DOR">
-               <property name="calendarPopup">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="lbl_DOR">
-               <property name="text">
-                <string>Date of Recording</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="lbl_project">
-               <property name="text">
-                <string>Project</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="le_project"/>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="lbl_ACUC">
-               <property name="text">
-                <string>ACUC protocol</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <item>
-                <widget class="QComboBox" name="cb_ACUC"/>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="gb_solutions">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="title">
-             <string>Solutions</string>
-            </property>
-            <layout class="QFormLayout" name="formLayout_8">
-             <item row="0" column="0">
-              <widget class="QLabel" name="lbl_cuttingOS">
-               <property name="text">
-                <string>Cutting (mOsm/Kg)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="le_cuttingOS"/>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="lbl_holdingOS">
-               <property name="text">
-                <string>Holding (mOsm/Kg)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="le_holdingOS"/>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="lbl_recordingOS">
-               <property name="text">
-                <string>Recording (mOsm/Kg)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLineEdit" name="le_recordingOS"/>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QGroupBox" name="gb_solutions">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>150</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Solutions</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lbl_cuttingOS">
+             <property name="text">
+              <string>Cutting (mOsm/Kg)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="lbl_holdingOS">
+             <property name="text">
+              <string>Holding (mOsm/Kg)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLineEdit" name="le_cuttingOS"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="le_holdingOS"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="lbl_recordingOS">
+             <property name="text">
+              <string>Recording (mOsm/Kg)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="le_recordingOS"/>
+           </item>
+          </layout>
+         </widget>
         </item>
         <item>
          <widget class="QGroupBox" name="gb_animals">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="title">
            <string>Animals</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="le_animalID"/>
-           </item>
-           <item row="0" column="7">
-            <widget class="QLabel" name="lbl_species">
-             <property name="text">
-              <string>Species</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QDateEdit" name="de_DOB"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="lbl_animalID">
-             <property name="text">
-              <string>Animal ID</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
+           <item row="2" column="0">
             <widget class="QLabel" name="lbl_DOB">
              <property name="text">
               <string>Date of Birth</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="8">
-            <widget class="QComboBox" name="cb_SPECIES"/>
-           </item>
-           <item row="3" column="2">
-            <widget class="QLabel" name="lbl_agesLabel">
-             <property name="text">
-              <string>Ages</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="7">
-            <widget class="QLabel" name="lbl_sex">
-             <property name="text">
-              <string>Sex</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="3">
-            <widget class="QLabel" name="lbl_ages">
-             <property name="text">
-              <string>0</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="lbl_genotype">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lbl_Genotype">
              <property name="text">
               <string>Genotype</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="8">
-            <widget class="QComboBox" name="cb_SEX"/>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lbl_AnimalID">
+             <property name="text">
+              <string>Animal ID</string>
+             </property>
+            </widget>
            </item>
-           <item row="0" column="3">
-            <widget class="QComboBox" name="cb_GENOTYPE"/>
+           <item row="0" column="5">
+            <widget class="QComboBox" name="cb_Species"/>
+           </item>
+           <item row="0" column="4">
+            <widget class="QLabel" name="lbl_Species">
+             <property name="text">
+              <string>Species</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDateEdit" name="de_DOB"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="cb_Genotype"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="le_AnimalID"/>
+           </item>
+           <item row="2" column="4">
+            <widget class="QLabel" name="lbl_Ages">
+             <property name="text">
+              <string>Ages</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="5">
+            <widget class="QLineEdit" name="le_ages"/>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLabel" name="lbl_Sex">
+             <property name="text">
+              <string>Sex</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="5">
+            <widget class="QComboBox" name="cb_Sex"/>
            </item>
           </layout>
          </widget>
         </item>
         <item>
          <widget class="QGroupBox" name="gb_injections">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="title">
            <string>Injections</string>
           </property>
@@ -259,14 +250,14 @@
              <item>
               <widget class="QPushButton" name="btn_AddInjections">
                <property name="text">
-                <string>Add</string>
+                <string>Add New</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="btn_RmInjections">
                <property name="text">
-                <string>Remove</string>
+                <string>Remove Selected</string>
                </property>
               </widget>
              </item>
@@ -274,6 +265,41 @@
            </item>
            <item>
             <widget class="QTreeView" name="tree_injections"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_fileIO">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Database Operations</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QPushButton" name="btn_OpenExpDb">
+             <property name="text">
+              <string>Open EXP_DATA</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_SaveToDb">
+             <property name="text">
+              <string>Save to EXP_DATA</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -289,6 +315,18 @@
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
            <widget class="QGroupBox" name="gb_recBasic">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="title">
              <string>Experiment Date: YYYY_MM_DD</string>
             </property>
@@ -434,6 +472,18 @@
           </item>
           <item>
            <widget class="QGroupBox" name="gb_recCustomized">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="title">
              <string>Customized Parameters</string>
             </property>
@@ -526,6 +576,18 @@
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
            <widget class="QGroupBox" name="gb_status">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="title">
              <string>Status</string>
             </property>
@@ -538,6 +600,18 @@
           </item>
           <item>
            <widget class="QGroupBox" name="gb_tagOutput">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="title">
              <string>Output</string>
             </property>
@@ -627,6 +701,18 @@
              </item>
              <item>
               <widget class="QGroupBox" name="gb_tagPreview">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="title">
                 <string>Tag Preview and Operations</string>
                </property>
@@ -666,6 +752,124 @@
            </widget>
           </item>
          </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_REC_DB">
+       <attribute name="title">
+        <string>REC Database</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_21">
+        <item>
+         <widget class="QGroupBox" name="gb_recDB_status">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Status</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QTextBrowser" name="tb_recDB"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_dbOperation">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Database Operation</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="QPushButton" name="btn_ImportRecDb">
+             <property name="text">
+              <string>Import Data From Rec Files</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <item>
+              <widget class="QLabel" name="lbl_tableName">
+               <property name="text">
+                <string>Table Name</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="cb_REC_DB_TABLE"/>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_LoadRecTable">
+               <property name="text">
+                <string>Load</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_ExportSummary">
+               <property name="text">
+                <string>Export</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_DeleteTable">
+               <property name="text">
+                <string>Delete</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_dbDisplay">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Display</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QTableView" name="tv_recDB"/>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -818,88 +1022,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_REC_DB">
-       <attribute name="title">
-        <string>REC Database</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_21">
-        <item>
-         <widget class="QGroupBox" name="gb_recDB_status">
-          <property name="title">
-           <string>Status</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
-           <item>
-            <widget class="QTextBrowser" name="tb_recDB"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="gb_dbOperation">
-          <property name="title">
-           <string>Database Operation</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_8">
-           <item>
-            <widget class="QPushButton" name="btn_ImportRecDb">
-             <property name="text">
-              <string>Import Data From Rec Files</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_14">
-             <item>
-              <widget class="QLabel" name="lbl_tableName">
-               <property name="text">
-                <string>Table Name</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="cb_REC_DB_TABLE"/>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_LoadRecTable">
-               <property name="text">
-                <string>Load</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_ExportSummary">
-               <property name="text">
-                <string>Export</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_DeleteTable">
-               <property name="text">
-                <string>Delete</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="gb_dbDisplay">
-          <property name="title">
-           <string>Display</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_9">
-           <item>
-            <widget class="QTableView" name="tv_recDB"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="tab_CONCAT">
        <attribute name="title">
         <string>Concatenator (Tiff)</string>
@@ -907,6 +1029,18 @@
        <layout class="QVBoxLayout" name="verticalLayout_22">
         <item>
          <widget class="QGroupBox" name="gb_concat_status">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="title">
            <string>Status</string>
           </property>
@@ -919,6 +1053,18 @@
         </item>
         <item>
          <widget class="QGroupBox" name="gb_tiffBrowser">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="title">
            <string>File Browser (Tiff)</string>
           </property>
@@ -979,7 +1125,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>722</width>
+     <width>600</width>
      <height>21</height>
     </rect>
    </property>

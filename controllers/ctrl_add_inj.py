@@ -1,7 +1,7 @@
 ## Third-party imports
 import pendulum
 from PySide6.QtCore import QObject, Qt
-from PySide6.QtGui import QColor, QFont, QStandardItem
+from PySide6.QtGui import QColor, QStandardItem
 
 ## Local application imports
 from classes import DialogCloneInfo
@@ -115,31 +115,19 @@ class CtrlAddInj(QObject):
         days = self.total_incubation_days % 7
         incubation_text = f"Incubated {weeks}w{days}d"
 
-        # Create parent font (14px, bold)
-        parent_font = QFont()
-        parent_font.setPointSize(12)
-        parent_font.setBold(True)
-
         item_DOI = QStandardItem(self.DOI.strftime("%Y_%m_%d"))
-        item_DOI.setFont(parent_font)
-        item_DOI.setForeground(Qt.darkGreen)  # Green color for Injection History column
+        item_DOI.setForeground(Qt.darkGreen)  # Green color for DOI
 
         item_summary = QStandardItem(f"{mode_abbr}_{inj_side}_{injectate_short} [{incubation_text}]")
-        item_summary.setFont(parent_font)
 
         self.model.appendRow([item_DOI, item_summary])
         parent = item_DOI
 
         # ========== Add Children (Conditionally) ==========
-        # Create child font for column 0 labels (bold, dark red)
-        child_label_font = QFont()
-        child_label_font.setBold(True)
-
         child_row = 0
 
         # 1. Construction (shown in one row for both SINGLE and MIXED)
         label_construction = QStandardItem("Construction")
-        label_construction.setFont(child_label_font)
         label_construction.setForeground(QColor("#8A2BE2"))
         parent.setChild(child_row, 0, label_construction)
         parent.setChild(child_row, 1, QStandardItem(construction_full))
@@ -148,7 +136,6 @@ class CtrlAddInj(QObject):
         # 2. Volume Per Shot (always shown)
         volume = self.view_addInj.le_volume_total.text() or "undefined"
         label_volume = QStandardItem("Volume Per Shot")
-        label_volume.setFont(child_label_font)
         label_volume.setForeground(QColor("#8A2BE2"))
         parent.setChild(child_row, 0, label_volume)
         parent.setChild(child_row, 1, QStandardItem(volume))
@@ -161,7 +148,6 @@ class CtrlAddInj(QObject):
                 ratio = "undefined"
 
             label_ratio = QStandardItem("Mixing Ratio")
-            label_ratio.setFont(child_label_font)
             label_ratio.setForeground(QColor("#8A2BE2"))
             parent.setChild(child_row, 0, label_ratio)
             parent.setChild(child_row, 1, QStandardItem(ratio))
@@ -172,7 +158,6 @@ class CtrlAddInj(QObject):
             # Get number of sites
             num_of_sites = self.view_addInj.cb_num_of_sites.currentText()
             label_n_sites = QStandardItem("Number of Sites")
-            label_n_sites.setFont(child_label_font)
             label_n_sites.setForeground(QColor("#8A2BE2"))
             parent.setChild(child_row, 0, label_n_sites)
             parent.setChild(child_row, 1, QStandardItem(num_of_sites))
@@ -185,7 +170,6 @@ class CtrlAddInj(QObject):
 
             coords = f"[DV, ML, AP] = [{dv}, {ml}, {ap}]"
             label_coords = QStandardItem("Coordinates")
-            label_coords.setFont(child_label_font)
             label_coords.setForeground(QColor("#8A2BE2"))
             parent.setChild(child_row, 0, label_coords)
             parent.setChild(child_row, 1, QStandardItem(coords))

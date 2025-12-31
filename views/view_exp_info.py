@@ -3,10 +3,10 @@
 from datetime import datetime
 
 # Third-party imports
-from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QAbstractItemView, QHeaderView
 
 # Local application imports
+from classes import DelegateWordWrap
 from util.constants import MenuOptions, UISizes
 
 
@@ -23,11 +23,8 @@ class ViewExpInfo:
         self.setup_treeview()
 
     def setup_groupboxes(self):
-        self.ui.gb_fileIO.setFixedSize(UISizes.GROUP_BOX_ROW1_WIDTH, UISizes.GROUP_BOX_ROW1_HEIGHT)
-        self.ui.gb_basics.setFixedSize(UISizes.GROUP_BOX_ROW2_WIDTH, UISizes.GROUP_BOX_ROW2_HEIGHT)
-        self.ui.gb_solutions.setFixedSize(UISizes.GROUP_BOX_ROW2_WIDTH, UISizes.GROUP_BOX_ROW2_HEIGHT)
-        self.ui.gb_animals.setFixedSize(UISizes.GROUP_BOX_ROW3_WIDTH, UISizes.GROUP_BOX_ROW3_HEIGHT)
-        self.ui.gb_injections.setFixedWidth(UISizes.GROUP_BOX_ROW3_WIDTH)
+        # Let layouts handle sizing naturally for 600x800 window
+        pass
 
     def setup_dateedit(self):
         dateEdits = [
@@ -41,21 +38,21 @@ class ViewExpInfo:
     def setup_lineedits(self):
         self.ui.le_project.setText("SPIKE_TRIGGERED_ACH_DOMAIN")
 
-        self.ui.le_cuttingOS.setFixedWidth(UISizes.LINE_EDIT_OS_WIDTH)
-        self.ui.le_holdingOS.setFixedWidth(UISizes.LINE_EDIT_OS_WIDTH)
-        self.ui.le_recordingOS.setFixedWidth(UISizes.LINE_EDIT_OS_WIDTH)
-
-        self.ui.le_animalID.setFixedWidth(UISizes.LINE_EDIT_ID_WIDTH)
+        # Ages display (read-only, gb_animals column 3)
+        self.ui.le_ages.setReadOnly(True)
+        self.ui.le_ages.setFixedWidth(UISizes.GB_ANIMALS_COL3_WIDTH)
 
     def setup_comboboxes(self):
         self.ui.cb_ACUC.addItems(MenuOptions.ACUC_PNS)
         self.ui.cb_ACUC.setCurrentIndex(1)
 
-        self.ui.cb_SPECIES.addItems(MenuOptions.SPECIES)
-        self.ui.cb_GENOTYPE.addItems(MenuOptions.GENOTYPE)
-        self.ui.cb_SEX.addItems(MenuOptions.SEX)
+        self.ui.cb_Species.addItems(MenuOptions.SPECIES)
+        self.ui.cb_Genotype.addItems(MenuOptions.GENOTYPE)
+        self.ui.cb_Sex.addItems(MenuOptions.SEX)
 
-        self.ui.cb_GENOTYPE.setFixedWidth(UISizes.COMBO_GENOTYPE_WIDTH)
+        # gb_animals column 3
+        self.ui.cb_Species.setFixedWidth(UISizes.GB_ANIMALS_COL3_WIDTH)
+        self.ui.cb_Sex.setFixedWidth(UISizes.GB_ANIMALS_COL3_WIDTH)
 
     def setup_treeview(self):
         # Set column resize mode
@@ -68,7 +65,6 @@ class ViewExpInfo:
         self.ui.tree_injections.setWordWrap(True)
         self.ui.tree_injections.setUniformRowHeights(False)
 
-        # Set default font size
-        tree_font = QFont()
-        tree_font.setPointSize(12)
-        self.ui.tree_injections.setFont(tree_font)
+        # Set delegate for auto-adjusting row height and font sizes
+        self.word_wrap_delegate = DelegateWordWrap(self.ui.tree_injections)
+        self.ui.tree_injections.setItemDelegate(self.word_wrap_delegate)

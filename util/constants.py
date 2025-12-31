@@ -60,7 +60,7 @@ class UISizes:
     COMBO_STANDARD = QSize(180, 40)  # Standard combo boxes
     COMBO_WIDE = QSize(200, 40)  # Wide combo boxes
     COMBO_UNIT_WIDTH = 80
-    COMBO_GENOTYPE_WIDTH = 140
+    COMBO_GENOTYPE_WIDTH = 100
     COMBO_INJECTATE_WIDTH = 180
     COMBO_RATIO_WIDTH = 180
     COMBO_VECTOR_WIDTH = 150
@@ -76,18 +76,18 @@ class UISizes:
     LINE_EDIT_VOLUME_WIDTH = 150
     LINE_EDIT_COORDINATE_WIDTH = 100
 
-    # Group Boxes
+    # Group Boxes (adjusted for 600x800 window)
     GROUP_BOX_ROW1_HEIGHT = 80
-    GROUP_BOX_ROW1_WIDTH = 806
+    GROUP_BOX_ROW1_WIDTH = 560
 
     GROUP_BOX_ROW2_HEIGHT = 150
-    GROUP_BOX_ROW2_WIDTH = 400
+    GROUP_BOX_ROW2_WIDTH = 275
 
     GROUP_BOX_ROW3_HEIGHT = 150
-    GROUP_BOX_ROW3_WIDTH = 806
+    GROUP_BOX_ROW3_WIDTH = 560
 
-    GROUP_BOX_WIDTH_LEFT_COLUMN = 400
-    GROUP_BOX_WIDTH_RIGHT_COLUMN = 400
+    GROUP_BOX_WIDTH_LEFT_COLUMN = 275
+    GROUP_BOX_WIDTH_RIGHT_COLUMN = 275
     GROUP_BOX_STATUS_HEIGHT = 150
 
     # Database Viewer
@@ -102,6 +102,10 @@ class UISizes:
 
     # DateEdit
     DATE_EDIT_WIDTH = 250
+    DATE_EDIT_DOB_WIDTH = 120
+
+    # gb_animals widget widths
+    GB_ANIMALS_COL3_WIDTH = 126  # cb_Species, cb_Sex, le_ages (~1/3 of gb_animals)
 
 
 # UI Alignments

@@ -45,7 +45,7 @@ class CtrlExpInfo(QObject):
         weeks = total_days // 7
         days = total_days % 7
         self.ages = f"{weeks}w{days}d"
-        self.ui.lbl_ages.setText(self.ages)
+        self.ui.le_ages.setText(self.ages)
 
     def add_injections(self):
         self.dlg_addTree = DialogInjManager(self.ui, self.model_injections)
@@ -103,12 +103,12 @@ class CtrlExpInfo(QObject):
             "CuttingOS": self.ui.le_cuttingOS.text(),
             "HoldingOS": self.ui.le_holdingOS.text(),
             "RecordingOS": self.ui.le_recordingOS.text(),
-            "Animal_ID": self.ui.le_animalID.text(),
-            "Genotype": self.ui.cb_GENOTYPE.currentText(),
-            "Species": self.ui.cb_SPECIES.currentText(),
+            "Animal_ID": self.ui.le_AnimalID.text(),
+            "Genotype": self.ui.cb_Genotype.currentText(),
+            "Species": self.ui.cb_Species.currentText(),
             "DOB": self.ui.de_DOB.date().toPython().strftime("%Y_%m_%d"),
-            "Ages": self.ui.lbl_ages.text(),
-            "Sex": self.ui.cb_SEX.currentText(),
+            "Ages": self.ui.le_ages.text(),
+            "Sex": self.ui.cb_Sex.currentText(),
         }
 
         conn = sqlite3.connect(MODELS_DIR / "exp_data.db")

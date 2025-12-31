@@ -20,6 +20,14 @@ from classes import (
 )
 from util.constants import DISPLAY_DATE_FORMAT, MODELS_DIR, SERIAL_NAME_REGEX
 
+## TODO:
+# 1. le_Level change to non-typing input
+# 2. le_Frames change to non-typing input
+# 3. remove CAM_TRIG_MODE
+# 4. Add "Side" (R, L) combobox for slice
+# 5. Make the filename of filename-serial number auto set to date of the folder
+# 6.
+
 
 class CtrlRecWriter:
     def __init__(self, ui):
@@ -136,13 +144,8 @@ class CtrlRecWriter:
         self.ui.te_tags.clear()
 
     def template_reload_list(self):
-        templateFiles = [
-            os.path.basename(i)
-            for i in glob.glob(os.path.join(MODELS_DIR, "template_*.json"))
-        ]
-        templateList = [
-            Path(tempName.replace("template_", "")).stem for tempName in templateFiles
-        ]
+        templateFiles = [os.path.basename(i) for i in glob.glob(os.path.join(MODELS_DIR, "template_*.json"))]
+        templateList = [Path(tempName.replace("template_", "")).stem for tempName in templateFiles]
         for file in templateList:
             if file == "patch_default":
                 templateList.remove(file)
@@ -158,9 +161,7 @@ class CtrlRecWriter:
         self.model_menuList_templates.layoutChanged.emit()
 
     def template_load(self):
-        filename = self.model_menuList_templates.list_of_options[
-            self.ui.cb_TemplateLoad.currentIndex()
-        ]
+        filename = self.model_menuList_templates.list_of_options[self.ui.cb_TemplateLoad.currentIndex()]
         self.ui.btn_TemplateDelete.setEnabled(False)
 
         if filename not in ["patch_default", "puff_default"]:
@@ -176,9 +177,7 @@ class CtrlRecWriter:
             print("[bold red]Template doesn't exist![/bold red]")
             return
 
-        self.saveCheck = DialogConfirm(
-            title="Checking...", msg="Save current template?"
-        )
+        self.saveCheck = DialogConfirm(title="Checking...", msg="Save current template?")
         if not self.saveCheck.exec():
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return
@@ -188,9 +187,7 @@ class CtrlRecWriter:
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return
 
-        self.saveDialog.savefile(
-            os.path.join(MODELS_DIR), self.model_tv_customized._data
-        )
+        self.saveDialog.savefile(os.path.join(MODELS_DIR), self.model_tv_customized._data)
 
         # reload the menu list
         self.template_reload_list()
@@ -203,12 +200,8 @@ class CtrlRecWriter:
                 break
 
     def template_delete(self):
-        filename = self.model_menuList_templates.list_of_options[
-            self.ui.cb_TemplateLoad.currentIndex()
-        ]
-        self.deleteCheck = DialogConfirm(
-            title="Checking...", msg="Delete current template?"
-        )
+        filename = self.model_menuList_templates.list_of_options[self.ui.cb_TemplateLoad.currentIndex()]
+        self.deleteCheck = DialogConfirm(title="Checking...", msg="Delete current template?")
 
         if self.deleteCheck.exec():
             os.remove(os.path.join(MODELS_DIR, "template_{}.json".format(filename)))
@@ -233,25 +226,19 @@ class CtrlRecWriter:
         if self.sm_customized.hasSelection():
             insert_from_this_row = self.sm_customized.currentIndex().row()
         else:
-            insert_from_this_row = (
-                self.model_tv_customized.rowCount(QModelIndex()) - 1
-            )
+            insert_from_this_row = self.model_tv_customized.rowCount(QModelIndex()) - 1
 
         self.dlg_insertion = DialogInsertProps()
         if not self.dlg_insertion.exec() == QDialog.Accepted:
             print("Cancel Insertion!")
             return
 
-        self.model_tv_customized.add_rows(
-            QModelIndex(), insert_from_this_row, self.dlg_insertion.dataToBeAdded
-        )
+        self.model_tv_customized.add_rows(QModelIndex(), insert_from_this_row, self.dlg_insertion.dataToBeAdded)
         new_index = self.model_tv_customized.index(
             insert_from_this_row + self.dlg_insertion.dataToBeAdded.shape[0],
             self.dlg_insertion.dataToBeAdded.shape[1] - 1,
         )
-        self.sm_customized.setCurrentIndex(
-            new_index, QItemSelectionModel.ClearAndSelect
-        )
+        self.sm_customized.setCurrentIndex(new_index, QItemSelectionModel.ClearAndSelect)
 
     def rm_selected_rows(self):
         selected_indexes = self.sm_customized.selectedIndexes()
@@ -259,9 +246,7 @@ class CtrlRecWriter:
             print("No row is selected")
             return
 
-        rows_to_be_removed = sorted(
-            set(index.row() for index in selected_indexes), reverse=True
-        )
+        rows_to_be_removed = sorted(set(index.row() for index in selected_indexes), reverse=True)
         for row in rows_to_be_removed:
             self.model_tv_customized.rm_rows(QModelIndex(), row, 1)
 
@@ -280,9 +265,7 @@ class CtrlRecWriter:
         self.sm_customized.clearSelection()
         for row in new_positions_of_moved_rows:
             index = self.model_tv_customized.index(row, 0)
-            self.sm_customized.select(
-                index, QItemSelectionModel.Select | QItemSelectionModel.Rows
-            )
+            self.sm_customized.select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
 
     def mv_rows_down(self):
         selected_indexes = self.sm_customized.selectedIndexes()
@@ -299,9 +282,7 @@ class CtrlRecWriter:
         self.sm_customized.clearSelection()
         for row in new_positions_of_moved_rows:
             index = self.model_tv_customized.index(row, 0)
-            self.sm_customized.select(
-                index, QItemSelectionModel.Select | QItemSelectionModel.Rows
-            )
+            self.sm_customized.select(index, QItemSelectionModel.Select | QItemSelectionModel.Rows)
 
     def browse_rec_dir(self):
         self.dlg_requestRecDirectory = DialogGetPath()
@@ -381,9 +362,7 @@ class CtrlRecWriter:
 
         return tags, preserved_content, original_content
 
-    def backup_rec_contents(
-        self, rec_directory, rec_filename, contents_to_be_backupped
-    ):
+    def backup_rec_contents(self, rec_directory, rec_filename, contents_to_be_backupped):
         # Backup before writing (can be recovered)
         if self.rec_filename in self.recBackups.keys():
             self.recBackups[rec_filename].append(contents_to_be_backupped)
@@ -393,71 +372,49 @@ class CtrlRecWriter:
         backup_path = os.path.join(rec_directory, "rec_backups.json")
         with open(backup_path, mode="w") as f:
             json.dump(self.recBackups, f, indent=4)
-            self.ui.tb_status.append(
-                "<span style='color: lime;'>[INFO] Backup saved!</span>"
-            )
+            self.ui.tb_status.append("<span style='color: lime;'>[INFO] Backup saved!</span>")
             self.ui.tb_status.moveCursor(QTextCursor.End)
 
     def write_rec(self):
         self.directory = self.ui.le_recDir.text()
 
         # Prepare filename and path
-        self.rec_filename = self.ui.le_filenameSN.text().replace(
-            ".tif", ".tif.rec"
-        )
+        self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
 
         # Check if file exists
         if not os.path.isfile(self.rec_filepath):
-            self.ui.tb_status.setText(
-                f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>"
-            )
+            self.ui.tb_status.setText(f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>")
             return
 
-        self.ui.tb_status.setText(
-            f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>"
-        )
+        self.ui.tb_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
 
         # Confirm write operation
-        dlg_checkWriteTags = DialogConfirm(
-            title="Checking...", msg=f"Write tags to the {self.rec_filename}?"
-        )
+        dlg_checkWriteTags = DialogConfirm(title="Checking...", msg=f"Write tags to the {self.rec_filename}?")
 
         if not dlg_checkWriteTags.exec():
-            self.ui.tb_status.append(
-                "<span style='color: white;'>[MESSAGE] Write Cancelled!</span>"
-            )
+            self.ui.tb_status.append("<span style='color: white;'>[MESSAGE] Write Cancelled!</span>")
             self.ui.tb_status.moveCursor(QTextCursor.End)
             return
 
         # Scan existing comments
-        self.tags_read, self.preserved_content, self.original_content = (
-            self.scan_rec_commments(self.rec_filepath)
-        )
+        self.tags_read, self.preserved_content, self.original_content = self.scan_rec_commments(self.rec_filepath)
         self.tags_to_be_written = self.ui.te_tags.toPlainText().splitlines()
 
         # Handle case with existing tags
         if self.tags_read:
-            dlg_checkOverwriteTags = DialogConfirm(
-                title="Checking...", msg="Overwrite existing tags?"
-            )
+            dlg_checkOverwriteTags = DialogConfirm(title="Checking...", msg="Overwrite existing tags?")
 
             if not dlg_checkOverwriteTags.exec():
-                self.ui.tb_status.append(
-                    "<span style='color: white;'>[MESSAGE] Overwrite Cancelled!</span>"
-                )
+                self.ui.tb_status.append("<span style='color: white;'>[MESSAGE] Overwrite Cancelled!</span>")
                 self.ui.tb_status.moveCursor(QTextCursor.End)
                 return
             else:
-                self.ui.tb_status.append(
-                    "<span style='color: yellow;'>[WARNING] Overwrite Confirmed!</span>"
-                )
+                self.ui.tb_status.append("<span style='color: yellow;'>[WARNING] Overwrite Confirmed!</span>")
                 self.ui.tb_status.moveCursor(QTextCursor.End)
 
         # Backup before writing (can be recovered)
-        self.backup_rec_contents(
-            self.directory, self.rec_filename, self.original_content
-        )
+        self.backup_rec_contents(self.directory, self.rec_filename, self.original_content)
 
         # Write tags to file (either no existing tags or overwrite confirmed)
         contents_to_be_written = self.preserved_content + self.tags_to_be_written
@@ -473,24 +430,16 @@ class CtrlRecWriter:
 
     def read_rec(self):
         self.directory = self.ui.le_recDir.text()
-        self.rec_filename = self.ui.le_filenameSN.text().replace(
-            ".tif", ".tif.rec"
-        )
+        self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
 
         if not os.path.isfile(self.rec_filepath):
-            self.ui.tb_status.setText(
-                f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>"
-            )
+            self.ui.tb_status.setText(f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>")
             return
         else:
-            self.ui.tb_status.setText(
-                f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>"
-            )
+            self.ui.tb_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
 
-        self.ui.tb_status.append(
-            f"<span style='color: lime;'>[INFO] Tags were loaded from {self.rec_filename}!</span>"
-        )
+        self.ui.tb_status.append(f"<span style='color: lime;'>[INFO] Tags were loaded from {self.rec_filename}!</span>")
         self.ui.tb_status.moveCursor(QTextCursor.End)
         self.ui.te_tags.clear()
         self.tags_read, _, _ = self.scan_rec_commments(self.rec_filepath)
@@ -498,34 +447,24 @@ class CtrlRecWriter:
 
     def revert_rec(self):
         self.directory = self.ui.le_recDir.text()
-        self.rec_filename = self.ui.le_filenameSN.text().replace(
-            ".tif", ".tif.rec"
-        )
+        self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
 
         if not os.path.isfile(self.rec_filepath):
-            self.ui.tb_status.setText(
-                f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>"
-            )
+            self.ui.tb_status.setText(f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>")
             return
         else:
-            self.ui.tb_status.setText(
-                f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>"
-            )
+            self.ui.tb_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
 
         recovery_filepath = os.path.join(self.directory, "rec_backups.json")
         if not os.path.isfile(recovery_filepath):
-            self.ui.tb_status.append(
-                "<span style='color: tomato;'>[ERROR] No backup file (JSON) is found!</span>"
-            )
+            self.ui.tb_status.append("<span style='color: tomato;'>[ERROR] No backup file (JSON) is found!</span>")
             self.ui.tb_status.moveCursor(QTextCursor.End)
             return
         else:
             with open(recovery_filepath, mode="r") as f:
                 self.recBackups = json.load(f)
-            self.ui.tb_status.append(
-                "<span style='color: lime;'>[INFO] Backup JSON file is Loaded!</span>"
-            )
+            self.ui.tb_status.append("<span style='color: lime;'>[INFO] Backup JSON file is Loaded!</span>")
             self.ui.tb_status.moveCursor(QTextCursor.End)
 
         dlg_checkRecover = DialogConfirm(
@@ -533,23 +472,17 @@ class CtrlRecWriter:
             msg=f"Recover {self.rec_filename} to the original state?",
         )
         if not dlg_checkRecover.exec():
-            self.ui.tb_status.append(
-                "<span style='color: white;'>[MESSAGE] Recovery Cancelled!</span>"
-            )
+            self.ui.tb_status.append("<span style='color: white;'>[MESSAGE] Recovery Cancelled!</span>")
             self.ui.tb_status.moveCursor(QTextCursor.End)
             return
         else:
-            self.ui.tb_status.append(
-                "<span style='color: yellow;'>[WARNING] Recovery Confirmed!</span>"
-            )
+            self.ui.tb_status.append("<span style='color: yellow;'>[WARNING] Recovery Confirmed!</span>")
             self.ui.tb_status.moveCursor(QTextCursor.End)
 
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
             if self.rec_filename in self.recBackups.keys():
                 f.write("\n".join(self.recBackups[self.rec_filename][0]))
-                self.ui.tb_status.append(
-                    f"<span style='color: lime;'>[INFO] {self.rec_filename} was recovered!</span>"
-                )
+                self.ui.tb_status.append(f"<span style='color: lime;'>[INFO] {self.rec_filename} was recovered!</span>")
                 self.ui.tb_status.moveCursor(QTextCursor.End)
             else:
                 self.ui.tb_status.append(

@@ -1,5 +1,5 @@
 QDateEdit {
-    font-size: 16px;
+    font-size: 12px;
     color: blue;
 }
 
@@ -18,53 +18,53 @@ QDateEdit::down-arrow {
 }
 
 QGroupBox {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
 }
 
 QLabel {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
 }
 
 QRadioButton {
-    font-size: 16px;
+    font-size: 12px;
 }
 
 QComboBox{
-    font-size: 16px;
+    font-size: 12px;
 }
 
 QLineEdit {
-    font-size: 16px;
+    font-size: 12px;
 }
 
 QSpinBox {
-    font-size: 16px;
+    font-size: 12px;
 }
 
 QHeaderView::section {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     color:blue;
 }
 
 QTableView {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
 }
 
 QScrollBar:vertical {
-    width: 30px;
+    width: 16px;
 }
 
 QScrollBar:horizontal {
-    height: 30px;
+    height: 16px;
 }
 
 
 QPushButton {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -78,7 +78,7 @@ QPushButton#btn_deleteCurrentTemplate:disabled{
 
 
 QLineEdit#le_filenameSN {
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
     font-style: italic;
     color: green;
@@ -94,13 +94,13 @@ QPushButton#btn_SnCopy:disabled {
 
 QTextBrowser {
     font-family: "Hack Nerd Font Mono";
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     background-color: black;
 }
 
 QTextEdit#te_tags {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
     color: purple;
 }
@@ -113,7 +113,7 @@ QProgressBar {
     background-color: darkgray;
     text-align: center;
     font-family: "Hack Nerd Font Mono";
-    font-size: 18px;
+    font-size: 14px;
     color: #f9f9f9;
     font-weight: bold;
     padding: 5px;
@@ -123,14 +123,14 @@ QProgressBar::chunk {
 }
 
 QCheckBox {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
 }
 
 QCheckBox::indicator
  {
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
 }
 
 QCheckBox::indicator:unchecked {
@@ -142,9 +142,9 @@ QCheckBox::indicator:checked {
 }
 
 QListView::indicator {
-    width: 40px;
-    height: 40px;
-    margin-right:100px
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
 }
 
 QListView::indicator:unchecked {
@@ -156,8 +156,8 @@ QListView::indicator:checked {
 }
 
 QTreeView#tree_injections QHeaderView::section {
-      font-size: 16px;
+      font-size: 12px;
       font-weight: bold;
       color: black;
-      padding: 5px;
+      padding: 3px;
   }

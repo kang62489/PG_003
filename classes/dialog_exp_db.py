@@ -6,7 +6,7 @@ from datetime import datetime
 ## Third-party imports
 import pandas as pd
 from PySide6.QtCore import QItemSelectionModel, Qt
-from PySide6.QtGui import QColor, QFont, QStandardItem, QStandardItemModel
+from PySide6.QtGui import QColor, QStandardItem, QStandardItemModel
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -248,13 +248,13 @@ class DialogExpDb(QDialog):
         self.ui.le_holdingOS.setText(df_basic_selected["HoldingOS"][0].astype(str))
         self.ui.le_recordingOS.setText(df_basic_selected["RecordingOS"][0].astype(str))
 
-        self.ui.le_animalID.setText(df_basic_selected["Animal_ID"][0])
-        self.ui.cb_GENOTYPE.setCurrentIndex(self.ui.cb_GENOTYPE.findText(df_basic_selected["Genotype"][0]))
-        self.ui.cb_SPECIES.setCurrentIndex(self.ui.cb_SPECIES.findText(df_basic_selected["Species"][0]))
+        self.ui.le_AnimalID.setText(df_basic_selected["Animal_ID"][0])
+        self.ui.cb_Genotype.setCurrentIndex(self.ui.cb_Genotype.findText(df_basic_selected["Genotype"][0]))
+        self.ui.cb_Species.setCurrentIndex(self.ui.cb_Species.findText(df_basic_selected["Species"][0]))
 
         self.ui.de_DOB.setDate(datetime.strptime(df_basic_selected["DOB"][0], "%Y_%m_%d"))
-        self.ui.lbl_ages.setText(df_basic_selected["Ages"][0])
-        self.ui.cb_SEX.setCurrentIndex(self.ui.cb_SEX.findText(df_basic_selected["Sex"][0]))
+        self.ui.le_ages.setText(df_basic_selected["Ages"][0])
+        self.ui.cb_Sex.setCurrentIndex(self.ui.cb_Sex.findText(df_basic_selected["Sex"][0]))
 
         ## Injection History
         # Clear existing injection tree
@@ -273,31 +273,19 @@ class DialogExpDb(QDialog):
             # ========== Create Parent Row ==========
             incubation_text = df_injection_selected["Incubated"][i]
 
-            # Create parent font (14px, bold)
-            parent_font = QFont()
-            parent_font.setPointSize(12)
-            parent_font.setBold(True)
-
             item_DOI = QStandardItem(df_injection_selected["DOI"][i])
-            item_DOI.setFont(parent_font)
-            item_DOI.setForeground(Qt.darkGreen)  # Green color for Injection History column
+            item_DOI.setForeground(Qt.darkGreen)  # Green color for DOI
 
             item_summary = QStandardItem(f"{mode_abbr}_{inj_side}_{injectate_short} [{incubation_text}]")
-            item_summary.setFont(parent_font)
 
             self.tree_model.appendRow([item_DOI, item_summary])
             parent = item_DOI
 
             # ========== Add Children (Conditionally) ==========
-            # Create child font for column 0 labels (bold, dark red)
-            child_label_font = QFont()
-            child_label_font.setBold(True)
-
             child_row = 0
 
             # 1. Construction (shown in one row for both SINGLE and MIXED)
             label_construction = QStandardItem("Construction")
-            label_construction.setFont(child_label_font)
             label_construction.setForeground(QColor("#8A2BE2"))
             parent.setChild(child_row, 0, label_construction)
             parent.setChild(child_row, 1, QStandardItem(construction_full))
@@ -306,7 +294,6 @@ class DialogExpDb(QDialog):
             # 2. Volume Per Shot (always shown)
             volume = df_injection_selected["Volume_Per_Shot"][i]
             label_volume = QStandardItem("Volume Per Shot")
-            label_volume.setFont(child_label_font)
             label_volume.setForeground(QColor("#8A2BE2"))
             parent.setChild(child_row, 0, label_volume)
             parent.setChild(child_row, 1, QStandardItem(volume))
@@ -317,7 +304,6 @@ class DialogExpDb(QDialog):
                 ratio = df_injection_selected["Mix_Ratio"][i]
 
                 label_ratio = QStandardItem("Mixing Ratio")
-                label_ratio.setFont(child_label_font)
                 label_ratio.setForeground(QColor("#8A2BE2"))
                 parent.setChild(child_row, 0, label_ratio)
                 parent.setChild(child_row, 1, QStandardItem(ratio))
@@ -328,7 +314,6 @@ class DialogExpDb(QDialog):
                 # Get number of sites
                 num_of_sites = df_injection_selected["Num_Of_Sites"][i]
                 label_n_sites = QStandardItem("Number of Sites")
-                label_n_sites.setFont(child_label_font)
                 label_n_sites.setForeground(QColor("#8A2BE2"))
                 parent.setChild(child_row, 0, label_n_sites)
                 parent.setChild(child_row, 1, QStandardItem(num_of_sites))
@@ -338,7 +323,6 @@ class DialogExpDb(QDialog):
                 Inj_Coords = df_injection_selected["Inj_Coords"][i]
                 coords = f"[DV, ML, AP] = {Inj_Coords}"
                 label_coords = QStandardItem("Coordinates")
-                label_coords.setFont(child_label_font)
                 label_coords.setForeground(QColor("#8A2BE2"))
                 parent.setChild(child_row, 0, label_coords)
                 parent.setChild(child_row, 1, QStandardItem(coords))

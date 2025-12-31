@@ -129,3 +129,52 @@ class DelegateCheckableListItem(QStyledItemDelegate):
             size.width(),
             max(size.height(), 40 + 8),
         )  # 40px checkbox + 8px padding
+
+
+class DelegateWordWrap(QStyledItemDelegate):
+    """Delegate that auto-adjusts row height based on text content with word wrap.
+
+    Only applies word wrap to column 1 of child items.
+    Also sets different fonts for parent vs child items.
+    """
+
+    def __init__(self, parent=None, parent_font_size=10, child_font_size=10):
+        super().__init__(parent)
+        self.parent_font_size = parent_font_size
+        self.child_font_size = child_font_size
+
+    def initStyleOption(self, option, index):
+        super().initStyleOption(option, index)
+        # Set font size based on parent or child
+        if not index.parent().isValid():
+            # Parent item - bold
+            option.font.setPointSize(self.parent_font_size)
+            option.font.setBold(True)
+        else:
+            # Child item
+            option.font.setPointSize(self.child_font_size)
+            # Only column 1 is bold
+            option.font.setBold(index.column() == 0)
+
+    def sizeHint(self, option, index):
+        """Calculate the size needed to display the text with word wrap."""
+        # Only apply word wrap to column 1 of child items
+        if not index.parent().isValid() or index.column() != 1:
+            return super().sizeHint(option, index)
+
+        text = index.data(Qt.DisplayRole)
+        if not text:
+            return super().sizeHint(option, index)
+
+        # Get column width from the view
+        view = option.widget
+        column_width = view.columnWidth(index.column()) if view else 200
+
+        # Calculate bounding rect with word wrap
+        text_rect = option.fontMetrics.boundingRect(
+            QRect(0, 0, max(column_width, 50), 10000),
+            Qt.TextWordWrap | Qt.AlignLeft,
+            str(text),
+        )
+
+        return QSize(text_rect.width(), text_rect.height())
