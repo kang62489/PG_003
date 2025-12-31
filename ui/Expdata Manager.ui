@@ -900,6 +900,76 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_CONCAT">
+       <attribute name="title">
+        <string>Concatenator (Tiff)</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_22">
+        <item>
+         <widget class="QGroupBox" name="gb_concat_status">
+          <property name="title">
+           <string>Status</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_23">
+           <item>
+            <widget class="QTextBrowser" name="tb_concatenator"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_tiffBrowser">
+          <property name="title">
+           <string>File Browser (Tiff)</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_24">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_24">
+             <item>
+              <widget class="QCheckBox" name="chk_includeSubfolders">
+               <property name="text">
+                <string>Include subfolders</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_BrowseTiffs">
+               <property name="text">
+                <string>Browse</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="chk_selectAllFiles">
+             <property name="text">
+              <string>All</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QListView" name="lv_recFiles"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_StartConcat">
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QProgressBar" name="pb_concatenation">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>

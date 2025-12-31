@@ -80,6 +80,7 @@ class CtrlTiffStacker:
 
         # Disable the start button while processing
         self.ui.btn_StartConcat.setEnabled(False)
+        self.ui.pb_concatenation.setValue(0)
         self.ui.tb_concatenator.append("<span style='color: lime;'>[INFO] Starting concatenation process...</span>")
         self.ui.tb_concatenator.moveCursor(QTextCursor.End)
 

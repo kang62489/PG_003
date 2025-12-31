@@ -14,6 +14,7 @@ from controllers import (
     CtrlExpInfo,
     CtrlRecImport,
     CtrlRecWriter,
+    CtrlTiffStacker,
 )
 from resources import (
     resources,  # noqa: F401 (Import resources.py for qss file,using # noqa to ignore unused import warning)
@@ -23,6 +24,7 @@ from views import (
     ViewExpInfo,
     ViewRecImport,
     ViewRecWriter,
+    ViewTiffStacker,
 )
 
 loader = QUiLoader()
@@ -57,11 +59,13 @@ class Main:
         ViewExpInfo(self.ui)
         ViewRecWriter(self.ui)
         ViewRecImport(self.ui)
+        ViewTiffStacker(self.ui)
 
         # Initialize tab handlers (need to add handler instances to self to access uis in self.ui)
         self.handlers_expInfo = CtrlExpInfo(self.ui)
         self.handlers_recTagger = CtrlRecWriter(self.ui)
         self.handlers_recDB = CtrlRecImport(self.ui)
+        self.handlers_tiffStacker = CtrlTiffStacker(self.ui)
         # Set default tab index
         self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])
 
