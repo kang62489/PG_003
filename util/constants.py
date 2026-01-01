@@ -32,6 +32,9 @@ def _load_json_menu(filename):
 # Load general options set
 _general_options = _load_json_menu("menuList_general_options_set.json")
 
+# Greek symbol replacements for customized parameters
+GREEK_REPLACEMENTS = _load_json_menu("greek_replacements.json")
+
 # File Paths
 UI_FILE = UI_DIR / "Expdata Manager.ui"
 STYLE_FILE = STYLES_DIR / "styles.qss"
@@ -44,11 +47,13 @@ class UISizes:
     BUTTON_LARGE = QSize(180, 80)  # Main action buttons
     BUTTON_MEDIUM = QSize(100, 80)  # Secondary action buttons
     BUTTON_SMALL = QSize(90, 40)  # Navigation buttons
-    BUTTON_TINY = QSize(60, 30)  # Utility buttons (plus, minus, etc.)
+    BUTTON_TEMPLATE = QSize(80, 30)  # Navigation buttons
+    BUTTON_SN = QSize(50, 40)  # Utility buttons (plus, minus, etc.)
     BUTTON_WIDE = QSize(125, 40)  # Wide buttons (copyTag, clearTag)
     BUTTON_TINY_SQUARE = QSize(30, 30)
     BUTTON_LONG_HEIGHT = 50
     BUTTON_GENERAL_HEIGHT = 40
+    BUTTON_ROWOP_HEIGHT = 30
     BUTTON_REFRESH = QSize(100, 30)
 
     # Labels
@@ -68,13 +73,18 @@ class UISizes:
     COMBO_SIDE_WIDTH = 150
     COMBO_INJ_MODE_WIDTH = 250
 
+    COMBO_TAB1_HEIGHT = 30
+
     # Line Edits
     LINE_EDIT_OS_WIDTH = 80
     LINE_EDIT_ID_WIDTH = 180
-    LINE_EDIT_HEIGHT = 50
     LINE_EDIT_EXPO_WIDTH = 120
     LINE_EDIT_VOLUME_WIDTH = 150
     LINE_EDIT_COORDINATE_WIDTH = 100
+
+    LINE_EDIT_EXPO_HEIGHT = 30
+    LINE_EDIT_FPS_HEIGHT = 30
+    LINE_EDIT_FSN_HEIGHT = 40
 
     # Group Boxes (adjusted for 600x800 window)
     GROUP_BOX_ROW1_HEIGHT = 80
@@ -107,6 +117,12 @@ class UISizes:
     # gb_animals widget widths
     GB_ANIMALS_COL3_WIDTH = 126  # cb_Species, cb_Sex, le_ages (~1/3 of gb_animals)
 
+    # SpinBox
+    SPIN_TAB1_HEIGHT = 30
+
+    # TextEdit
+    TEXT_EDIT_RECDIR_HEIGHT = 45
+
 
 # UI Alignments
 @dataclass
@@ -114,6 +130,7 @@ class UIAlignments:
     CENTER = Qt.AlignCenter
     RIGHT_CENTER = Qt.AlignRight | Qt.AlignVCenter
     LEFT_CENTER = Qt.AlignLeft | Qt.AlignVCenter
+    TOP_CENTER = Qt.AlignTop | Qt.AlignHCenter
 
 
 # Regular Expressions

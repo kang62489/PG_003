@@ -5,8 +5,8 @@ from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
-from PySide6.QtCore import QItemSelectionModel, QModelIndex, QRegularExpression
-from PySide6.QtGui import QRegularExpressionValidator, QTextCursor
+from PySide6.QtCore import QFileSystemWatcher, QItemSelectionModel, QModelIndex, QRegularExpression, Qt
+from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import QApplication, QDialog
 from rich import print
 
@@ -21,12 +21,12 @@ from classes import (
 from util.constants import DISPLAY_DATE_FORMAT, MODELS_DIR, SERIAL_NAME_REGEX
 
 ## TODO:
-# 1. le_Level change to non-typing input
-# 2. le_Frames change to non-typing input
-# 3. remove CAM_TRIG_MODE
-# 4. Add "Side" (R, L) combobox for slice
+# 1. [DONE] le_Level change to non-typing input (sb_LEVEL)
+# 2. [DONE] le_Frames change to non-typing input (sb_FRAMES)
+# 3. [DONE] remove CAM_TRIG_MODE
+# 4. [DONE] Add "Side" (R, L) combobox for slice (cb_SIDE)
 # 5. Make the filename of filename-serial number auto set to date of the folder
-# 6.
+# 6. [DONE] Add Greek symbol auto-replace (via GREEK_REPLACEMENTS from constants)
 
 
 class CtrlRecWriter:
@@ -39,39 +39,29 @@ class CtrlRecWriter:
         self.model_menuList_templates = ModelDynamicList()
         self.ui.cb_TemplateLoad.setModel(self.model_menuList_templates)
 
-        # Set validtor for cheking filename-SN.tif
+        # Set validator for checking filename-SN.tif
         regex = QRegularExpression(SERIAL_NAME_REGEX)
         self.validator = QRegularExpressionValidator(regex)
         self.dateStr = datetime.today().strftime(DISPLAY_DATE_FORMAT)
 
         self.recBackups = dict()
 
+        # Setup file system watcher for .rec files
+        self.file_watcher = QFileSystemWatcher()
+
         self.connect_signals()
-        self.update_tag_output()
         self.template_reload_list()
         self.template_load()
+        self.populate_rec_files()  # Check for .rec files on startup
 
     def connect_signals(self):
-        self.ui.radioBtnGroup_OBJ.buttonClicked.connect(self.update_tag_output)
-        self.ui.cb_EXC.activated.connect(self.update_tag_output)
+        # Toggle buttons for switching parameter pages
+        self.ui.toggleBtnGroup.idClicked.connect(self.on_toggle_page)
+
+        # Auto-select emission based on excitation
         self.ui.cb_EXC.currentIndexChanged.connect(self.auto_select_emi)
-        self.ui.le_LEVEL.textChanged.connect(self.update_tag_output)
-        self.ui.le_EXPO.textChanged.connect(self.update_tag_output)
-        self.ui.cb_EXPO_UNIT.activated.connect(self.update_tag_output)
-        self.ui.cb_EMI.activated.connect(self.update_tag_output)
-        self.ui.le_FRAMES.textChanged.connect(self.update_tag_output)
-        self.ui.le_FPS.textChanged.connect(self.update_tag_output)
-        self.ui.sb_SLICE.valueChanged.connect(self.update_tag_output)
-        self.ui.cb_CAM_TRIG_MODE.activated.connect(self.update_tag_output)
-        self.ui.sb_SLICE.valueChanged.connect(self.update_tag_output)
-        self.ui.cb_LOC_TYPE.activated.connect(self.update_tag_output)
-        self.ui.sb_AT.valueChanged.connect(self.update_tag_output)
-        self.ui.chk_addCustomized.stateChanged.connect(self.update_tag_output)
 
-        # Emit signal to update tag output when the table in the QTableView (tv_customized) is changed
-        self.model_tv_customized.dataChanged.connect(self.update_tag_output)
-        self.model_tv_customized.layoutChanged.connect(self.update_tag_output)
-
+        # Template management
         self.ui.cb_TemplateLoad.activated.connect(self.template_load)
         self.ui.btn_TemplateSave.clicked.connect(self.template_save)
         self.ui.btn_TemplateDelete.clicked.connect(self.template_delete)
@@ -80,8 +70,11 @@ class CtrlRecWriter:
         self.ui.btn_MvRowsUp.clicked.connect(self.mv_rows_up)
         self.ui.btn_MvRowsDown.clicked.connect(self.mv_rows_down)
 
-        self.ui.le_recDir.textChanged.connect(self.validate_rec_dir)
+        # File & Preview section
+        self.ui.te_recDir.textChanged.connect(self.populate_rec_files)
         self.ui.btn_BrowseRecDir.clicked.connect(self.browse_rec_dir)
+        self.ui.cb_recFiles.activated.connect(self.load_selected_rec_file)
+        self.file_watcher.directoryChanged.connect(self.populate_rec_files)
 
         self.ui.le_filenameSN.textChanged.connect(self.sn_validate)
 
@@ -90,9 +83,8 @@ class CtrlRecWriter:
         self.ui.btn_SnReset.clicked.connect(self.sn_reset)
         self.ui.btn_SnCopy.clicked.connect(self.sn_copy)
 
+        self.ui.btn_GenerateTags.clicked.connect(self.generate_tags_from_form)
         self.ui.btn_WriteRec.clicked.connect(self.write_rec)
-        self.ui.btn_ReadRec.clicked.connect(self.read_rec)
-        self.ui.btn_RevertRec.clicked.connect(self.revert_rec)
 
     def auto_select_emi(self):
         if self.ui.cb_EXC.currentText() == "HLG":
@@ -102,8 +94,19 @@ class CtrlRecWriter:
         elif self.ui.cb_EXC.currentText() == "LED_BLUE":
             self.ui.cb_EMI.setCurrentIndex(2)
 
-    def update_tag_output(self):
-        self.clear_tag_output()
+    def on_toggle_page(self, button_id):
+        """Switch between Basic and Customized parameter pages"""
+        self.ui.stack_parameters.setCurrentIndex(button_id)
+
+    def generate_tags_from_form(self):
+        """Generate tags from form and display in te_tags with blue color"""
+        tags = self.build_tags_from_form()
+        self.ui.te_tags.clear()
+        self.ui.te_tags.setTextColor(Qt.red)
+        self.ui.te_tags.setPlainText("\n".join(tags))
+
+    def build_tags_from_form(self):
+        """Build tags list from form widgets for writing to .rec file"""
         props = [
             "OBJ",
             "EXC",
@@ -112,20 +115,22 @@ class CtrlRecWriter:
             "EMI",
             "FRAMES",
             "FPS",
-            "CAM_TRIG_MODE",
             "SLICE",
             "AT",
         ]
+        # Convert LEVEL value: 10 → "MAX", otherwise show number
+        level_val = self.ui.sb_LEVEL.value()
+        level_str = "MAX" if level_val == 10 else str(level_val)
+
         values = [
             self.ui.radioBtnGroup_OBJ.checkedButton().text(),
             self.ui.cb_EXC.currentText(),
-            self.ui.le_LEVEL.text(),
+            level_str,
             self.ui.le_EXPO.text() + self.ui.cb_EXPO_UNIT.currentText(),
             self.ui.cb_EMI.currentText(),
-            self.ui.le_FRAMES.text(),
+            str(self.ui.sb_FRAMES.value()),
             self.ui.le_FPS.text(),
-            self.ui.cb_CAM_TRIG_MODE.currentText(),
-            self.ui.sb_SLICE.value(),
+            f"{self.ui.sb_SLICE.value()}{self.ui.cb_SIDE.currentText()}",
             self.ui.cb_LOC_TYPE.currentText() + str(self.ui.sb_AT.value()),
         ]
 
@@ -137,11 +142,7 @@ class CtrlRecWriter:
                 props.append(prop)
                 values.append(val)
 
-        for prop, val in zip(props, values):
-            self.ui.te_tags.append(f"{prop}: {val}")
-
-    def clear_tag_output(self):
-        self.ui.te_tags.clear()
+        return [f"{prop}: {val}" for prop, val in zip(props, values)]
 
     def template_reload_list(self):
         templateFiles = [os.path.basename(i) for i in glob.glob(os.path.join(MODELS_DIR, "template_*.json"))]
@@ -287,22 +288,93 @@ class CtrlRecWriter:
     def browse_rec_dir(self):
         self.dlg_requestRecDirectory = DialogGetPath()
         self.directory = self.dlg_requestRecDirectory.get_path()
-        if self.directory == "":
-            self.ui.le_recDir.setText("No selected directory")
-        else:
-            self.ui.le_recDir.setText(self.directory)
+        # Only update if user selected a directory (not cancelled)
+        if self.directory:
+            self.ui.te_recDir.setText(self.directory)
 
-    def validate_rec_dir(self):
-        self.directory = self.ui.le_recDir.text()
-        prefix_text = self.ui.lbl_recDir.text()
+    def populate_rec_files(self):
+        """Populate the .rec file combobox with files from the current directory"""
+        self.directory = self.ui.te_recDir.toPlainText()
+
+        # Remember current selection and file list before clearing
+        current_selection = self.ui.cb_recFiles.currentText()
+        old_files = set(
+            self.ui.cb_recFiles.itemText(i)
+            for i in range(self.ui.cb_recFiles.count())
+            if not self.ui.cb_recFiles.itemText(i).startswith("--")
+        )
+
+        # Remove old directory from watcher if any
+        watched_dirs = self.file_watcher.directories()
+        if watched_dirs:
+            self.file_watcher.removePaths(watched_dirs)
+
+        # Clear existing items
+        self.ui.cb_recFiles.clear()
+        self.ui.te_tags.clear()
+
         if not os.path.isdir(self.directory):
-            dirCheckText = prefix_text + " (Invalid)"
-            self.ui.lbl_recDir.setText(dirCheckText)
-            self.ui.lbl_recDir.setStyleSheet("color: tomato;")
+            self.ui.cb_recFiles.addItem("-- No RECs in current dir --")
+            return
+
+        # Add directory to watcher
+        self.file_watcher.addPath(self.directory)
+
+        # Find all .rec files
+        rec_files = sorted(glob.glob(os.path.join(self.directory, "*.tif.rec")))
+        rec_filenames = [os.path.basename(f) for f in rec_files]
+
+        if not rec_filenames:
+            self.ui.cb_recFiles.addItem("-- No RECs in current dir --")
         else:
-            direCheckText = prefix_text + " (Valid)"
-            self.ui.lbl_recDir.setText(direCheckText)
-            self.ui.lbl_recDir.setStyleSheet("color: green;")
+            self.ui.cb_recFiles.addItems(rec_filenames)
+
+            # Check for new files
+            new_files = set(rec_filenames) - old_files
+
+            if new_files:
+                # Select the newest added file (last one alphabetically among new files)
+                newest_file = sorted(new_files)[-1]
+                index = self.ui.cb_recFiles.findText(newest_file)
+                self.ui.cb_recFiles.setCurrentIndex(index)
+            elif current_selection and not current_selection.startswith("--"):
+                # Restore previous selection if it still exists
+                index = self.ui.cb_recFiles.findText(current_selection)
+                if index >= 0:
+                    self.ui.cb_recFiles.setCurrentIndex(index)
+                else:
+                    self.ui.cb_recFiles.setCurrentIndex(len(rec_filenames) - 1)
+            else:
+                # Default to last file
+                self.ui.cb_recFiles.setCurrentIndex(len(rec_filenames) - 1)
+
+            self.load_selected_rec_file()
+
+    def load_selected_rec_file(self):
+        """Load the selected .rec file content into the preview"""
+        self.directory = self.ui.te_recDir.toPlainText()
+        selected_file = self.ui.cb_recFiles.currentText()
+
+        # Skip if placeholder text
+        if selected_file.startswith("--"):
+            self.ui.te_tags.clear()
+            return
+
+        rec_filepath = os.path.join(self.directory, selected_file)
+
+        if not os.path.isfile(rec_filepath):
+            self.ui.te_tags.clear()
+            self.ui.te_tags.setPlainText("File not found")
+            return
+
+        # Load and display the file content with black color (from file)
+        tags_read, _, _ = self.scan_rec_commments(rec_filepath)
+        self.ui.te_tags.clear()
+        self.ui.te_tags.setTextColor(Qt.blue)
+        if tags_read:
+            self.ui.te_tags.setPlainText("\n".join(tags_read))
+        else:
+            self.ui.te_tags.setPlainText("(No tags written yet)")
 
     def sn_validate(self):
         self.ui.le_filenameSN.setValidator(self.validator)
@@ -372,33 +444,40 @@ class CtrlRecWriter:
         backup_path = os.path.join(rec_directory, "rec_backups.json")
         with open(backup_path, mode="w") as f:
             json.dump(self.recBackups, f, indent=4)
-            self.ui.tb_status.append("<span style='color: lime;'>[INFO] Backup saved!</span>")
-            self.ui.tb_status.moveCursor(QTextCursor.End)
+            print("[bold green][INFO] Backup saved![/bold green]")
 
     def write_rec(self):
-        self.directory = self.ui.le_recDir.text()
+        self.directory = self.ui.te_recDir.toPlainText()
 
-        # Prepare filename and path
-        self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
+        # Get selected file from combobox
+        selected_file = self.ui.cb_recFiles.currentText()
+
+        # Skip if placeholder text
+        if selected_file.startswith("--"):
+            print("[bold red][ERROR] No valid .rec file selected[/bold red]")
+            return
+
+        self.rec_filename = selected_file
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
 
         # Check if file exists
         if not os.path.isfile(self.rec_filepath):
-            self.ui.tb_status.setText(f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>")
+            print(f"[bold red][ERROR] {self.rec_filename} is not found[/bold red]")
             return
 
-        self.ui.tb_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
+        print(f"[bold green][INFO] {self.rec_filename} is found[/bold green]")
 
         # Confirm write operation
         dlg_checkWriteTags = DialogConfirm(title="Checking...", msg=f"Write tags to the {self.rec_filename}?")
 
         if not dlg_checkWriteTags.exec():
-            self.ui.tb_status.append("<span style='color: white;'>[MESSAGE] Write Cancelled!</span>")
-            self.ui.tb_status.moveCursor(QTextCursor.End)
+            print("[bold yellow][MESSAGE] Write Cancelled![/bold yellow]")
             return
 
         # Scan existing comments
         self.tags_read, self.preserved_content, self.original_content = self.scan_rec_commments(self.rec_filepath)
+
+        # Use te_tags content directly (can be from form or manually edited)
         self.tags_to_be_written = self.ui.te_tags.toPlainText().splitlines()
 
         # Handle case with existing tags
@@ -406,86 +485,79 @@ class CtrlRecWriter:
             dlg_checkOverwriteTags = DialogConfirm(title="Checking...", msg="Overwrite existing tags?")
 
             if not dlg_checkOverwriteTags.exec():
-                self.ui.tb_status.append("<span style='color: white;'>[MESSAGE] Overwrite Cancelled!</span>")
-                self.ui.tb_status.moveCursor(QTextCursor.End)
+                print("[bold yellow][MESSAGE] Overwrite Cancelled![/bold yellow]")
                 return
             else:
-                self.ui.tb_status.append("<span style='color: yellow;'>[WARNING] Overwrite Confirmed!</span>")
-                self.ui.tb_status.moveCursor(QTextCursor.End)
+                print("[bold yellow][WARNING] Overwrite Confirmed![/bold yellow]")
 
         # Backup before writing (can be recovered)
         self.backup_rec_contents(self.directory, self.rec_filename, self.original_content)
 
+        # Track if this is an overwrite (has existing tags)
+        is_overwrite = bool(self.tags_read)
+
         # Write tags to file (either no existing tags or overwrite confirmed)
         contents_to_be_written = self.preserved_content + self.tags_to_be_written
-        print("contents_to_be_written:", contents_to_be_written)
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
             f.write("\n".join(contents_to_be_written))
-            self.ui.tb_status.append(
-                f"<span style='color: lime;'>[INFO] Tags were written to {self.rec_filename}!</span>"
-            )
-            self.ui.tb_status.moveCursor(QTextCursor.End)
+            print(f"[bold green][INFO] Tags were written to {self.rec_filename}![/bold green]")
 
-        self.sn_inc()
+        # Reload the written file's content (no need to repopulate combobox)
+        self.load_selected_rec_file()
+
+        # Auto-increment serial number only for new writes (not overwrites)
+        if not is_overwrite:
+            self.sn_inc()
 
     def read_rec(self):
-        self.directory = self.ui.le_recDir.text()
+        self.directory = self.ui.te_recDir.toPlainText()
         self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
 
         if not os.path.isfile(self.rec_filepath):
-            self.ui.tb_status.setText(f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>")
+            print(f"[bold red][ERROR] {self.rec_filename} is not found[/bold red]")
             return
         else:
-            self.ui.tb_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
+            print(f"[bold green][INFO] {self.rec_filename} is found[/bold green]")
 
-        self.ui.tb_status.append(f"<span style='color: lime;'>[INFO] Tags were loaded from {self.rec_filename}!</span>")
-        self.ui.tb_status.moveCursor(QTextCursor.End)
+        print(f"[bold green][INFO] Tags were loaded from {self.rec_filename}![/bold green]")
         self.ui.te_tags.clear()
         self.tags_read, _, _ = self.scan_rec_commments(self.rec_filepath)
         self.ui.te_tags.setPlainText("\n".join(self.tags_read))
 
     def revert_rec(self):
-        self.directory = self.ui.le_recDir.text()
+        self.directory = self.ui.te_recDir.toPlainText()
         self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
         self.rec_filepath = os.path.join(self.directory, self.rec_filename)
 
         if not os.path.isfile(self.rec_filepath):
-            self.ui.tb_status.setText(f"<span style='color: tomato;'>[ERROR] {self.rec_filename} is not found</span>")
+            print(f"[bold red][ERROR] {self.rec_filename} is not found[/bold red]")
             return
         else:
-            self.ui.tb_status.setText(f"<span style='color: lime;'>[INFO] {self.rec_filename} is found</span>")
+            print(f"[bold green][INFO] {self.rec_filename} is found[/bold green]")
 
         recovery_filepath = os.path.join(self.directory, "rec_backups.json")
         if not os.path.isfile(recovery_filepath):
-            self.ui.tb_status.append("<span style='color: tomato;'>[ERROR] No backup file (JSON) is found!</span>")
-            self.ui.tb_status.moveCursor(QTextCursor.End)
+            print("[bold red][ERROR] No backup file (JSON) is found![/bold red]")
             return
         else:
             with open(recovery_filepath, mode="r") as f:
                 self.recBackups = json.load(f)
-            self.ui.tb_status.append("<span style='color: lime;'>[INFO] Backup JSON file is Loaded!</span>")
-            self.ui.tb_status.moveCursor(QTextCursor.End)
+            print("[bold green][INFO] Backup JSON file is Loaded![/bold green]")
 
         dlg_checkRecover = DialogConfirm(
             title="Checking...",
             msg=f"Recover {self.rec_filename} to the original state?",
         )
         if not dlg_checkRecover.exec():
-            self.ui.tb_status.append("<span style='color: white;'>[MESSAGE] Recovery Cancelled!</span>")
-            self.ui.tb_status.moveCursor(QTextCursor.End)
+            print("[bold yellow][MESSAGE] Recovery Cancelled![/bold yellow]")
             return
         else:
-            self.ui.tb_status.append("<span style='color: yellow;'>[WARNING] Recovery Confirmed!</span>")
-            self.ui.tb_status.moveCursor(QTextCursor.End)
+            print("[bold yellow][WARNING] Recovery Confirmed![/bold yellow]")
 
         with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
             if self.rec_filename in self.recBackups.keys():
                 f.write("\n".join(self.recBackups[self.rec_filename][0]))
-                self.ui.tb_status.append(f"<span style='color: lime;'>[INFO] {self.rec_filename} was recovered!</span>")
-                self.ui.tb_status.moveCursor(QTextCursor.End)
+                print(f"[bold green][INFO] {self.rec_filename} was recovered![/bold green]")
             else:
-                self.ui.tb_status.append(
-                    f"<span style='color: tomato;'>[ERROR] Recovery failed! {self.rec_filename} was not found in the backup!</span>"
-                )
-                self.ui.tb_status.moveCursor(QTextCursor.End)
+                print(f"[bold red][ERROR] Recovery failed! {self.rec_filename} was not found in the backup![/bold red]")

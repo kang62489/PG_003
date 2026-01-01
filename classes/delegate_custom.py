@@ -6,6 +6,8 @@ from PySide6.QtWidgets import (
     QStyleOptionButton,
 )
 
+from util.constants import GREEK_REPLACEMENTS
+
 
 class DelegateCenterAlign(QStyledItemDelegate):
     def initStyleOption(self, option, index):
@@ -22,6 +24,7 @@ class DelegateAlignRightCenter(QStyledItemDelegate):
 class DelegateCellEdit(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
         editor = QLineEdit(parent)
+        editor.setStyleSheet("font-size: 12pt;")
         return editor
 
     def setEditorData(self, editor, index):
@@ -29,7 +32,11 @@ class DelegateCellEdit(QStyledItemDelegate):
         editor.setText(value)
 
     def setModelData(self, editor, model, index):
-        model.setData(index, editor.text(), Qt.EditRole)
+        # Apply Greek symbol replacements before saving
+        text = editor.text()
+        for pattern, replacement in GREEK_REPLACEMENTS.items():
+            text = text.replace(pattern, replacement)
+        model.setData(index, text, Qt.EditRole)
 
     def initStyleOption(self, option, index):
         super().initStyleOption(option, index)
@@ -153,7 +160,6 @@ class DelegateWordWrap(QStyledItemDelegate):
         else:
             # Child item
             option.font.setPointSize(self.child_font_size)
-            # Only column 1 is bold
             option.font.setBold(index.column() == 0)
 
     def sizeHint(self, option, index):
