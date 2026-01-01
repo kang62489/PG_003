@@ -20,14 +20,6 @@ from classes import (
 )
 from util.constants import DISPLAY_DATE_FORMAT, MODELS_DIR, SERIAL_NAME_REGEX
 
-## TODO:
-# 1. [DONE] le_Level change to non-typing input (sb_LEVEL)
-# 2. [DONE] le_Frames change to non-typing input (sb_FRAMES)
-# 3. [DONE] remove CAM_TRIG_MODE
-# 4. [DONE] Add "Side" (R, L) combobox for slice (cb_SIDE)
-# 5. Make the filename of filename-serial number auto set to date of the folder
-# 6. [DONE] Add Greek symbol auto-replace (via GREEK_REPLACEMENTS from constants)
-
 
 class CtrlRecWriter:
     def __init__(self, ui):

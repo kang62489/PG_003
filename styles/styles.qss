@@ -76,12 +76,18 @@ QPushButton#btn_deleteCurrentTemplate:disabled{
     color: gray;
 }
 
-
-QLineEdit#le_filenameSN {
-    font-size: 18px;
+QPushButton#btn_SnInc, #btn_SnDec {
+    text-align: bottom;
+    font-size: 36px;
     font-weight: bold;
-    font-style: italic;
-    color: green;
+}
+
+QPushButton#btn_SnReset:enabled {
+    color: red;
+}
+
+QPushButton#btn_SnCopy:disabled {
+    color: gray;
 }
 
 QPushButton#btn_SnCopy:enabled {
@@ -91,6 +97,14 @@ QPushButton#btn_SnCopy:enabled {
 QPushButton#btn_SnCopy:disabled {
     color: gray;
 }
+
+QLineEdit#le_filenameSN {
+    font-size: 18px;
+    font-weight: bold;
+    font-style: italic;
+    color: green;
+}
+
 
 QTextBrowser {
     font-family: "Hack Nerd Font Mono";

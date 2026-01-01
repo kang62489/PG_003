@@ -100,6 +100,9 @@ class ViewRecWriter:
         table.setEditTriggers(QAbstractItemView.DoubleClicked | QAbstractItemView.EditKeyPressed)
         table.setItemDelegate(DelegateCellEdit())
 
+        # Set fixed height
+        table.setFixedHeight(UISizes.TABLEVIEW_CUSTOMIZED_HEIGHT)
+
     def setup_comboboxes(self):
         self.ui.cb_EXC.addItems(MenuOptions.EXCITATION)
         self.ui.cb_EXC.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
@@ -153,6 +156,7 @@ class ViewRecWriter:
     def setup_stacked_widget(self):
         """Setup stacked widget for parameter pages"""
         self.ui.stack_parameters.setCurrentIndex(0)  # Show Basic page by default
+        self.ui.stack_parameters.setFixedHeight(UISizes.STACK_PARAMETERS_HEIGHT)
 
     def setup_textedits(self):
         self.ui.te_recDir.setPlainText(os.path.join(BASE_DIR))

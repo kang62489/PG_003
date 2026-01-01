@@ -123,6 +123,12 @@ class UISizes:
     # TextEdit
     TEXT_EDIT_RECDIR_HEIGHT = 45
 
+    # Stack Widget
+    STACK_PARAMETERS_HEIGHT = 180
+
+    # TableView
+    TABLEVIEW_CUSTOMIZED_HEIGHT = 126
+
 
 # UI Alignments
 @dataclass
