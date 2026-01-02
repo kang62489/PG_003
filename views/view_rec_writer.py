@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Third-party imports
 from PySide6.QtGui import QTextOption
-from PySide6.QtWidgets import QAbstractItemView, QButtonGroup, QHeaderView
+from PySide6.QtWidgets import QAbstractItemView, QButtonGroup, QHeaderView, QLabel
 
 # Local application imports
 from classes import DelegateCellEdit
@@ -80,13 +80,18 @@ class ViewRecWriter:
             btn.setFixedSize(UISizes.BUTTON_TEMPLATE)
 
         for btn in buttons_for_row_op:
-            btn.setFixedHeight(UISizes.BUTTON_ROWOP_HEIGHT)
+            btn.setFixedSize(UISizes.BUTTON_ROWOP)
 
         for btn in buttons_for_SN:
             btn.setFixedSize(UISizes.BUTTON_SN)
 
+        self.ui.btn_BrowseRecDir.setFixedSize(UISizes.BUTTON_BROWSE)
+
         # Initial button states
         self.ui.btn_TemplateDelete.setEnabled(False)
+
+        self.ui.btn_GenerateTags.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_WriteRec.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
 
     def setup_tableview(self):
         table = self.ui.tv_customized
@@ -161,5 +166,5 @@ class ViewRecWriter:
     def setup_textedits(self):
         self.ui.te_recDir.setPlainText(os.path.join(BASE_DIR))
         self.ui.te_recDir.setFixedHeight(UISizes.TEXT_EDIT_RECDIR_HEIGHT)
-        self.ui.te_recDir.setAlignment(UIAlignments.TOP_CENTER)
-        self.ui.te_recDir.setWordWrapMode(QTextOption.WrapAnywhere)
+        self.ui.te_recDir.setAlignment(UIAlignments.TOP)
+        self.ui.te_recDir.setWordWrapMode(QTextOption.WrapAtWordBoundaryOrAnywhere)

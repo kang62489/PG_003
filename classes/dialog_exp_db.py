@@ -6,7 +6,7 @@ from datetime import datetime
 ## Third-party imports
 import pandas as pd
 from PySide6.QtCore import QItemSelectionModel, Qt
-from PySide6.QtGui import QColor, QStandardItem, QStandardItemModel
+from PySide6.QtGui import QColor, QStandardItem
 from PySide6.QtSql import QSqlDatabase, QSqlTableModel
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -108,7 +108,7 @@ class DialogExpDb(QDialog):
     def setup_buttons(self):
         self.btn_LoadToTab0 = QPushButton("Edit in Main Window")
         self.btn_delete = QPushButton("Delete Selected Rows")
-        self.btn_delete.setStyleSheet("color: red;")
+        self.btn_delete.setObjectName("btn_deleteFromDb")
         self.btn_export_selected = QPushButton("Export Selected")
         self.btn_export_databases = QPushButton("Export Databases")
 

@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QAbstractItemView, QHeaderView
 
 # Local application imports
 from classes import DelegateWordWrap
-from util.constants import MenuOptions, UISizes
+from util.constants import MenuOptions, UIAlignments, UISizes
 
 
 class ViewExpInfo:
@@ -21,6 +21,7 @@ class ViewExpInfo:
         self.setup_lineedits()
         self.setup_comboboxes()
         self.setup_treeview()
+        self.setup_pushbuttons()
 
     def setup_groupboxes(self):
         # Let layouts handle sizing naturally for 600x800 window
@@ -57,6 +58,7 @@ class ViewExpInfo:
     def setup_treeview(self):
         # Set column resize mode
         self.ui.tree_injections.header().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.ui.tree_injections.header().setDefaultAlignment(UIAlignments.CENTER)
 
         # Enable multiple selection (Ctrl+Click or Shift+Click) for deletion
         self.ui.tree_injections.setSelectionMode(QAbstractItemView.ExtendedSelection)
@@ -66,5 +68,11 @@ class ViewExpInfo:
         self.ui.tree_injections.setUniformRowHeights(False)
 
         # Set delegate for auto-adjusting row height and font sizes
-        self.word_wrap_delegate = DelegateWordWrap(self.ui.tree_injections)
+        self.word_wrap_delegate = DelegateWordWrap(self.ui.tree_injections, parent_font_size=12, child_font_size=11)
         self.ui.tree_injections.setItemDelegate(self.word_wrap_delegate)
+
+    def setup_pushbuttons(self):
+        self.ui.btn_AddInjections.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_RmInjections.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_OpenExpDb.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_SaveToDb.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)

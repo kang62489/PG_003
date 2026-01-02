@@ -1,6 +1,23 @@
+/* TabWiget */
+QTabWidget {
+    font-size: 14px;
+}
+
+/* GroupBox */
+QGroupBox {
+    font-size: 16px;
+}
+
+/* Label */
+QLabel {
+    font-size: 16px;
+    background-color: #E5E4E2;
+}
+
+/* DateEdit */
 QDateEdit {
-    font-size: 12px;
-    color: blue;
+    font-size: 16px;
+    color: #1F51FF;
 }
 
 QDateEdit::drop-down {
@@ -17,63 +34,81 @@ QDateEdit::down-arrow {
     height: 20px; /* Adjust the height of the image */
 }
 
-QGroupBox {
+/* LineEdit */
+QLineEdit {
     font-size: 16px;
-    font-weight: bold;
+    color: #1F51FF;
 }
 
-QLabel {
+QLineEdit#le_filenameSN {
+    font-size: 24px;
+    font-weight: bold;
+    color: green;
+}
+
+/* ComboBox */
+QComboBox{
+    font-size: 16px;
+    color: #1F51FF;
+}
+
+/* RadioButton */
+QRadioButton {
+    font-size: 16px;
+    color: #1F51FF;
+}
+
+/* SpinBox */
+QSpinBox {
+    font-size: 16px;
+    color: #1F51FF;
+}
+
+/* TableView */
+QTableView {
     font-size: 14px;
     font-weight: bold;
+    font-family: "Hack Nerd Font Mono";
 }
 
-QRadioButton {
-    font-size: 12px;
-}
-
-QComboBox{
-    font-size: 12px;
-}
-
-QLineEdit {
-    font-size: 12px;
-}
-
-QSpinBox {
-    font-size: 12px;
+QTableView#tv_customized {
+    font-size: 16px;
 }
 
 QHeaderView::section {
     font-weight: bold;
     font-size: 14px;
+    font-family: "Hack Nerd Font Mono";
     color:blue;
 }
 
-QTableView {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-QScrollBar:vertical {
-    width: 16px;
-}
-
-QScrollBar:horizontal {
-    height: 16px;
-}
-
-
+/* PushButton */
 QPushButton {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
+    color: #5a4bad;
+    background-color: #f9f9f9;
+    border: 3px solid #5a4bad;
+    border-radius: 8px;
 }
 
-QPushButton#btn_deleteCurrentTemplate {
+QPushButton::hover {
+    color: #f9f9f9;
+    background-color: #5a4bad;
+}
+
+QPushButton#btn_TemplateDelete:enabled {
     color: red;
+    border-color: red;
 }
 
-QPushButton#btn_deleteCurrentTemplate:disabled{
+QPushButton#btn_TemplateDelete:disabled{
     color: gray;
+}
+
+QPushButton#btn_TemplateDelete:hover {
+    color: #f9f9f9;
+    background-color: red;
 }
 
 QPushButton#btn_SnInc, #btn_SnDec {
@@ -84,60 +119,96 @@ QPushButton#btn_SnInc, #btn_SnDec {
 
 QPushButton#btn_SnReset:enabled {
     color: red;
+    border-color: red;
 }
 
-QPushButton#btn_SnCopy:disabled {
+QPushButton#btn_SnReset:disabled {
     color: gray;
+}
+
+QPushButton#btn_SnReset:hover {
+    color: #f9f9f9;
+    background-color: red;
 }
 
 QPushButton#btn_SnCopy:enabled {
     color: green;
+    border-color: green;
 }
 
 QPushButton#btn_SnCopy:disabled {
     color: gray;
 }
 
-QLineEdit#le_filenameSN {
-    font-size: 18px;
-    font-weight: bold;
-    font-style: italic;
-    color: green;
-}
-
-
-QTextBrowser {
-    font-family: "Hack Nerd Font Mono";
-    font-size: 12px;
-    font-weight: bold;
-    background-color: black;
-}
-
-QTextEdit#te_tags {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-QProgressBar {
-    border-style: solid;
-    border-color: gray;
-    border-radius: 7px;
-    border-width: 2px;
-    background-color: darkgray;
-    text-align: center;
-    font-family: "Hack Nerd Font Mono";
-    font-size: 14px;
+QPushButton#btn_SnCopy:hover {
     color: #f9f9f9;
-    font-weight: bold;
-    padding: 5px;
-}
-QProgressBar::chunk {
-    background-color: darkviolet;
+    background-color: green;
 }
 
+QPushButton#btn_DeleteTable {
+    color: red;
+    border-color: red;
+}
+QPushButton#btn_DeleteTable:hover {
+    color: #f9f9f9;
+    background-color: red;
+}
+
+QPushButton#btn_toggleBasic:checked,
+QPushButton#btn_toggleCustomized:checked {
+    background-color: #5a4bad;
+    color: #f9f9f9;
+}
+
+QPushButton#btn_toggleBasic:!checked,
+QPushButton#btn_toggleCustomized:!checked {
+    background-color: #f9f9f9;
+    color: #5a4bad;
+}
+
+QPushButton#btn_deleteFromDb {
+    color: red;
+    border-color: red;
+}
+
+QPushButton#btn_deleteFromDb:hover {
+    color: #f9f9f9;
+    background-color: red;
+}
+
+QPushButton#btn_GenerateTags {
+    color: #1F51FF;
+    border-color: #1F51FF;
+}
+
+QPushButton#btn_GenerateTags:hover {
+    color: #f9f9f9;
+    background-color: #1F51FF;
+}
+
+QPushButton#btn_WriteRec{
+    color: green;
+    border-color: green;
+}
+
+QPushButton#btn_WriteRec:hover {
+    color: #f9f9f9;
+    background-color: green;
+}
+
+QPushButton#btn_SaveToDb{
+    color: green;
+    border-color: green;
+}
+
+QPushButton#btn_SaveToDb:hover {
+    color: #f9f9f9;
+    background-color: green;
+}
+
+/* CheckBox */
 QCheckBox {
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 16px;
 }
 
 QCheckBox::indicator
@@ -154,6 +225,51 @@ QCheckBox::indicator:checked {
     image: url(:checkbox/checked.svg);
 }
 
+/* ScrollBar */
+QScrollBar:vertical {
+    width: 20px;
+}
+
+QScrollBar:horizontal {
+    height: 20px;
+}
+
+
+/* TextBrowser */
+QTextBrowser {
+    font-family: "Hack Nerd Font Mono";
+    font-size: 14px;
+    font-weight: bold;
+    background-color: black;
+}
+
+/* ProgressBar */
+QProgressBar {
+    border-style: solid;
+    border-color: gray;
+    border-radius: 7px;
+    border-width: 2px;
+    background-color: darkgray;
+    text-align: center;
+    font-family: "Hack Nerd Font Mono";
+    font-size: 16px;
+    color: #f9f9f9;
+    font-weight: bold;
+    padding: 5px;
+}
+
+QProgressBar::chunk {
+    background-color: darkviolet;
+}
+
+/* TextEdit */
+QTextEdit#te_tags {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+/* ListView */
 QListView::indicator {
     width: 24px;
     height: 24px;
@@ -169,8 +285,7 @@ QListView::indicator:checked {
 }
 
 QTreeView#tree_injections QHeaderView::section {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: bold;
-      color: black;
-      padding: 3px;
+      color: blue;
   }

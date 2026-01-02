@@ -5,8 +5,8 @@ from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
-from PySide6.QtCore import QFileSystemWatcher, QItemSelectionModel, QModelIndex, QRegularExpression, Qt
-from PySide6.QtGui import QRegularExpressionValidator
+from PySide6.QtCore import QFileSystemWatcher, QItemSelectionModel, QModelIndex, QRegularExpression
+from PySide6.QtGui import QColor, QPalette, QRegularExpressionValidator
 from PySide6.QtWidgets import QApplication, QDialog
 from rich import print
 
@@ -91,10 +91,10 @@ class CtrlRecWriter:
         self.ui.stack_parameters.setCurrentIndex(button_id)
 
     def generate_tags_from_form(self):
-        """Generate tags from form and display in te_tags with blue color"""
+        """Generate tags from form and display in te_tags"""
         tags = self.build_tags_from_form()
         self.ui.te_tags.clear()
-        self.ui.te_tags.setTextColor(Qt.red)
+        self.ui.te_tags.setTextColor(QColor("#1F51FF"))
         self.ui.te_tags.setPlainText("\n".join(tags))
 
     def build_tags_from_form(self):
@@ -282,7 +282,7 @@ class CtrlRecWriter:
         self.directory = self.dlg_requestRecDirectory.get_path()
         # Only update if user selected a directory (not cancelled)
         if self.directory:
-            self.ui.te_recDir.setText(self.directory)
+            self.ui.te_recDir.setPlainText(self.directory)
 
     def populate_rec_files(self):
         """Populate the .rec file combobox with files from the current directory"""
@@ -362,7 +362,7 @@ class CtrlRecWriter:
         # Load and display the file content with black color (from file)
         tags_read, _, _ = self.scan_rec_commments(rec_filepath)
         self.ui.te_tags.clear()
-        self.ui.te_tags.setTextColor(Qt.blue)
+        self.ui.te_tags.setTextColor(QColor("#71797E"))
         if tags_read:
             self.ui.te_tags.setPlainText("\n".join(tags_read))
         else:
@@ -370,14 +370,15 @@ class CtrlRecWriter:
 
     def sn_validate(self):
         self.ui.le_filenameSN.setValidator(self.validator)
+        palette = self.ui.le_filenameSN.palette()
         if self.ui.le_filenameSN.hasAcceptableInput():
-            self.ui.le_filenameSN.setStyleSheet("QLineEdit { color: green; }")
+            palette.setColor(QPalette.Text, QColor("green"))
             self.ui.btn_SnCopy.setEnabled(True)
-            self.ui.le_filenameSN.setValidator(None)
         else:
-            self.ui.le_filenameSN.setStyleSheet("QLineEdit { color: tomato; }")
+            palette.setColor(QPalette.Text, QColor("tomato"))
             self.ui.btn_SnCopy.setEnabled(False)
-            self.ui.le_filenameSN.setValidator(None)
+        self.ui.le_filenameSN.setPalette(palette)
+        self.ui.le_filenameSN.setValidator(None)
 
     def sn_inc(self):
         self.dateStr = self.ui.le_filenameSN.text().split("-")[0]

@@ -41,7 +41,6 @@ class DelegateCellEdit(QStyledItemDelegate):
     def initStyleOption(self, option, index):
         super().initStyleOption(option, index)
         option.displayAlignment = Qt.AlignHCenter | Qt.AlignVCenter
-        option.font.setFamily("Calibri")
 
 
 class DelegateCheckableListItem(QStyledItemDelegate):
@@ -160,7 +159,7 @@ class DelegateWordWrap(QStyledItemDelegate):
         else:
             # Child item
             option.font.setPointSize(self.child_font_size)
-            option.font.setBold(index.column() == 0)
+            # option.font.setBold(index.column() == 0)
 
     def sizeHint(self, option, index):
         """Calculate the size needed to display the text with word wrap."""

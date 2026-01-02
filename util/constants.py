@@ -48,13 +48,14 @@ class UISizes:
     BUTTON_MEDIUM = QSize(100, 80)  # Secondary action buttons
     BUTTON_SMALL = QSize(90, 40)  # Navigation buttons
     BUTTON_TEMPLATE = QSize(80, 30)  # Navigation buttons
-    BUTTON_SN = QSize(50, 40)  # Utility buttons (plus, minus, etc.)
+    BUTTON_SN = QSize(60, 40)  # Utility buttons (plus, minus, etc.)
     BUTTON_WIDE = QSize(125, 40)  # Wide buttons (copyTag, clearTag)
     BUTTON_TINY_SQUARE = QSize(30, 30)
     BUTTON_LONG_HEIGHT = 50
-    BUTTON_GENERAL_HEIGHT = 40
-    BUTTON_ROWOP_HEIGHT = 30
+    BUTTON_GENERAL_HEIGHT = 30
+    BUTTON_ROWOP = QSize(110, 30)
     BUTTON_REFRESH = QSize(100, 30)
+    BUTTON_BROWSE = QSize(80, 40)
 
     # Labels
     LABEL_STANDARD = QSize(180, 40)  # Standard labels
@@ -136,7 +137,7 @@ class UIAlignments:
     CENTER = Qt.AlignCenter
     RIGHT_CENTER = Qt.AlignRight | Qt.AlignVCenter
     LEFT_CENTER = Qt.AlignLeft | Qt.AlignVCenter
-    TOP_CENTER = Qt.AlignTop | Qt.AlignHCenter
+    TOP = Qt.AlignTop
 
 
 # Regular Expressions

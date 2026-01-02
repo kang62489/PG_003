@@ -4,10 +4,12 @@ import os
 import sys
 from pathlib import Path
 
-# Third-party imports
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QFontDatabase
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication
+
+# Third-party imports
+from rich import print
 
 # Local application imports
 from controllers import (
@@ -36,17 +38,24 @@ class Main:
         self.ui = loader.load(UI_FILE, None)
         self.ui.setWindowTitle(APP_NAME)
 
-        # Load custom font and set it
+        self.ui.setFixedSize(self.ui.size())
+
+        # Load custom fonts
         self.default_font = QFont("Calibri", 12)
-        # font_id = QFontDatabase.addApplicationFont(
-        #     "resources/fonts/HACKNERDFONTMONO-REGULAR.TTF",
-        # )
-        # if font_id == -1:
-        #     rich.print("[red]Error loading font: Hack Nerd Font Mono[/red]")
-        #     self.ui.setFont(self.default_font)
-        # else:
-        #     font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-        #     self.ui.setFont(QFont(font_family, 12))
+        font_dir = Path(__file__).parent / "resources" / "fonts"
+        fonts_loaded = False
+
+        for font_file in font_dir.glob("*.ttf"):
+            font_id = QFontDatabase.addApplicationFont(str(font_file))
+            if font_id != -1:
+                fonts_loaded = True
+
+        # Set font once after loading all
+        if fonts_loaded:
+            self.ui.setFont(QFont("FantasqueSansM Nerd Font Mono", 12))
+        else:
+            print("[red]All fonts failed to load, using Calibri[/red]")
+            self.ui.setFont(self.default_font)
 
         # Apply styles
         with Path.open(STYLE_FILE) as f:
@@ -74,9 +83,9 @@ class Main:
 
 
 if sys.platform == "win32":
-    os.environ["QT_QPA_PLATFORM"] = "windows:darkmode=0"
+    sys.argv += ["-platform", "windows:darkmode=0"]
 
-app = QApplication([])
-app.setStyle("fusion")
+app = QApplication(sys.argv)
+app.setStyle("Fusion")
 window = Main()
 app.exec()

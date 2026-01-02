@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>640</width>
     <height>800</height>
    </rect>
   </property>
@@ -17,8 +17,20 @@
    <layout class="QVBoxLayout" name="verticalLayout_10">
     <item>
      <widget class="QTabWidget" name="tabs">
+      <property name="tabPosition">
+       <enum>QTabWidget::TabPosition::North</enum>
+      </property>
       <property name="currentIndex">
        <number>1</number>
+      </property>
+      <property name="elideMode">
+       <enum>Qt::TextElideMode::ElideNone</enum>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
       </property>
       <widget class="QWidget" name="tab_EXP">
        <attribute name="title">
@@ -351,7 +363,7 @@
         <item>
          <widget class="QStackedWidget" name="stack_parameters">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page_basic">
            <layout class="QGridLayout" name="gridLayout_basic">
@@ -390,6 +402,9 @@
               <property name="text">
                <string>OBJ</string>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+              </property>
              </widget>
             </item>
             <item row="2" column="0">
@@ -403,6 +418,9 @@
              <widget class="QLabel" name="lbl_FRAMES">
               <property name="text">
                <string>FRAMES (p)</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -435,6 +453,9 @@
              <widget class="QLabel" name="lbl_EXC">
               <property name="text">
                <string>EXC</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -541,7 +562,7 @@
               <item>
                <widget class="QCheckBox" name="chk_addCustomized">
                 <property name="text">
-                 <string>Add customized parameters</string>
+                 <string>Check to append</string>
                 </property>
                </widget>
               </item>
@@ -644,6 +665,52 @@
            <string>REC Preview</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
+           <item row="1" column="0">
+            <widget class="QTextEdit" name="te_tags"/>
+           </item>
+           <item row="0" column="0">
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="1" rowspan="2">
+              <widget class="QTextEdit" name="te_recDir"/>
+             </item>
+             <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignTop">
+              <widget class="QPushButton" name="btn_BrowseRecDir">
+               <property name="text">
+                <string>Browse</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="cb_recFiles"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lbl_recDir">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Directory</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="lbl_recFile">
+               <property name="text">
+                <string>Filename</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
            <item row="2" column="0">
             <layout class="QHBoxLayout" name="horizontalLayout_recButtons">
              <item>
@@ -662,164 +729,6 @@
              </item>
             </layout>
            </item>
-           <item row="1" column="0">
-            <widget class="QTextEdit" name="te_tags"/>
-           </item>
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="0">
-              <widget class="QLabel" name="lbl_recDir">
-               <property name="text">
-                <string>Directory</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignTop">
-              <widget class="QPushButton" name="btn_BrowseRecDir">
-               <property name="text">
-                <string>Browse</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QTextEdit" name="te_recDir"/>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="lbl_recFile">
-               <property name="text">
-                <string>Filename</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="cb_recFiles"/>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_REC_DB">
-       <attribute name="title">
-        <string>REC Database</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_21">
-        <item>
-         <widget class="QGroupBox" name="gb_recDB_status">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="title">
-           <string>Status</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
-           <item>
-            <widget class="QTextBrowser" name="tb_recDB"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="gb_dbOperation">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="title">
-           <string>Database Operation</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_8">
-           <item>
-            <widget class="QPushButton" name="btn_ImportRecDb">
-             <property name="text">
-              <string>Import Data From Rec Files</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_14">
-             <item>
-              <widget class="QLabel" name="lbl_tableName">
-               <property name="text">
-                <string>Table Name</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="cb_REC_DB_TABLE"/>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_LoadRecTable">
-               <property name="text">
-                <string>Load</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_ExportSummary">
-               <property name="text">
-                <string>Export</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_DeleteTable">
-               <property name="text">
-                <string>Delete</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="gb_dbDisplay">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="title">
-           <string>Display</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_9">
-           <item>
-            <widget class="QTableView" name="tv_recDB"/>
-           </item>
           </layout>
          </widget>
         </item>
@@ -827,7 +736,7 @@
       </widget>
       <widget class="QWidget" name="tab_ABF">
        <attribute name="title">
-        <string>ABF metadata</string>
+        <string>ABF Linker</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_15">
         <item>
@@ -974,6 +883,124 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_REC_DB">
+       <attribute name="title">
+        <string>REC Database</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_21">
+        <item>
+         <widget class="QGroupBox" name="gb_recDB_status">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Status</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QTextBrowser" name="tb_recDB"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_dbOperation">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Database Operation</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="QPushButton" name="btn_ImportRecDb">
+             <property name="text">
+              <string>Import Data From Rec Files</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <item>
+              <widget class="QLabel" name="lbl_tableName">
+               <property name="text">
+                <string>Table Name</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="cb_REC_DB_TABLE"/>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_LoadRecTable">
+               <property name="text">
+                <string>Load</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_ExportSummary">
+               <property name="text">
+                <string>Export</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_DeleteTable">
+               <property name="text">
+                <string>Delete</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_dbDisplay">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Display</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QTableView" name="tv_recDB"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tab_CONCAT">
        <attribute name="title">
         <string>Concatenator (Tiff)</string>
@@ -1077,7 +1104,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>640</width>
      <height>21</height>
     </rect>
    </property>
