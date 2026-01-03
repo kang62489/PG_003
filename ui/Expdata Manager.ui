@@ -21,7 +21,7 @@
        <enum>QTabWidget::TabPosition::North</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::TextElideMode::ElideNone</enum>
@@ -363,7 +363,7 @@
         <item>
          <widget class="QStackedWidget" name="stack_parameters">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="page_basic">
            <layout class="QGridLayout" name="gridLayout_basic">
@@ -736,7 +736,7 @@
       </widget>
       <widget class="QWidget" name="tab_ABF">
        <attribute name="title">
-        <string>ABF Linker</string>
+        <string>ABF Note</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_15">
         <item>

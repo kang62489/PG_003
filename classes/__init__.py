@@ -14,10 +14,11 @@ from .dialog_exp_db import DialogExpDb
 from .dialog_get_path import DialogGetPath
 from .dialog_insert_props import DialogInsertProps
 from .dialog_save_template import DialogSaveTemplate
-# Note: DialogInjManager excluded - has cross-package deps, import from classes.dialog_inj_manager directly
 
+# Note: DialogInjManager excluded - has cross-package deps, import from classes.dialog_inj_manager directly
 # Helpers
 from .helper_combo_editor import HelperComboEditor
+from .helper_dir_watcher import DirWatcher
 
 # Models
 from .model_checkable_list import ModelCheckableList
@@ -44,6 +45,7 @@ __all__ = [
     "DialogSaveTemplate",
     # Helpers
     "HelperComboEditor",
+    "DirWatcher",
     # Models
     "ModelCheckableList",
     "ModelDynamicList",

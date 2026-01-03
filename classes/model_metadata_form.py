@@ -139,9 +139,9 @@ class ModelMetadataForm(QAbstractTableModel):
         self.layoutChanged.emit()
         
     def rm_rows(self, SourceParent, start_from_this_row, count):
-        self.beginRemv_rows(SourceParent, start_from_this_row, start_from_this_row + count - 1)
+        self.beginRemoveRows(SourceParent, start_from_this_row, start_from_this_row + count - 1)
         self._data = self._data.drop(self._data.index[start_from_this_row:start_from_this_row + count])
-        self.endRemv_rows()
+        self.endRemoveRows()
         
         columns = self._data.columns.to_list()
         if len(columns) > 1:

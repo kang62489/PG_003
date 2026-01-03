@@ -1,20 +1,25 @@
+## Modules
+# Standard library imports
 import glob
 import json
 import os
 from datetime import datetime
 from pathlib import Path
 
+# Third-party imports
 import pandas as pd
-from PySide6.QtCore import QFileSystemWatcher, QItemSelectionModel, QModelIndex, QRegularExpression
+from PySide6.QtCore import QItemSelectionModel, QModelIndex, QRegularExpression
 from PySide6.QtGui import QColor, QPalette, QRegularExpressionValidator
 from PySide6.QtWidgets import QApplication, QDialog
 from rich import print
 
+# Local application imports
 from classes import (
     DialogConfirm,
     DialogGetPath,
     DialogInsertProps,
     DialogSaveTemplate,
+    DirWatcher,
     ModelDynamicList,
     ModelMetadataForm,
 )
@@ -39,7 +44,7 @@ class CtrlRecWriter:
         self.recBackups = dict()
 
         # Setup file system watcher for .rec files
-        self.file_watcher = QFileSystemWatcher()
+        self.rec_watcher = DirWatcher(filetype=".rec", target_cb=self.ui.cb_recFiles)
 
         self.connect_signals()
         self.template_reload_list()
@@ -66,7 +71,7 @@ class CtrlRecWriter:
         self.ui.te_recDir.textChanged.connect(self.populate_rec_files)
         self.ui.btn_BrowseRecDir.clicked.connect(self.browse_rec_dir)
         self.ui.cb_recFiles.activated.connect(self.load_selected_rec_file)
-        self.file_watcher.directoryChanged.connect(self.populate_rec_files)
+        self.rec_watcher.filelistRenewed.connect(self.load_selected_rec_file)
 
         self.ui.le_filenameSN.textChanged.connect(self.sn_validate)
 
@@ -175,7 +180,7 @@ class CtrlRecWriter:
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return
 
-        self.saveDialog = DialogSaveTemplate()
+        self.saveDialog = DialogSaveTemplate(current_template_name=self.ui.cb_TemplateLoad.currentText())
         if not self.saveDialog.exec():
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return
@@ -279,72 +284,22 @@ class CtrlRecWriter:
 
     def browse_rec_dir(self):
         self.dlg_requestRecDirectory = DialogGetPath()
-        self.directory = self.dlg_requestRecDirectory.get_path()
+        self.rec_directory = self.dlg_requestRecDirectory.get_path()
         # Only update if user selected a directory (not cancelled)
-        if self.directory:
-            self.ui.te_recDir.setPlainText(self.directory)
+        if self.rec_directory:
+            self.ui.te_recDir.setPlainText(self.rec_directory)
 
     def populate_rec_files(self):
         """Populate the .rec file combobox with files from the current directory"""
-        self.directory = self.ui.te_recDir.toPlainText()
-
-        # Remember current selection and file list before clearing
-        current_selection = self.ui.cb_recFiles.currentText()
-        old_files = set(
-            self.ui.cb_recFiles.itemText(i)
-            for i in range(self.ui.cb_recFiles.count())
-            if not self.ui.cb_recFiles.itemText(i).startswith("--")
-        )
-
-        # Remove old directory from watcher if any
-        watched_dirs = self.file_watcher.directories()
-        if watched_dirs:
-            self.file_watcher.removePaths(watched_dirs)
-
-        # Clear existing items
-        self.ui.cb_recFiles.clear()
+        # Clear display anyway
         self.ui.te_tags.clear()
 
-        if not os.path.isdir(self.directory):
-            self.ui.cb_recFiles.addItem("-- No RECs in current dir --")
-            return
-
-        # Add directory to watcher
-        self.file_watcher.addPath(self.directory)
-
-        # Find all .rec files
-        rec_files = sorted(glob.glob(os.path.join(self.directory, "*.tif.rec")))
-        rec_filenames = [os.path.basename(f) for f in rec_files]
-
-        if not rec_filenames:
-            self.ui.cb_recFiles.addItem("-- No RECs in current dir --")
-        else:
-            self.ui.cb_recFiles.addItems(rec_filenames)
-
-            # Check for new files
-            new_files = set(rec_filenames) - old_files
-
-            if new_files:
-                # Select the newest added file (last one alphabetically among new files)
-                newest_file = sorted(new_files)[-1]
-                index = self.ui.cb_recFiles.findText(newest_file)
-                self.ui.cb_recFiles.setCurrentIndex(index)
-            elif current_selection and not current_selection.startswith("--"):
-                # Restore previous selection if it still exists
-                index = self.ui.cb_recFiles.findText(current_selection)
-                if index >= 0:
-                    self.ui.cb_recFiles.setCurrentIndex(index)
-                else:
-                    self.ui.cb_recFiles.setCurrentIndex(len(rec_filenames) - 1)
-            else:
-                # Default to last file
-                self.ui.cb_recFiles.setCurrentIndex(len(rec_filenames) - 1)
-
-            self.load_selected_rec_file()
+        self.rec_directory = self.ui.te_recDir.toPlainText()
+        self.rec_watcher.set_watched_dir(self.rec_directory)
 
     def load_selected_rec_file(self):
         """Load the selected .rec file content into the preview"""
-        self.directory = self.ui.te_recDir.toPlainText()
+        self.rec_directory = self.ui.te_recDir.toPlainText()
         selected_file = self.ui.cb_recFiles.currentText()
 
         # Skip if placeholder text
@@ -352,7 +307,7 @@ class CtrlRecWriter:
             self.ui.te_tags.clear()
             return
 
-        rec_filepath = os.path.join(self.directory, selected_file)
+        rec_filepath = os.path.join(self.rec_directory, selected_file)
 
         if not os.path.isfile(rec_filepath):
             self.ui.te_tags.clear()
@@ -360,6 +315,7 @@ class CtrlRecWriter:
             return
 
         # Load and display the file content with black color (from file)
+        self.ui.tabs.setCurrentIndex(1)  # Switch to rec writer tab when loading a rec file
         tags_read, _, _ = self.scan_rec_commments(rec_filepath)
         self.ui.te_tags.clear()
         self.ui.te_tags.setTextColor(QColor("#71797E"))
@@ -429,7 +385,7 @@ class CtrlRecWriter:
 
     def backup_rec_contents(self, rec_directory, rec_filename, contents_to_be_backupped):
         # Backup before writing (can be recovered)
-        if self.rec_filename in self.recBackups.keys():
+        if rec_filename in self.recBackups.keys():
             self.recBackups[rec_filename].append(contents_to_be_backupped)
         else:
             self.recBackups[rec_filename] = [contents_to_be_backupped]
@@ -440,7 +396,7 @@ class CtrlRecWriter:
             print("[bold green][INFO] Backup saved![/bold green]")
 
     def write_rec(self):
-        self.directory = self.ui.te_recDir.toPlainText()
+        self.rec_directory = self.ui.te_recDir.toPlainText()
 
         # Get selected file from combobox
         selected_file = self.ui.cb_recFiles.currentText()
@@ -451,7 +407,7 @@ class CtrlRecWriter:
             return
 
         self.rec_filename = selected_file
-        self.rec_filepath = os.path.join(self.directory, self.rec_filename)
+        self.rec_filepath = os.path.join(self.rec_directory, self.rec_filename)
 
         # Check if file exists
         if not os.path.isfile(self.rec_filepath):
@@ -484,7 +440,7 @@ class CtrlRecWriter:
                 print("[bold yellow][WARNING] Overwrite Confirmed![/bold yellow]")
 
         # Backup before writing (can be recovered)
-        self.backup_rec_contents(self.directory, self.rec_filename, self.original_content)
+        self.backup_rec_contents(self.rec_directory, self.rec_filename, self.original_content)
 
         # Track if this is an overwrite (has existing tags)
         is_overwrite = bool(self.tags_read)
@@ -503,9 +459,9 @@ class CtrlRecWriter:
             self.sn_inc()
 
     def read_rec(self):
-        self.directory = self.ui.te_recDir.toPlainText()
+        self.rec_directory = self.ui.te_recDir.toPlainText()
         self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
-        self.rec_filepath = os.path.join(self.directory, self.rec_filename)
+        self.rec_filepath = os.path.join(self.rec_directory, self.rec_filename)
 
         if not os.path.isfile(self.rec_filepath):
             print(f"[bold red][ERROR] {self.rec_filename} is not found[/bold red]")
@@ -519,9 +475,9 @@ class CtrlRecWriter:
         self.ui.te_tags.setPlainText("\n".join(self.tags_read))
 
     def revert_rec(self):
-        self.directory = self.ui.te_recDir.toPlainText()
+        self.rec_directory = self.ui.te_recDir.toPlainText()
         self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
-        self.rec_filepath = os.path.join(self.directory, self.rec_filename)
+        self.rec_filepath = os.path.join(self.rec_directory, self.rec_filename)
 
         if not os.path.isfile(self.rec_filepath):
             print(f"[bold red][ERROR] {self.rec_filename} is not found[/bold red]")
@@ -529,7 +485,7 @@ class CtrlRecWriter:
         else:
             print(f"[bold green][INFO] {self.rec_filename} is found[/bold green]")
 
-        recovery_filepath = os.path.join(self.directory, "rec_backups.json")
+        recovery_filepath = os.path.join(self.rec_directory, "rec_backups.json")
         if not os.path.isfile(recovery_filepath):
             print("[bold red][ERROR] No backup file (JSON) is found![/bold red]")
             return
