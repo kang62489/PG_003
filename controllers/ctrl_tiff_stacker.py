@@ -18,10 +18,10 @@ class CtrlTiffStacker:
         self.connect_signals()
 
     def connect_signals(self):
-        self.ui.btn_BrowseTiffs.clicked.connect(self.browse_tiffs)
+        self.ui.btn_browseTiffs.clicked.connect(self.browse_tiffs)
         self.ui.chk_selectAllFiles.stateChanged.connect(self.select_all_files)
         self.model_recFileList.allSelectedCheck.connect(self.check_all_selected)
-        self.ui.btn_StartConcat.clicked.connect(self.start_concat)
+        self.ui.btn_startConcat.clicked.connect(self.start_concat)
 
     def browse_tiffs(self):
         dlg_get_inputDir = DialogGetPath(title="Please select the folder contains .rec and .tif files")
@@ -79,7 +79,7 @@ class CtrlTiffStacker:
             return
 
         # Disable the start button while processing
-        self.ui.btn_StartConcat.setEnabled(False)
+        self.ui.btn_startConcat.setEnabled(False)
         self.ui.pb_concatenation.setValue(0)
         self.ui.tb_concatenator.append("<span style='color: lime;'>[INFO] Starting concatenation process...</span>")
         self.ui.tb_concatenator.moveCursor(QTextCursor.End)
@@ -100,4 +100,4 @@ class CtrlTiffStacker:
     def on_concatenation_finished(self):
         self.ui.tb_concatenator.append("<span style='color: lime;'>[INFO] Concatenation process completed!</span>")
         self.ui.tb_concatenator.moveCursor(QTextCursor.End)
-        self.ui.btn_StartConcat.setEnabled(True)
+        self.ui.btn_startConcat.setEnabled(True)

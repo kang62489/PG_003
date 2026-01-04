@@ -9,7 +9,7 @@ class CtrlAbfNote:
         self.connect_signals()
 
     def connect_signals(self):
-        self.ui.btn_ClearCellParams.clicked.connect(self.clear_cell_parameters)
+        self.ui.btn_clearCellParams.clicked.connect(self.clear_cell_parameters)
 
     def clear_cell_parameters(self):
         line_edits_to_clear = self.ui.gb_cellParams.findChildren(QLineEdit)

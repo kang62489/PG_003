@@ -34,11 +34,11 @@ All widget object names sorted by prefix.
 | 1  | btn_AddAbf                     | -                            | -                    |
 | 2  | btn_AddInjections              | add_injections               | ctrl_exp_info.py     |
 | 3  | btn_browseRecDir               | browse_rec_dir               | ctrl_rec_writer.py   |
-| 4  | btn_DeleteTable                | delete_table                 | ctrl_rec_import.py   |
-| 5  | btn_ExportSummary              | export_summary               | ctrl_rec_import.py   |
-| 6  | btn_ImportRecDb                | import_rec_db                | ctrl_rec_import.py   |
+| 4  | btn_deleteTable                | delete_table                 | ctrl_rec_import.py   |
+| 5  | btn_exportSummary              | export_summary               | ctrl_rec_import.py   |
+| 6  | btn_importRecDb                | import_rec_db                | ctrl_rec_import.py   |
 | 7  | btn_insertCustomProps          | insert_custom_props          | ctrl_rec_writer.py   |
-| 8  | btn_LoadRecTable               | load_rec_table               | ctrl_rec_import.py   |
+| 8  | btn_loadRecTable               | load_rec_table               | ctrl_rec_import.py   |
 | 9  | btn_mvRowsDown                 | mv_rows_down                 | ctrl_rec_writer.py   |
 | 10 | btn_mvRowsUp                   | mv_rows_up                   | ctrl_rec_writer.py   |
 | 11 | btn_OpenExpDb                  | open_exp_db                  | ctrl_exp_info.py     |
@@ -54,8 +54,8 @@ All widget object names sorted by prefix.
 | 21 | btn_templateDelete             | template_delete              | ctrl_rec_writer.py   |
 | 22 | btn_templateSave               | template_save                | ctrl_rec_writer.py   |
 | 23 | btn_writeRec                   | write_rec                    | ctrl_rec_writer.py   |
-| 24 | btn_BrowseTiffs*               | browse_tiffs                 | ctrl_tiff_stacker.py |
-| 25 | btn_StartConcat*               | start_concat                 | ctrl_tiff_stacker.py |
+| 24 | btn_browseTiffs*               | browse_tiffs                 | ctrl_tiff_stacker.py |
+| 25 | btn_startConcat*               | start_concat                 | ctrl_tiff_stacker.py |
 
 ## cb_ - QComboBox (14)
 
@@ -71,7 +71,7 @@ All widget object names sorted by prefix.
 | 33 | cb_expoUnit      | update_tag_output                  | ctrl_rec_writer.py                 |
 | 34 | cb_GENOTYPE      | -                                  | view_exp_info.py, ctrl_exp_info.py |
 | 35 | cb_locType       | update_tag_output                  | ctrl_rec_writer.py                 |
-| 36 | cb_REC_DB_TABLE  | -                                  | ctrl_rec_import.py                 |
+| 36 | cb_recDbTable    | -                                  | ctrl_rec_import.py                 |
 | 37 | cb_SEX           | -                                  | view_exp_info.py, ctrl_exp_info.py |
 | 38 | cb_SPECIES       | -                                  | view_exp_info.py, ctrl_exp_info.py |
 | 39 | cb_templateLoad  | template_load                      | ctrl_rec_writer.py                 |
@@ -214,7 +214,7 @@ todo: 1. 40 -> chk_screaming_snake_case 2. 41 -> chk_IncludeSubDirs 3. 42 -> fix
 | #   | Name             | Used In              |
 |-----|------------------|----------------------|
 | 127 | tb_concatenator* | ctrl_tiff_stacker.py |
-| 128 | tb_recDB         | ctrl_rec_import.py   |
+| 128 | tb_recDb         | ctrl_rec_import.py   |
 | 129 | tb_status        | ctrl_rec_writer.py   |
 
 ## te_ - QTextEdit (1)
@@ -235,7 +235,7 @@ todo: 1. 40 -> chk_screaming_snake_case 2. 41 -> chk_IncludeSubDirs 3. 42 -> fix
 |-----|---------------|----------------------------------------|
 | 132 | tv_abf        | -                                      |
 | 133 | tv_customized | view_rec_writer.py, ctrl_rec_writer.py |
-| 134 | tv_recDB      | view_rec_import.py, ctrl_rec_import.py |
+| 134 | tv_recDb      | view_rec_import.py, ctrl_rec_import.py |
 
 ## Other - System/Container Widgets
 

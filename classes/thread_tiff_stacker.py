@@ -1,8 +1,12 @@
+## Modules
+# Standard library imports
 import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from time import time
 
+# Third-party imports
+import numpy as np
 import tifffile
 from PySide6.QtCore import QThread, Signal
 
@@ -39,8 +43,13 @@ class ThreadTiffStacker(QThread):
             for i, tiff_file in enumerate(all_files):
                 data = tifffile.imread(tiff_file)
                 # First file creates, rest append
-                append_mode = i > 0
-                tifffile.imwrite(output_path, data, append=append_mode, metadata=None)
+                if i == 0:
+                    stacked_data = data
+                else:
+                    stacked_data = np.concatenate((stacked_data, data), axis=0)
+
+            tifffile.imwrite(output_path, stacked_data, metadata=None, imagej=True)
+            del data, stacked_data
 
             elaspse = time() - t_start
             os.utime(output_path, (original_stat.st_atime, original_stat.st_mtime))
@@ -54,9 +63,7 @@ class ThreadTiffStacker(QThread):
 
         # Update progress
         self.processed_count += 1
-        self.progress_percentage.emit(
-            int(self.processed_count / self.total_count * 100)
-        )
+        self.progress_percentage.emit(int(self.processed_count / self.total_count * 100))
 
     def run(self):
         if not os.path.exists(os.path.join(self.main_dir, "merged")):
@@ -67,9 +74,7 @@ class ThreadTiffStacker(QThread):
 
         length_horizontal_line = len(self.files_to_process[-1]) + 1
         self.progress_update.emit("-" * length_horizontal_line, "white")
-        self.progress_update.emit(
-            f"Total files to concatenate: {self.total_count}", "white"
-        )
+        self.progress_update.emit(f"Total files to concatenate: {self.total_count}", "white")
 
         # Process files in parallel
         t_start = time()
@@ -79,6 +84,4 @@ class ThreadTiffStacker(QThread):
             executor.map(self.concatenate_process, self.files_to_process)
 
         t_end = time() - t_start
-        self.progress_update.emit(
-            f"All concatenation completed in {t_end:.2f} seconds<br>", "aqua"
-        )
+        self.progress_update.emit(f"All concatenation completed in {t_end:.2f} seconds<br>", "aqua")

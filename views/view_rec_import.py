@@ -17,23 +17,23 @@ class ViewRecImport:
         self.setup_groupbox()
 
     def setup_tableview(self):
-        self.ui.tv_recDB.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
-        self.ui.tv_recDB.verticalHeader().setVisible(False)
-        self.ui.tv_recDB.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.ui.tv_recDB.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.ui.tv_recDB.setItemDelegate(DelegateCenterAlign())
+        self.ui.tv_recDb.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
+        self.ui.tv_recDb.verticalHeader().setVisible(False)
+        self.ui.tv_recDb.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.ui.tv_recDb.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.ui.tv_recDb.setItemDelegate(DelegateCenterAlign())
 
     def setup_buttons(self):
         buttons_small = [
-            self.ui.btn_LoadRecTable,
-            self.ui.btn_DeleteTable,
-            self.ui.btn_ExportSummary,
+            self.ui.btn_loadRecTable,
+            self.ui.btn_deleteTable,
+            self.ui.btn_exportSummary,
         ]
 
         for btn in buttons_small:
             btn.setFixedSize(UISizes.BUTTON_SMALL)
 
-        self.ui.btn_ImportRecDb.setFixedHeight(UISizes.BUTTON_LONG_HEIGHT)
+        self.ui.btn_importRecDb.setFixedHeight(UISizes.BUTTON_LONG_HEIGHT)
 
     def setup_groupbox(self):
         self.ui.gb_recDB_status.setFixedHeight(UISizes.GROUP_BOX_STATUS_HEIGHT)

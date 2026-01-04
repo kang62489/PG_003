@@ -26,5 +26,5 @@ class ViewTiffStacker:
         self.ui.pb_concatenation.setFixedHeight(UISizes.PROGRESSBAR_HEIGHT)
 
     def setup_pushbuttons(self):
-        self.ui.btn_BrowseTiffs.setFixedSize(UISizes.BUTTON_SMALL)
-        self.ui.btn_StartConcat.setFixedHeight(UISizes.BUTTON_LONG_HEIGHT)
+        self.ui.btn_browseTiffs.setFixedSize(UISizes.BUTTON_SMALL)
+        self.ui.btn_startConcat.setFixedHeight(UISizes.BUTTON_LONG_HEIGHT)

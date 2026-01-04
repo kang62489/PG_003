@@ -40,7 +40,7 @@ QLineEdit {
     color: #1F51FF;
 }
 
-QLineEdit#le_filenameSN {
+QLineEdit#le_filenameSn {
     font-size: 24px;
     font-weight: bold;
     color: green;
@@ -97,59 +97,59 @@ QPushButton::hover {
     background-color: #5a4bad;
 }
 
-QPushButton#btn_TemplateDelete:enabled {
+QPushButton#btn_templateDelete:enabled {
     color: red;
     border-color: red;
 }
 
-QPushButton#btn_TemplateDelete:disabled{
+QPushButton#btn_templateDelete:disabled{
     color: gray;
 }
 
-QPushButton#btn_TemplateDelete:hover {
+QPushButton#btn_templateDelete:hover {
     color: #f9f9f9;
     background-color: red;
 }
 
-QPushButton#btn_SnInc, #btn_SnDec {
+QPushButton#btn_snInc, #btn_snDec {
     text-align: bottom;
     font-size: 36px;
     font-weight: bold;
 }
 
-QPushButton#btn_SnReset:enabled {
+QPushButton#btn_snReset:enabled {
     color: red;
     border-color: red;
 }
 
-QPushButton#btn_SnReset:disabled {
+QPushButton#btn_snReset:disabled {
     color: gray;
 }
 
-QPushButton#btn_SnReset:hover {
+QPushButton#btn_snReset:hover {
     color: #f9f9f9;
     background-color: red;
 }
 
-QPushButton#btn_SnCopy:enabled {
+QPushButton#btn_snCopy:enabled {
     color: green;
     border-color: green;
 }
 
-QPushButton#btn_SnCopy:disabled {
+QPushButton#btn_snCopy:disabled {
     color: gray;
 }
 
-QPushButton#btn_SnCopy:hover {
+QPushButton#btn_snCopy:hover {
     color: #f9f9f9;
     background-color: green;
 }
 
-QPushButton#btn_DeleteTable {
+QPushButton#btn_deleteTable {
     color: red;
     border-color: red;
 }
-QPushButton#btn_DeleteTable:hover {
+QPushButton#btn_deleteTable:hover {
     color: #f9f9f9;
     background-color: red;
 }
@@ -176,32 +176,32 @@ QPushButton#btn_deleteFromDb:hover {
     background-color: red;
 }
 
-QPushButton#btn_GenerateTags {
+QPushButton#btn_generateTags {
     color: #1F51FF;
     border-color: #1F51FF;
 }
 
-QPushButton#btn_GenerateTags:hover {
+QPushButton#btn_generateTags:hover {
     color: #f9f9f9;
     background-color: #1F51FF;
 }
 
-QPushButton#btn_WriteRec{
+QPushButton#btn_writeRec{
     color: green;
     border-color: green;
 }
 
-QPushButton#btn_WriteRec:hover {
+QPushButton#btn_writeRec:hover {
     color: #f9f9f9;
     background-color: green;
 }
 
-QPushButton#btn_SaveToDb{
+QPushButton#btn_saveToDb{
     color: green;
     border-color: green;
 }
 
-QPushButton#btn_SaveToDb:hover {
+QPushButton#btn_saveToDb:hover {
     color: #f9f9f9;
     background-color: green;
 }
