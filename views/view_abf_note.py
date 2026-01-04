@@ -14,10 +14,10 @@ class ViewAbfNote:
         self.setup_combobox()
 
     def setup_spinbox(self):
-        self.ui.sb_abfSlice.setValue(self.ui.sb_SLICE.value())
+        self.ui.sb_abfSlice.setValue(self.ui.sb_slice.value())
         self.ui.sb_abfSlice.setRange(1, 10)
 
-        self.ui.sb_abfAt.setValue(self.ui.sb_AT.value())
+        self.ui.sb_abfAt.setValue(self.ui.sb_at.value())
         self.ui.sb_abfAt.setRange(1, 10)
 
     def setup_combobox(self):

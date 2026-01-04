@@ -33,27 +33,27 @@ All widget object names sorted by prefix.
 |----|--------------------------------|------------------------------|----------------------|
 | 1  | btn_AddAbf                     | -                            | -                    |
 | 2  | btn_AddInjections              | add_injections               | ctrl_exp_info.py     |
-| 3  | btn_BrowseRecDir               | browse_rec_dir               | ctrl_rec_writer.py   |
+| 3  | btn_browseRecDir               | browse_rec_dir               | ctrl_rec_writer.py   |
 | 4  | btn_DeleteTable                | delete_table                 | ctrl_rec_import.py   |
 | 5  | btn_ExportSummary              | export_summary               | ctrl_rec_import.py   |
 | 6  | btn_ImportRecDb                | import_rec_db                | ctrl_rec_import.py   |
-| 7  | btn_InsertCustomProps          | insert_custom_props          | ctrl_rec_writer.py   |
+| 7  | btn_insertCustomProps          | insert_custom_props          | ctrl_rec_writer.py   |
 | 8  | btn_LoadRecTable               | load_rec_table               | ctrl_rec_import.py   |
-| 9  | btn_MvRowsDown                 | mv_rows_down                 | ctrl_rec_writer.py   |
-| 10 | btn_MvRowsUp                   | mv_rows_up                   | ctrl_rec_writer.py   |
+| 9  | btn_mvRowsDown                 | mv_rows_down                 | ctrl_rec_writer.py   |
+| 10 | btn_mvRowsUp                   | mv_rows_up                   | ctrl_rec_writer.py   |
 | 11 | btn_OpenExpDb                  | open_exp_db                  | ctrl_exp_info.py     |
 | 12 | btn_ReadRec                    | read_rec                     | ctrl_rec_writer.py   |
 | 13 | btn_RevertRec                  | revert_rec                   | ctrl_rec_writer.py   |
 | 14 | btn_RmInjections               | rm_injections                | ctrl_exp_info.py     |
-| 15 | btn_RmSelectedRows             | rm_selected_rows             | ctrl_rec_writer.py   |
+| 15 | btn_rmSelectedRows             | rm_selected_rows             | ctrl_rec_writer.py   |
 | 16 | btn_SaveToDb                   | save_to_db                   | ctrl_exp_info.py     |
-| 17 | btn_SnCopy                     | sn_copy                      | ctrl_rec_writer.py   |
-| 18 | btn_SnDec                      | sn_dec                       | ctrl_rec_writer.py   |
-| 19 | btn_SnInc                      | sn_inc                       | ctrl_rec_writer.py   |
-| 20 | btn_SnReset                    | sn_reset                     | ctrl_rec_writer.py   |
-| 21 | btn_TemplateDelete             | template_delete              | ctrl_rec_writer.py   |
-| 22 | btn_TemplateSave               | template_save                | ctrl_rec_writer.py   |
-| 23 | btn_WriteRec                   | write_rec                    | ctrl_rec_writer.py   |
+| 17 | btn_snCopy                     | sn_copy                      | ctrl_rec_writer.py   |
+| 18 | btn_snDec                      | sn_dec                       | ctrl_rec_writer.py   |
+| 19 | btn_snInc                      | sn_inc                       | ctrl_rec_writer.py   |
+| 20 | btn_snReset                    | sn_reset                     | ctrl_rec_writer.py   |
+| 21 | btn_templateDelete             | template_delete              | ctrl_rec_writer.py   |
+| 22 | btn_templateSave               | template_save                | ctrl_rec_writer.py   |
+| 23 | btn_writeRec                   | write_rec                    | ctrl_rec_writer.py   |
 | 24 | btn_BrowseTiffs*               | browse_tiffs                 | ctrl_tiff_stacker.py |
 | 25 | btn_StartConcat*               | start_concat                 | ctrl_tiff_stacker.py |
 
@@ -65,16 +65,16 @@ All widget object names sorted by prefix.
 | 27 | cb_ABF_MODE      | -                                  | -                                  |
 | 28 | cb_ACUC          | -                                  | view_exp_info.py, ctrl_exp_info.py |
 | 29 | cb_CAM_TRIG_MODE | update_tag_output                  | ctrl_rec_writer.py                 |
-| 30 | cb_EMI           | update_tag_output                  | ctrl_rec_writer.py                 |
-| 31 | cb_EXC           | update_tag_output, auto_select_emi | ctrl_rec_writer.py                 |
+| 30 | cb_emi           | update_tag_output                  | ctrl_rec_writer.py                 |
+| 31 | cb_exc           | update_tag_output, auto_select_emi | ctrl_rec_writer.py                 |
 | 32 | cb_EXP_DB_TABLE  | -                                  | ctrl_exp_info.py                   |
-| 33 | cb_EXPO_UNIT     | update_tag_output                  | ctrl_rec_writer.py                 |
+| 33 | cb_expoUnit      | update_tag_output                  | ctrl_rec_writer.py                 |
 | 34 | cb_GENOTYPE      | -                                  | view_exp_info.py, ctrl_exp_info.py |
-| 35 | cb_LOC_TYPE      | update_tag_output                  | ctrl_rec_writer.py                 |
+| 35 | cb_locType       | update_tag_output                  | ctrl_rec_writer.py                 |
 | 36 | cb_REC_DB_TABLE  | -                                  | ctrl_rec_import.py                 |
 | 37 | cb_SEX           | -                                  | view_exp_info.py, ctrl_exp_info.py |
 | 38 | cb_SPECIES       | -                                  | view_exp_info.py, ctrl_exp_info.py |
-| 39 | cb_TemplateLoad  | template_load                      | ctrl_rec_writer.py                 |
+| 39 | cb_templateLoad  | template_load                      | ctrl_rec_writer.py                 |
 
 ## chk_ - QCheckBox (3)
 todo: 1. 40 -> chk_screaming_snake_case 2. 41 -> chk_IncludeSubDirs 3. 42 -> fix to pascal case
@@ -161,8 +161,8 @@ todo: 1. 40 -> chk_screaming_snake_case 2. 41 -> chk_IncludeSubDirs 3. 42 -> fix
 
 | #   | Name             | Connected Function | Used In                                |
 |-----|------------------|--------------------|----------------------------------------|
-| 100 | le_EXPO          | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
-| 101 | le_FPS           | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
+| 100 | le_expo          | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
+| 101 | le_fps           | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
 | 102 | le_FRAMES        | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
 | 103 | le_LEVEL         | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
 | 104 | le_abfCell       | -                  | -                                      |
@@ -176,7 +176,7 @@ todo: 1. 40 -> chk_screaming_snake_case 2. 41 -> chk_IncludeSubDirs 3. 42 -> fix
 | 112 | le_animalID      | -                  | view_exp_info.py, ctrl_exp_info.py     |
 | 113 | le_cuttingOS     | -                  | view_exp_info.py, ctrl_exp_info.py     |
 | 114 | le_experimenters | -                  | ctrl_exp_info.py                       |
-| 115 | le_filenameSN    | sn_validate        | ctrl_rec_writer.py, view_rec_writer.py |
+| 115 | le_filenameSn    | sn_validate        | ctrl_rec_writer.py, view_rec_writer.py |
 | 116 | le_holdingOS     | -                  | view_exp_info.py, ctrl_exp_info.py     |
 | 117 | le_project       | -                  | view_exp_info.py                       |
 | 118 | le_recDir        | validate_rec_dir   | ctrl_rec_writer.py, view_rec_writer.py |
@@ -198,16 +198,16 @@ todo: 1. 40 -> chk_screaming_snake_case 2. 41 -> chk_IncludeSubDirs 3. 42 -> fix
 
 | #   | Name   | Connected Function | Used In            |
 |-----|--------|--------------------|--------------------|
-| 122 | rb_10X | update_tag_output  | view_rec_writer.py |
-| 123 | rb_40X | update_tag_output  | view_rec_writer.py |
-| 124 | rb_60X | update_tag_output  | view_rec_writer.py |
+| 122 | rb_10x | update_tag_output  | view_rec_writer.py |
+| 123 | rb_40x | update_tag_output  | view_rec_writer.py |
+| 124 | rb_60x | update_tag_output  | view_rec_writer.py |
 
 ## sb_ - QSpinBox (2)
 
 | #   | Name     | Connected Function | Used In                                |
 |-----|----------|--------------------|----------------------------------------|
-| 125 | sb_AT    | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
-| 126 | sb_SLICE | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
+| 125 | sb_at    | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
+| 126 | sb_slice | update_tag_output  | ctrl_rec_writer.py, view_rec_writer.py |
 
 ## tb_ - QTextBrowser (3)
 
@@ -269,17 +269,17 @@ todo: 1. 40 -> chk_screaming_snake_case 2. 41 -> chk_IncludeSubDirs 3. 42 -> fix
 
 | #   | Name                 | Connected Function  | Used In                |
 |-----|----------------------|---------------------|------------------------|
-| 149 | btn_add_row          | add_row             | dialog_insert_props.py |
+| 149 | btn_addRow           | add_row             | dialog_insert_props.py |
 | 150 | btn_cancel           | cancel              | dialog_insert_props.py |
 | 151 | btn_cloneInfo        | show_clone_info     | view_add_inj.py        |
 | 152 | btn_delete           | delete              | dialog_exp_db.py       |
-| 153 | btn_export_databases | export_databases    | dialog_exp_db.py       |
-| 154 | btn_export_selected  | export_selected     | dialog_exp_db.py       |
-| 155 | btn_load_for_edit    | load_to_main_window | dialog_exp_db.py       |
+| 153 | btn_exportDatabases  | export_databases    | dialog_exp_db.py       |
+| 154 | btn_exportSelected   | export_selected     | dialog_exp_db.py       |
+| 155 | btn_loadToTab0       | load_to_tab0        | dialog_exp_db.py       |
 | 156 | btn_ok               | ok                  | dialog_insert_props.py |
 | 157 | btn_refresh_clone_1  | refresh_clone_menus | view_add_inj.py        |
 | 158 | btn_refresh_clone_2  | refresh_clone_menus | view_add_inj.py        |
-| 159 | btn_rm_row           | rm_row              | dialog_insert_props.py |
+| 159 | btn_rmRow            | rm_row              | dialog_insert_props.py |
 
 ## cb_ - QComboBox (9)
 
@@ -308,11 +308,11 @@ todo: 1. 40 -> chk_screaming_snake_case 2. 41 -> chk_IncludeSubDirs 3. 42 -> fix
 | 170 | lbl_clone_1        | view_add_inj.py         |
 | 171 | lbl_clone_2        | view_add_inj.py         |
 | 172 | lbl_coordinate     | view_add_inj.py         |
-| 173 | lbl_exp_list       | dialog_exp_db.py        |
+| 173 | lbl_expList        | dialog_exp_db.py        |
 | 174 | lbl_incubated      | view_add_inj.py         |
 | 175 | lbl_incubated_disp | view_add_inj.py         |
 | 176 | lbl_inj_DOI        | view_add_inj.py         |
-| 177 | lbl_inj_history    | dialog_exp_db.py        |
+| 177 | lbl_injHistory     | dialog_exp_db.py        |
 | 178 | lbl_inj_mode       | view_add_inj.py         |
 | 179 | lbl_inj_side       | view_add_inj.py         |
 | 180 | lbl_injectate_type | view_add_inj.py         |

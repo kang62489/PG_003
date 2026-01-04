@@ -36,44 +36,44 @@ class ViewRecWriter:
 
     def setup_radiobuttons(self):
         self.ui.radioBtnGroup_OBJ = QButtonGroup()
-        self.ui.radioBtnGroup_OBJ.addButton(self.ui.rb_10X)
-        self.ui.radioBtnGroup_OBJ.addButton(self.ui.rb_40X)
-        self.ui.radioBtnGroup_OBJ.addButton(self.ui.rb_60X)
-        self.ui.rb_60X.setChecked(True)
+        self.ui.radioBtnGroup_OBJ.addButton(self.ui.rb_10x)
+        self.ui.radioBtnGroup_OBJ.addButton(self.ui.rb_40x)
+        self.ui.radioBtnGroup_OBJ.addButton(self.ui.rb_60x)
+        self.ui.rb_60x.setChecked(True)
 
     def setup_lineedits(self):
-        self.ui.le_EXPO.setText(DEFAULTS["EXPOSURE_TIME"])
-        self.ui.le_EXPO.setFixedSize(UISizes.LINE_EDIT_EXPO_WIDTH, UISizes.LINE_EDIT_EXPO_HEIGHT)
+        self.ui.le_expo.setText(DEFAULTS["EXPOSURE_TIME"])
+        self.ui.le_expo.setFixedSize(UISizes.LINE_EDIT_EXPO_WIDTH, UISizes.LINE_EDIT_EXPO_HEIGHT)
 
-        self.ui.le_FPS.setText(DEFAULTS["FPS"])
-        self.ui.le_FPS.setFixedHeight(UISizes.LINE_EDIT_FPS_HEIGHT)
+        self.ui.le_fps.setText(DEFAULTS["FPS"])
+        self.ui.le_fps.setFixedHeight(UISizes.LINE_EDIT_FPS_HEIGHT)
 
-        self.ui.le_filenameSN.setFixedHeight(UISizes.LINE_EDIT_FSN_HEIGHT)
-        self.ui.le_filenameSN.setAlignment(UIAlignments.CENTER)
-        self.ui.le_filenameSN.setPlaceholderText("YYYY_MM_DD-0000")
-        self.ui.le_filenameSN.setText(f"{datetime.today().strftime(DISPLAY_DATE_FORMAT)}-{DEFAULTS['SERIAL']:04d}.tif")
+        self.ui.le_filenameSn.setFixedHeight(UISizes.LINE_EDIT_FSN_HEIGHT)
+        self.ui.le_filenameSn.setAlignment(UIAlignments.CENTER)
+        self.ui.le_filenameSn.setPlaceholderText("YYYY_MM_DD-0000")
+        self.ui.le_filenameSn.setText(f"{datetime.today().strftime(DISPLAY_DATE_FORMAT)}-{DEFAULTS['SERIAL']:04d}.tif")
 
     def setup_checkboxes(self):
         self.ui.chk_addCustomized.setChecked(False)
 
     def setup_pushbuttons(self):
         buttons_for_template = [
-            self.ui.btn_TemplateSave,
-            self.ui.btn_TemplateDelete,
+            self.ui.btn_templateSave,
+            self.ui.btn_templateDelete,
         ]
 
         buttons_for_row_op = [
-            self.ui.btn_RmSelectedRows,
-            self.ui.btn_InsertCustomProps,
-            self.ui.btn_MvRowsUp,
-            self.ui.btn_MvRowsDown,
+            self.ui.btn_rmSelectedRows,
+            self.ui.btn_insertCustomProps,
+            self.ui.btn_mvRowsUp,
+            self.ui.btn_mvRowsDown,
         ]
 
         buttons_for_SN = [
-            self.ui.btn_SnInc,
-            self.ui.btn_SnDec,
-            self.ui.btn_SnReset,
-            self.ui.btn_SnCopy,
+            self.ui.btn_snInc,
+            self.ui.btn_snDec,
+            self.ui.btn_snReset,
+            self.ui.btn_snCopy,
         ]
 
         for btn in buttons_for_template:
@@ -85,13 +85,13 @@ class ViewRecWriter:
         for btn in buttons_for_SN:
             btn.setFixedSize(UISizes.BUTTON_SN)
 
-        self.ui.btn_BrowseRecDir.setFixedSize(UISizes.BUTTON_BROWSE)
+        self.ui.btn_browseRecDir.setFixedSize(UISizes.BUTTON_BROWSE)
 
         # Initial button states
-        self.ui.btn_TemplateDelete.setEnabled(False)
+        self.ui.btn_templateDelete.setEnabled(False)
 
-        self.ui.btn_GenerateTags.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
-        self.ui.btn_WriteRec.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_generateTags.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_writeRec.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
 
     def setup_tableview(self):
         table = self.ui.tv_customized
@@ -109,43 +109,43 @@ class ViewRecWriter:
         table.setFixedHeight(UISizes.TABLEVIEW_CUSTOMIZED_HEIGHT)
 
     def setup_comboboxes(self):
-        self.ui.cb_EXC.addItems(MenuOptions.EXCITATION)
-        self.ui.cb_EXC.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
+        self.ui.cb_exc.addItems(MenuOptions.EXCITATION)
+        self.ui.cb_exc.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
 
-        self.ui.cb_EMI.addItems(MenuOptions.EMISSION)
-        self.ui.cb_EMI.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
+        self.ui.cb_emi.addItems(MenuOptions.EMISSION)
+        self.ui.cb_emi.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
 
-        self.ui.cb_EXPO_UNIT.addItems(MenuOptions.EXPO_UNITS)
-        self.ui.cb_EXPO_UNIT.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
+        self.ui.cb_expoUnit.addItems(MenuOptions.EXPO_UNITS)
+        self.ui.cb_expoUnit.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
 
-        self.ui.cb_LOC_TYPE.addItems(MenuOptions.LOC_TYPES)
-        self.ui.cb_LOC_TYPE.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
+        self.ui.cb_locType.addItems(MenuOptions.LOC_TYPES)
+        self.ui.cb_locType.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
 
-        self.ui.cb_SIDE.addItems(MenuOptions.SIDE)
-        self.ui.cb_SIDE.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
+        self.ui.cb_side.addItems(MenuOptions.SIDE)
+        self.ui.cb_side.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
 
-        self.ui.cb_TemplateLoad.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
+        self.ui.cb_templateLoad.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
 
         self.ui.cb_recFiles.setFixedHeight(UISizes.COMBO_TAB1_HEIGHT)
 
     def setup_spinboxes(self):
         # LEVEL spinbox (replaces le_LEVEL): 0-9, 10=MAX
-        self.ui.sb_LEVEL.setValue(10)  # Default to MAX
-        self.ui.sb_LEVEL.setRange(0, 10)
-        self.ui.sb_LEVEL.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
+        self.ui.sb_level.setValue(10)  # Default to MAX
+        self.ui.sb_level.setRange(0, 10)
+        self.ui.sb_level.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
 
         # FRAMES spinbox (replaces le_FRAMES)
-        self.ui.sb_FRAMES.setValue(1200)
-        self.ui.sb_FRAMES.setRange(1, 99999)
-        self.ui.sb_FRAMES.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
+        self.ui.sb_frames.setValue(1200)
+        self.ui.sb_frames.setRange(1, 99999)
+        self.ui.sb_frames.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
 
-        self.ui.sb_SLICE.setValue(1)
-        self.ui.sb_SLICE.setRange(1, 10)
-        self.ui.sb_SLICE.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
+        self.ui.sb_slice.setValue(1)
+        self.ui.sb_slice.setRange(1, 10)
+        self.ui.sb_slice.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
 
-        self.ui.sb_AT.setValue(1)
-        self.ui.sb_AT.setRange(1, 10)
-        self.ui.sb_AT.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
+        self.ui.sb_at.setValue(1)
+        self.ui.sb_at.setRange(1, 10)
+        self.ui.sb_at.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
 
     def setup_toggle_buttons(self):
         """Setup toggle buttons for switching between Basic and Customized parameters"""

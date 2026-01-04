@@ -34,7 +34,7 @@ class CtrlRecWriter:
         self.sm_customized = self.ui.tv_customized.selectionModel()
 
         self.model_menuList_templates = ModelDynamicList()
-        self.ui.cb_TemplateLoad.setModel(self.model_menuList_templates)
+        self.ui.cb_templateLoad.setModel(self.model_menuList_templates)
 
         # Set validator for checking filename-SN.tif
         regex = QRegularExpression(SERIAL_NAME_REGEX)
@@ -56,50 +56,50 @@ class CtrlRecWriter:
         self.ui.toggleBtnGroup.idClicked.connect(self.on_toggle_page)
 
         # Sync cell identity to abf note tab
-        self.ui.sb_SLICE.valueChanged.connect(lambda: self.ui.sb_abfSlice.setValue(self.ui.sb_SLICE.value()))
-        self.ui.cb_SIDE.currentIndexChanged.connect(
-            lambda: self.ui.cb_abfSide.setCurrentIndex(self.ui.cb_SIDE.currentIndex())
+        self.ui.sb_slice.valueChanged.connect(lambda: self.ui.sb_abfSlice.setValue(self.ui.sb_slice.value()))
+        self.ui.cb_side.currentIndexChanged.connect(
+            lambda: self.ui.cb_abfSide.setCurrentIndex(self.ui.cb_side.currentIndex())
         )
-        self.ui.sb_AT.valueChanged.connect(lambda: self.ui.sb_abfAt.setValue(self.ui.sb_AT.value()))
-        self.ui.cb_LOC_TYPE.currentIndexChanged.connect(
-            lambda: self.ui.cb_abfAtType.setCurrentIndex(self.ui.cb_LOC_TYPE.currentIndex())
+        self.ui.sb_at.valueChanged.connect(lambda: self.ui.sb_abfAt.setValue(self.ui.sb_at.value()))
+        self.ui.cb_locType.currentIndexChanged.connect(
+            lambda: self.ui.cb_abfAtType.setCurrentIndex(self.ui.cb_locType.currentIndex())
         )
 
         # Auto-select emission based on excitation
-        self.ui.cb_EXC.currentIndexChanged.connect(self.auto_select_emi)
+        self.ui.cb_exc.currentIndexChanged.connect(self.auto_select_emi)
 
         # Template management
-        self.ui.cb_TemplateLoad.activated.connect(self.template_load)
-        self.ui.btn_TemplateSave.clicked.connect(self.template_save)
-        self.ui.btn_TemplateDelete.clicked.connect(self.template_delete)
-        self.ui.btn_InsertCustomProps.clicked.connect(self.insert_custom_props)
-        self.ui.btn_RmSelectedRows.clicked.connect(self.rm_selected_rows)
-        self.ui.btn_MvRowsUp.clicked.connect(self.mv_rows_up)
-        self.ui.btn_MvRowsDown.clicked.connect(self.mv_rows_down)
+        self.ui.cb_templateLoad.activated.connect(self.template_load)
+        self.ui.btn_templateSave.clicked.connect(self.template_save)
+        self.ui.btn_templateDelete.clicked.connect(self.template_delete)
+        self.ui.btn_insertCustomProps.clicked.connect(self.insert_custom_props)
+        self.ui.btn_rmSelectedRows.clicked.connect(self.rm_selected_rows)
+        self.ui.btn_mvRowsUp.clicked.connect(self.mv_rows_up)
+        self.ui.btn_mvRowsDown.clicked.connect(self.mv_rows_down)
 
         # File & Preview section
         self.ui.te_recDir.textChanged.connect(self.populate_rec_files)
-        self.ui.btn_BrowseRecDir.clicked.connect(self.browse_rec_dir)
+        self.ui.btn_browseRecDir.clicked.connect(self.browse_rec_dir)
         self.ui.cb_recFiles.activated.connect(self.load_selected_rec_file)
         self.rec_watcher.filelistRenewed.connect(self.load_selected_rec_file)
 
-        self.ui.le_filenameSN.textChanged.connect(self.sn_validate)
+        self.ui.le_filenameSn.textChanged.connect(self.sn_validate)
 
-        self.ui.btn_SnInc.clicked.connect(self.sn_inc)
-        self.ui.btn_SnDec.clicked.connect(self.sn_dec)
-        self.ui.btn_SnReset.clicked.connect(self.sn_reset)
-        self.ui.btn_SnCopy.clicked.connect(self.sn_copy)
+        self.ui.btn_snInc.clicked.connect(self.sn_inc)
+        self.ui.btn_snDec.clicked.connect(self.sn_dec)
+        self.ui.btn_snReset.clicked.connect(self.sn_reset)
+        self.ui.btn_snCopy.clicked.connect(self.sn_copy)
 
-        self.ui.btn_GenerateTags.clicked.connect(self.generate_tags_from_form)
-        self.ui.btn_WriteRec.clicked.connect(self.write_rec)
+        self.ui.btn_generateTags.clicked.connect(self.generate_tags_from_form)
+        self.ui.btn_writeRec.clicked.connect(self.write_rec)
 
     def auto_select_emi(self):
-        if self.ui.cb_EXC.currentText() == "HLG":
-            self.ui.cb_EMI.setCurrentIndex(0)
-        elif self.ui.cb_EXC.currentText() == "LED_GREEN":
-            self.ui.cb_EMI.setCurrentIndex(1)
-        elif self.ui.cb_EXC.currentText() == "LED_BLUE":
-            self.ui.cb_EMI.setCurrentIndex(2)
+        if self.ui.cb_exc.currentText() == "HLG":
+            self.ui.cb_emi.setCurrentIndex(0)
+        elif self.ui.cb_exc.currentText() == "LED_GREEN":
+            self.ui.cb_emi.setCurrentIndex(1)
+        elif self.ui.cb_exc.currentText() == "LED_BLUE":
+            self.ui.cb_emi.setCurrentIndex(2)
 
     def on_toggle_page(self, button_id):
         """Switch between Basic and Customized parameter pages"""
@@ -126,19 +126,19 @@ class CtrlRecWriter:
             "AT",
         ]
         # Convert LEVEL value: 10 → "MAX", otherwise show number
-        level_val = self.ui.sb_LEVEL.value()
+        level_val = self.ui.sb_level.value()
         level_str = "MAX" if level_val == 10 else str(level_val)
 
         values = [
             self.ui.radioBtnGroup_OBJ.checkedButton().text(),
-            self.ui.cb_EXC.currentText(),
+            self.ui.cb_exc.currentText(),
             level_str,
-            self.ui.le_EXPO.text() + self.ui.cb_EXPO_UNIT.currentText(),
-            self.ui.cb_EMI.currentText(),
-            str(self.ui.sb_FRAMES.value()),
-            self.ui.le_FPS.text(),
-            f"{self.ui.sb_SLICE.value()}{self.ui.cb_SIDE.currentText()}",
-            self.ui.cb_LOC_TYPE.currentText() + str(self.ui.sb_AT.value()),
+            self.ui.le_expo.text() + self.ui.cb_expoUnit.currentText(),
+            self.ui.cb_emi.currentText(),
+            str(self.ui.sb_frames.value()),
+            self.ui.le_fps.text(),
+            f"{self.ui.sb_slice.value()}{self.ui.cb_side.currentText()}",
+            self.ui.cb_locType.currentText() + str(self.ui.sb_at.value()),
         ]
 
         if self.ui.chk_addCustomized.isChecked():
@@ -169,11 +169,11 @@ class CtrlRecWriter:
         self.model_menuList_templates.layoutChanged.emit()
 
     def template_load(self):
-        filename = self.model_menuList_templates.list_of_options[self.ui.cb_TemplateLoad.currentIndex()]
-        self.ui.btn_TemplateDelete.setEnabled(False)
+        filename = self.model_menuList_templates.list_of_options[self.ui.cb_templateLoad.currentIndex()]
+        self.ui.btn_templateDelete.setEnabled(False)
 
         if filename not in ["patch_default", "puff_default"]:
-            self.ui.btn_TemplateDelete.setEnabled(True)
+            self.ui.btn_templateDelete.setEnabled(True)
 
         with open(MODELS_DIR / "template_{}.json".format(filename), "r") as f:
             template = pd.read_json(f, dtype=str)
@@ -203,19 +203,19 @@ class CtrlRecWriter:
         # set the QComboBox display the saved template
         for idx, item in enumerate(self.model_menuList_templates.list_of_options):
             if item == self.saveDialog.le_filename.text():
-                self.ui.cb_TemplateLoad.setCurrentIndex(idx)
+                self.ui.cb_templateLoad.setCurrentIndex(idx)
                 self.template_load()
                 break
 
     def template_delete(self):
-        filename = self.model_menuList_templates.list_of_options[self.ui.cb_TemplateLoad.currentIndex()]
+        filename = self.model_menuList_templates.list_of_options[self.ui.cb_templateLoad.currentIndex()]
         self.deleteCheck = DialogConfirm(title="Checking...", msg="Delete current template?")
 
         if self.deleteCheck.exec():
             os.remove(os.path.join(MODELS_DIR, "template_{}.json".format(filename)))
             self.template_reload_list()
             self.clear_qtable_view(self.model_tv_customized)
-            self.ui.btn_TemplateDelete.setEnabled(False)
+            self.ui.btn_templateDelete.setEnabled(False)
         else:
             print("Delete Cancelled!")
 
@@ -335,46 +335,46 @@ class CtrlRecWriter:
             self.ui.te_tags.setPlainText("(No tags written yet)")
 
     def sn_validate(self):
-        self.ui.le_filenameSN.setValidator(self.validator)
-        palette = self.ui.le_filenameSN.palette()
-        if self.ui.le_filenameSN.hasAcceptableInput():
+        self.ui.le_filenameSn.setValidator(self.validator)
+        palette = self.ui.le_filenameSn.palette()
+        if self.ui.le_filenameSn.hasAcceptableInput():
             palette.setColor(QPalette.Text, QColor("green"))
-            self.ui.btn_SnCopy.setEnabled(True)
+            self.ui.btn_snCopy.setEnabled(True)
         else:
             palette.setColor(QPalette.Text, QColor("tomato"))
-            self.ui.btn_SnCopy.setEnabled(False)
-        self.ui.le_filenameSN.setPalette(palette)
-        self.ui.le_filenameSN.setValidator(None)
+            self.ui.btn_snCopy.setEnabled(False)
+        self.ui.le_filenameSn.setPalette(palette)
+        self.ui.le_filenameSn.setValidator(None)
 
     def sn_inc(self):
-        self.dateStr = self.ui.le_filenameSN.text().split("-")[0]
-        latest_value = self.ui.le_filenameSN.text().split("-")[1].split(".")[0]
+        self.dateStr = self.ui.le_filenameSn.text().split("-")[0]
+        latest_value = self.ui.le_filenameSn.text().split("-")[1].split(".")[0]
         self.Serial = int(latest_value)
         if self.Serial < 9999:
             self.Serial += 1
-            self.ui.le_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+            self.ui.le_filenameSn.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
         elif self.Serial == 9999:
             self.Serial = 0
-            self.ui.le_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+            self.ui.le_filenameSn.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
 
     def sn_dec(self):
-        self.dateStr = self.ui.le_filenameSN.text().split("-")[0]
-        latest_value = self.ui.le_filenameSN.text().split("-")[1].split(".")[0]
+        self.dateStr = self.ui.le_filenameSn.text().split("-")[0]
+        latest_value = self.ui.le_filenameSn.text().split("-")[1].split(".")[0]
         self.Serial = int(latest_value)
         if self.Serial > 0:
             self.Serial -= 1
-            self.ui.le_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+            self.ui.le_filenameSn.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
         elif self.Serial == 0:
             self.Serial = 0
-            self.ui.le_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+            self.ui.le_filenameSn.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
 
     def sn_reset(self):
-        self.dateStr = self.ui.le_filenameSN.text().split("-")[0]
+        self.dateStr = self.ui.le_filenameSn.text().split("-")[0]
         self.Serial = 0
-        self.ui.le_filenameSN.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
+        self.ui.le_filenameSn.setText(f"{self.dateStr}-{self.Serial:04d}.tif")
 
     def sn_copy(self):
-        QApplication.clipboard().setText(self.ui.le_filenameSN.text())
+        QApplication.clipboard().setText(self.ui.le_filenameSn.text())
 
     def scan_rec_commments(self, rec_filepath):
         with open(rec_filepath, mode="r", encoding="utf-16-LE") as f:
@@ -470,7 +470,7 @@ class CtrlRecWriter:
 
     def read_rec(self):
         self.rec_directory = self.ui.te_recDir.toPlainText()
-        self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
+        self.rec_filename = self.ui.le_filenameSn.text().replace(".tif", ".tif.rec")
         self.rec_filepath = os.path.join(self.rec_directory, self.rec_filename)
 
         if not os.path.isfile(self.rec_filepath):
@@ -486,7 +486,7 @@ class CtrlRecWriter:
 
     def revert_rec(self):
         self.rec_directory = self.ui.te_recDir.toPlainText()
-        self.rec_filename = self.ui.le_filenameSN.text().replace(".tif", ".tif.rec")
+        self.rec_filename = self.ui.le_filenameSn.text().replace(".tif", ".tif.rec")
         self.rec_filepath = os.path.join(self.rec_directory, self.rec_filename)
 
         if not os.path.isfile(self.rec_filepath):

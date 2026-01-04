@@ -89,30 +89,30 @@ class DialogExpDb(QDialog):
         self.layout_main = QVBoxLayout()
         self.layout_btns = QHBoxLayout()
 
-        self.layout_btns.addWidget(self.btn_LoadToTab0)
+        self.layout_btns.addWidget(self.btn_loadToTab0)
         self.layout_btns.addWidget(self.btn_delete)
-        self.layout_btns.addWidget(self.btn_export_selected)
-        self.layout_btns.addWidget(self.btn_export_databases)
+        self.layout_btns.addWidget(self.btn_exportSelected)
+        self.layout_btns.addWidget(self.btn_exportDatabases)
 
-        self.layout_main.addWidget(self.lbl_exp_list)
+        self.layout_main.addWidget(self.lbl_expList)
         self.layout_main.addWidget(self.tv_basic)
-        self.layout_main.addWidget(self.lbl_inj_history)
+        self.layout_main.addWidget(self.lbl_injHistory)
         self.layout_main.addWidget(self.tv_injections)
         self.layout_main.addLayout(self.layout_btns)
         self.setLayout(self.layout_main)
 
     def setup_labels(self):
-        self.lbl_exp_list = QLabel("Experiment List")
-        self.lbl_inj_history = QLabel("Injection History")
+        self.lbl_expList = QLabel("Experiment List")
+        self.lbl_injHistory = QLabel("Injection History")
 
     def setup_buttons(self):
-        self.btn_LoadToTab0 = QPushButton("Edit in Main Window")
+        self.btn_loadToTab0 = QPushButton("Edit in Main Window")
         self.btn_delete = QPushButton("Delete Selected Rows")
         self.btn_delete.setObjectName("btn_deleteFromDb")
-        self.btn_export_selected = QPushButton("Export Selected")
-        self.btn_export_databases = QPushButton("Export Databases")
+        self.btn_exportSelected = QPushButton("Export Selected")
+        self.btn_exportDatabases = QPushButton("Export Databases")
 
-        buttons = [self.btn_LoadToTab0, self.btn_delete, self.btn_export_selected, self.btn_export_databases]
+        buttons = [self.btn_loadToTab0, self.btn_delete, self.btn_exportSelected, self.btn_exportDatabases]
         for btn in buttons:
             btn.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
 
@@ -149,10 +149,10 @@ class DialogExpDb(QDialog):
 
     def connect_signals(self):
         self.sm_basic.selectionChanged.connect(self.preview_inj)
-        self.btn_LoadToTab0.clicked.connect(self.load_to_tab0)
+        self.btn_loadToTab0.clicked.connect(self.load_to_tab0)
         self.btn_delete.clicked.connect(self.delete)
-        self.btn_export_selected.clicked.connect(self.export_selected)
-        self.btn_export_databases.clicked.connect(self.export_databases)
+        self.btn_exportSelected.clicked.connect(self.export_selected)
+        self.btn_exportDatabases.clicked.connect(self.export_databases)
 
     def preview_inj(self):
         selected_indexes = self.sm_basic.selectedIndexes()
