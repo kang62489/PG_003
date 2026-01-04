@@ -1,3 +1,4 @@
+from .view_abf_note import ViewAbfNote
 from .view_add_inj import ViewAddInj
 from .view_exp_info import ViewExpInfo
 from .view_rec_import import ViewRecImport
@@ -10,4 +11,5 @@ __all__ = [
     "ViewRecImport",
     "ViewRecWriter",
     "ViewTiffStacker",
+    "ViewAbfNote",
 ]

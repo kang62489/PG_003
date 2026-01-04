@@ -55,6 +55,16 @@ class CtrlRecWriter:
         # Toggle buttons for switching parameter pages
         self.ui.toggleBtnGroup.idClicked.connect(self.on_toggle_page)
 
+        # Sync cell identity to abf note tab
+        self.ui.sb_SLICE.valueChanged.connect(lambda: self.ui.sb_abfSlice.setValue(self.ui.sb_SLICE.value()))
+        self.ui.cb_SIDE.currentIndexChanged.connect(
+            lambda: self.ui.cb_abfSide.setCurrentIndex(self.ui.cb_SIDE.currentIndex())
+        )
+        self.ui.sb_AT.valueChanged.connect(lambda: self.ui.sb_abfAt.setValue(self.ui.sb_AT.value()))
+        self.ui.cb_LOC_TYPE.currentIndexChanged.connect(
+            lambda: self.ui.cb_abfAtType.setCurrentIndex(self.ui.cb_LOC_TYPE.currentIndex())
+        )
+
         # Auto-select emission based on excitation
         self.ui.cb_EXC.currentIndexChanged.connect(self.auto_select_emi)
 

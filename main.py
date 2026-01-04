@@ -1,18 +1,17 @@
 ## Modules
 # Standard library imports
-import os
 import sys
 from pathlib import Path
 
+# Third-party imports
 from PySide6.QtGui import QFont, QFontDatabase
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication
-
-# Third-party imports
 from rich import print
 
 # Local application imports
 from controllers import (
+    CtrlAbfNote,
     CtrlExpInfo,
     CtrlRecImport,
     CtrlRecWriter,
@@ -23,6 +22,7 @@ from resources import (
 )
 from util.constants import APP_NAME, APP_STATUS_MESSAGE, DEFAULTS, STYLE_FILE, UI_FILE
 from views import (
+    ViewAbfNote,
     ViewExpInfo,
     ViewRecImport,
     ViewRecWriter,
@@ -69,12 +69,14 @@ class Main:
         ViewRecWriter(self.ui)
         ViewRecImport(self.ui)
         ViewTiffStacker(self.ui)
+        ViewAbfNote(self.ui)
 
         # Initialize tab handlers (need to add handler instances to self to access uis in self.ui)
         self.handlers_expInfo = CtrlExpInfo(self.ui)
         self.handlers_recTagger = CtrlRecWriter(self.ui)
         self.handlers_recDB = CtrlRecImport(self.ui)
         self.handlers_tiffStacker = CtrlTiffStacker(self.ui)
+        self.handlers_abfNote = CtrlAbfNote(self.ui)
         # Set default tab index
         self.ui.tabs.setCurrentIndex(DEFAULTS["TAB_INDEX"])
 

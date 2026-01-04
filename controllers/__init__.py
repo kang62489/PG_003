@@ -1,3 +1,4 @@
+from .ctrl_abf_note import CtrlAbfNote
 from .ctrl_add_inj import CtrlAddInj
 from .ctrl_exp_info import CtrlExpInfo
 from .ctrl_rec_import import CtrlRecImport
@@ -10,4 +11,5 @@ __all__ = [
     "CtrlRecImport",
     "CtrlRecWriter",
     "CtrlTiffStacker",
+    "CtrlAbfNote",
 ]

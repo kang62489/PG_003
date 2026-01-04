@@ -363,7 +363,7 @@
         <item>
          <widget class="QStackedWidget" name="stack_parameters">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page_basic">
            <layout class="QGridLayout" name="gridLayout_basic">
@@ -740,146 +740,262 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_15">
         <item>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="2" column="0">
-           <widget class="QComboBox" name="cb_ABF_FILENAME"/>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="lbl_abfSlice">
-            <property name="text">
-             <string>Slice</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lbl_abfFilename">
-            <property name="text">
-             <string>Filename</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="lbl_abfProtocol">
-            <property name="text">
-             <string>PClamp Protocol Name</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QLabel" name="lbl_abfCell">
-            <property name="text">
-             <string>Cell</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lbl_abfRtBath">
-            <property name="text">
-             <string>Rt(Bath)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="lbl_abfProtocolVal">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLineEdit" name="le_abfRtBath"/>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLineEdit" name="le_abfSlice"/>
-          </item>
-          <item row="2" column="4">
-           <widget class="QLineEdit" name="le_abfCell"/>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="lbl_abfTimestamp">
-            <property name="text">
-             <string>Timestamp</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="lbl_abfTimestampVal">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="lbl_abfMode">
-            <property name="text">
-             <string>Mode</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QComboBox" name="cb_ABF_MODE"/>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="lbl_abfRm">
-            <property name="text">
-             <string>Rm</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="3">
-           <widget class="QLabel" name="lbl_abfCm">
-            <property name="text">
-             <string>Cm</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="4">
-           <widget class="QLabel" name="lbl_abfRa">
-            <property name="text">
-             <string>Ra</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="5">
-           <widget class="QLabel" name="lbl_abfTau">
-            <property name="text">
-             <string>Tau</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QLineEdit" name="le_abfRm"/>
-          </item>
-          <item row="4" column="3">
-           <widget class="QLineEdit" name="le_abfCm"/>
-          </item>
-          <item row="4" column="4">
-           <widget class="QLineEdit" name="le_abfRa"/>
-          </item>
-          <item row="4" column="5">
-           <widget class="QLineEdit" name="le_abfTau"/>
-          </item>
-          <item row="3" column="6">
-           <widget class="QLabel" name="lbl_abfHold">
-            <property name="text">
-             <string>Hold</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="6">
-           <widget class="QLineEdit" name="le_abfHold"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btn_AddAbf">
-          <property name="text">
-           <string>Add</string>
+         <widget class="QGroupBox" name="gb_cellIdentity">
+          <property name="title">
+           <string>Cell Identity</string>
           </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_cellId">
+           <item>
+            <widget class="QLabel" name="lbl_abfSlice">
+             <property name="text">
+              <string>Slice</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="sb_abfSlice">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>99</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_abfSide">
+             <property name="text">
+              <string>Side</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="cb_abfSide"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_abfAt">
+             <property name="text">
+              <string>At</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="cb_abfAtType"/>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="sb_abfAt">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>99</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item>
-         <widget class="QTableView" name="tv_abf"/>
+         <widget class="QGroupBox" name="gb_cellParams">
+          <property name="title">
+           <string>Cell Parameters</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_cellParams">
+           <item>
+            <layout class="QGridLayout" name="gridLayout_cellParams">
+             <item row="0" column="0">
+              <widget class="QLabel" name="lbl_abfRt">
+               <property name="text">
+                <string>Rt (MΩ)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="le_abfRt"/>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="lbl_abfRm">
+               <property name="text">
+                <string>Rm (MΩ)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLineEdit" name="le_abfRm"/>
+             </item>
+             <item row="0" column="4">
+              <widget class="QLabel" name="lbl_abfCm">
+               <property name="text">
+                <string>Cm (pF)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="5">
+              <widget class="QLineEdit" name="le_abfCm"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="lbl_abfRa">
+               <property name="text">
+                <string>Ra (MΩ)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="le_abfRa"/>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="lbl_abfTau">
+               <property name="text">
+                <string>Tau (ms)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QLineEdit" name="le_abfTau"/>
+             </item>
+             <item row="1" column="4">
+              <widget class="QLabel" name="lbl_abfHold">
+               <property name="text">
+                <string>Hold (mV)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="5">
+              <widget class="QLineEdit" name="le_abfHold"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_logCellParams">
+             <item>
+              <spacer name="spacer_cellParams">
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_ClearCellParams">
+               <property name="text">
+                <string>Clear Cell Params</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_LogCellParams">
+               <property name="text">
+                <string>Log Cell Params</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_protocolLog">
+          <property name="title">
+           <string>Protocol Log</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_protocolLog">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_protocol">
+             <item>
+              <widget class="QLabel" name="lbl_abfProtocol">
+               <property name="text">
+                <string>Protocol</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="le_abfProtocol">
+               <property name="placeholderText">
+                <string>Auto-fills from ABF or type manually</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_LogProtocol">
+               <property name="text">
+                <string>Log Protocol</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_tableControls">
+             <item>
+              <widget class="QPushButton" name="btn_ToggleCellParams">
+               <property name="text">
+                <string>Show Cell Params</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_DeleteSelected">
+               <property name="text">
+                <string>Delete Selected</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_ExportXlsx">
+               <property name="text">
+                <string>Export XLSX</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTableView" name="tv_abf"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="gb_recordingTracker">
+          <property name="title">
+           <string>Recording Tracker</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_tracker">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lbl_currentImageSN">
+             <property name="text">
+              <string>Current Image SN</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="le_currentImageSN">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lbl_currentAbf">
+             <property name="text">
+              <string>Current ABF</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="cb_currentAbf"/>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </widget>

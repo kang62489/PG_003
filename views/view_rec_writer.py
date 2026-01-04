@@ -144,7 +144,7 @@ class ViewRecWriter:
         self.ui.sb_SLICE.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
 
         self.ui.sb_AT.setValue(1)
-        self.ui.sb_AT.setRange(1, 100)
+        self.ui.sb_AT.setRange(1, 10)
         self.ui.sb_AT.setFixedHeight(UISizes.SPIN_TAB1_HEIGHT)
 
     def setup_toggle_buttons(self):
