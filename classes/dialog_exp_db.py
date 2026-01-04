@@ -241,20 +241,20 @@ class DialogExpDb(QDialog):
         print("Properties in BASIC_INFO:", basic_columns)
         print("Properties in INJECTION_HISTORY:", injection_columns)
 
-        self.ui.de_DOR.setDate(datetime.strptime(df_basic_selected["DOR"][0], "%Y_%m_%d"))
+        self.ui.de_dor.setDate(datetime.strptime(df_basic_selected["DOR"][0], "%Y_%m_%d"))
         self.ui.le_project.setText(df_basic_selected["Project_Code"][0])
-        self.ui.cb_ACUC.setCurrentIndex(self.ui.cb_ACUC.findText(df_basic_selected["ACUC_Protocol"][0]))
+        self.ui.cb_acuc.setCurrentIndex(self.ui.cb_acuc.findText(df_basic_selected["ACUC_Protocol"][0]))
         self.ui.le_cuttingOS.setText(df_basic_selected["CuttingOS"][0].astype(str))
         self.ui.le_holdingOS.setText(df_basic_selected["HoldingOS"][0].astype(str))
         self.ui.le_recordingOS.setText(df_basic_selected["RecordingOS"][0].astype(str))
 
-        self.ui.le_AnimalID.setText(df_basic_selected["Animal_ID"][0])
-        self.ui.cb_Genotype.setCurrentIndex(self.ui.cb_Genotype.findText(df_basic_selected["Genotype"][0]))
-        self.ui.cb_Species.setCurrentIndex(self.ui.cb_Species.findText(df_basic_selected["Species"][0]))
+        self.ui.le_animalId.setText(df_basic_selected["Animal_ID"][0])
+        self.ui.cb_genotype.setCurrentIndex(self.ui.cb_genotype.findText(df_basic_selected["Genotype"][0]))
+        self.ui.cb_species.setCurrentIndex(self.ui.cb_species.findText(df_basic_selected["Species"][0]))
 
-        self.ui.de_DOB.setDate(datetime.strptime(df_basic_selected["DOB"][0], "%Y_%m_%d"))
+        self.ui.de_dob.setDate(datetime.strptime(df_basic_selected["DOB"][0], "%Y_%m_%d"))
         self.ui.le_ages.setText(df_basic_selected["Ages"][0])
-        self.ui.cb_Sex.setCurrentIndex(self.ui.cb_Sex.findText(df_basic_selected["Sex"][0]))
+        self.ui.cb_sex.setCurrentIndex(self.ui.cb_sex.findText(df_basic_selected["Sex"][0]))
 
         ## Injection History
         # Clear existing injection tree

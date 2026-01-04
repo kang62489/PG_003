@@ -67,7 +67,7 @@ class CtrlAddInj(QObject):
         self.dlg_cloneInfo.show()
 
     def auto_cal_incubation(self):
-        self.DOR = self.ui.de_DOR.date().toPython()
+        self.DOR = self.ui.de_dor.date().toPython()
         self.DOI = self.view_addInj.de_inj_DOI.date().toPython()
         self.total_incubation_days = (pendulum.instance(self.DOR) - pendulum.instance(self.DOI)).days
         weeks = self.total_incubation_days // 7

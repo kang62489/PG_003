@@ -29,8 +29,8 @@ class ViewExpInfo:
 
     def setup_dateedit(self):
         dateEdits = [
-            self.ui.de_DOR,
-            self.ui.de_DOB,
+            self.ui.de_dor,
+            self.ui.de_dob,
         ]
         for dateEdit in dateEdits:
             dateEdit.setDate(datetime.today())
@@ -44,16 +44,16 @@ class ViewExpInfo:
         self.ui.le_ages.setFixedWidth(UISizes.GB_ANIMALS_COL3_WIDTH)
 
     def setup_comboboxes(self):
-        self.ui.cb_ACUC.addItems(MenuOptions.ACUC_PNS)
-        self.ui.cb_ACUC.setCurrentIndex(1)
+        self.ui.cb_acuc.addItems(MenuOptions.ACUC_PNS)
+        self.ui.cb_acuc.setCurrentIndex(1)
 
-        self.ui.cb_Species.addItems(MenuOptions.SPECIES)
-        self.ui.cb_Genotype.addItems(MenuOptions.GENOTYPE)
-        self.ui.cb_Sex.addItems(MenuOptions.SEX)
+        self.ui.cb_species.addItems(MenuOptions.SPECIES)
+        self.ui.cb_genotype.addItems(MenuOptions.GENOTYPE)
+        self.ui.cb_sex.addItems(MenuOptions.SEX)
 
         # gb_animals column 3
-        self.ui.cb_Species.setFixedWidth(UISizes.GB_ANIMALS_COL3_WIDTH)
-        self.ui.cb_Sex.setFixedWidth(UISizes.GB_ANIMALS_COL3_WIDTH)
+        self.ui.cb_species.setFixedWidth(UISizes.GB_ANIMALS_COL3_WIDTH)
+        self.ui.cb_sex.setFixedWidth(UISizes.GB_ANIMALS_COL3_WIDTH)
 
     def setup_treeview(self):
         # Set column resize mode
@@ -72,7 +72,7 @@ class ViewExpInfo:
         self.ui.tree_injections.setItemDelegate(self.word_wrap_delegate)
 
     def setup_pushbuttons(self):
-        self.ui.btn_AddInjections.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
-        self.ui.btn_RmInjections.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
-        self.ui.btn_OpenExpDb.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
-        self.ui.btn_SaveToDb.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_addInjections.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_rmInjections.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_openExpDb.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_saveToDb.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)

@@ -27,19 +27,19 @@ class CtrlExpInfo(QObject):
         self.model_injections.setHorizontalHeaderLabels(["Injection History", "Description"])
 
     def connect_signals(self):
-        self.ui.btn_AddInjections.clicked.connect(self.add_injections)
-        self.ui.btn_RmInjections.clicked.connect(self.rm_injections)
-        self.ui.btn_OpenExpDb.clicked.connect(self.open_exp_db)
-        self.ui.btn_SaveToDb.clicked.connect(self.save_to_db)
+        self.ui.btn_addInjections.clicked.connect(self.add_injections)
+        self.ui.btn_rmInjections.clicked.connect(self.rm_injections)
+        self.ui.btn_openExpDb.clicked.connect(self.open_exp_db)
+        self.ui.btn_saveToDb.clicked.connect(self.save_to_db)
 
-        self.ui.de_DOR.dateChanged.connect(self.auto_calculation)
-        self.ui.de_DOB.dateChanged.connect(self.auto_calculation)
+        self.ui.de_dor.dateChanged.connect(self.auto_calculation)
+        self.ui.de_dob.dateChanged.connect(self.auto_calculation)
 
     def auto_calculation(self):
         """Calculation of ages of and incubated weeks of the animals"""
 
-        dor = pendulum.instance(self.ui.de_DOR.date().toPython())
-        dob = pendulum.instance(self.ui.de_DOB.date().toPython())
+        dor = pendulum.instance(self.ui.de_dor.date().toPython())
+        dob = pendulum.instance(self.ui.de_dob.date().toPython())
 
         total_days = (dor - dob).days
         weeks = total_days // 7
@@ -97,18 +97,18 @@ class CtrlExpInfo(QObject):
 
         # get data from UIs (matching fields from load_to_tab0 and UI widgets)
         data_main = {
-            "DOR": self.ui.de_DOR.date().toPython().strftime("%Y_%m_%d"),
+            "DOR": self.ui.de_dor.date().toPython().strftime("%Y_%m_%d"),
             "Project_Code": self.ui.le_project.text(),
-            "ACUC_Protocol": self.ui.cb_ACUC.currentText(),
+            "ACUC_Protocol": self.ui.cb_acuc.currentText(),
             "CuttingOS": self.ui.le_cuttingOS.text(),
             "HoldingOS": self.ui.le_holdingOS.text(),
             "RecordingOS": self.ui.le_recordingOS.text(),
-            "Animal_ID": self.ui.le_AnimalID.text(),
-            "Genotype": self.ui.cb_Genotype.currentText(),
-            "Species": self.ui.cb_Species.currentText(),
-            "DOB": self.ui.de_DOB.date().toPython().strftime("%Y_%m_%d"),
+            "Animal_ID": self.ui.le_animalId.text(),
+            "Genotype": self.ui.cb_genotype.currentText(),
+            "Species": self.ui.cb_species.currentText(),
+            "DOB": self.ui.de_dob.date().toPython().strftime("%Y_%m_%d"),
             "Ages": self.ui.le_ages.text(),
-            "Sex": self.ui.cb_Sex.currentText(),
+            "Sex": self.ui.cb_sex.currentText(),
         }
 
         conn = sqlite3.connect(MODELS_DIR / "exp_data.db")

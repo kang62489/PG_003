@@ -21,7 +21,7 @@
        <enum>QTabWidget::TabPosition::North</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::TextElideMode::ElideNone</enum>
@@ -65,14 +65,14 @@
           </property>
           <layout class="QFormLayout" name="formLayout_4">
            <item row="0" column="1">
-            <widget class="QDateEdit" name="de_DOR">
+            <widget class="QDateEdit" name="de_dor">
              <property name="calendarPopup">
               <bool>true</bool>
              </property>
             </widget>
            </item>
            <item row="0" column="0">
-            <widget class="QLabel" name="lbl_DOR">
+            <widget class="QLabel" name="lbl_dor">
              <property name="text">
               <string>Date of Recording</string>
              </property>
@@ -89,14 +89,14 @@
             <widget class="QLineEdit" name="le_project"/>
            </item>
            <item row="2" column="0">
-            <widget class="QLabel" name="lbl_ACUC">
+            <widget class="QLabel" name="lbl_acuc">
              <property name="text">
               <string>ACUC protocol</string>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QComboBox" name="cb_ACUC"/>
+            <widget class="QComboBox" name="cb_acuc"/>
            </item>
           </layout>
          </widget>
@@ -177,47 +177,47 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="2" column="0">
-            <widget class="QLabel" name="lbl_DOB">
+            <widget class="QLabel" name="lbl_dob">
              <property name="text">
               <string>Date of Birth</string>
              </property>
             </widget>
            </item>
            <item row="0" column="0">
-            <widget class="QLabel" name="lbl_Genotype">
+            <widget class="QLabel" name="lbl_genotype">
              <property name="text">
               <string>Genotype</string>
              </property>
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QLabel" name="lbl_AnimalID">
+            <widget class="QLabel" name="lbl_animalId">
              <property name="text">
               <string>Animal ID</string>
              </property>
             </widget>
            </item>
            <item row="0" column="5">
-            <widget class="QComboBox" name="cb_Species"/>
+            <widget class="QComboBox" name="cb_species"/>
            </item>
            <item row="0" column="4">
-            <widget class="QLabel" name="lbl_Species">
+            <widget class="QLabel" name="lbl_species">
              <property name="text">
               <string>Species</string>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QDateEdit" name="de_DOB"/>
+            <widget class="QDateEdit" name="de_dob"/>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="cb_Genotype"/>
+            <widget class="QComboBox" name="cb_genotype"/>
            </item>
            <item row="1" column="1">
-            <widget class="QLineEdit" name="le_AnimalID"/>
+            <widget class="QLineEdit" name="le_animalId"/>
            </item>
            <item row="2" column="4">
-            <widget class="QLabel" name="lbl_Ages">
+            <widget class="QLabel" name="lbl_ages">
              <property name="text">
               <string>Ages</string>
              </property>
@@ -227,14 +227,14 @@
             <widget class="QLineEdit" name="le_ages"/>
            </item>
            <item row="1" column="4">
-            <widget class="QLabel" name="lbl_Sex">
+            <widget class="QLabel" name="lbl_sex">
              <property name="text">
               <string>Sex</string>
              </property>
             </widget>
            </item>
            <item row="1" column="5">
-            <widget class="QComboBox" name="cb_Sex"/>
+            <widget class="QComboBox" name="cb_sex"/>
            </item>
           </layout>
          </widget>
@@ -260,14 +260,14 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
-              <widget class="QPushButton" name="btn_AddInjections">
+              <widget class="QPushButton" name="btn_addInjections">
                <property name="text">
                 <string>Add New</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="btn_RmInjections">
+              <widget class="QPushButton" name="btn_rmInjections">
                <property name="text">
                 <string>Remove Selected</string>
                </property>
@@ -300,14 +300,14 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
-            <widget class="QPushButton" name="btn_OpenExpDb">
+            <widget class="QPushButton" name="btn_openExpDb">
              <property name="text">
               <string>Open EXP_DATA</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="btn_SaveToDb">
+            <widget class="QPushButton" name="btn_saveToDb">
              <property name="text">
               <string>Save to EXP_DATA</string>
              </property>
@@ -368,24 +368,24 @@
           <widget class="QWidget" name="page_basic">
            <layout class="QGridLayout" name="gridLayout_basic">
             <item row="3" column="0">
-             <widget class="QLabel" name="lbl_EXPO">
+             <widget class="QLabel" name="lbl_expo">
               <property name="text">
                <string>EXPO</string>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
-             <widget class="QLabel" name="lbl_EMI">
+             <widget class="QLabel" name="lbl_emi">
               <property name="text">
                <string>EMI</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QComboBox" name="cb_EXC"/>
+             <widget class="QComboBox" name="cb_exc"/>
             </item>
             <item row="0" column="3">
-             <widget class="QSpinBox" name="sb_FRAMES">
+             <widget class="QSpinBox" name="sb_frames">
               <property name="minimum">
                <number>1</number>
               </property>
@@ -398,7 +398,7 @@
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QLabel" name="lbl_OBJ">
+             <widget class="QLabel" name="lbl_obj">
               <property name="text">
                <string>OBJ</string>
               </property>
@@ -408,14 +408,14 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="lbl_LEVEL">
+             <widget class="QLabel" name="lbl_level">
               <property name="text">
                <string>LEVEL</string>
               </property>
              </widget>
             </item>
             <item row="0" column="2">
-             <widget class="QLabel" name="lbl_FRAMES">
+             <widget class="QLabel" name="lbl_frames">
               <property name="text">
                <string>FRAMES (p)</string>
               </property>
@@ -427,21 +427,21 @@
             <item row="0" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_16">
               <item>
-               <widget class="QRadioButton" name="rb_10X">
+               <widget class="QRadioButton" name="rb_10x">
                 <property name="text">
                  <string>10X</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="rb_40X">
+               <widget class="QRadioButton" name="rb_40x">
                 <property name="text">
                  <string>40X</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="rb_60X">
+               <widget class="QRadioButton" name="rb_60x">
                 <property name="text">
                  <string>60X</string>
                 </property>
@@ -450,7 +450,7 @@
              </layout>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="lbl_EXC">
+             <widget class="QLabel" name="lbl_exc">
               <property name="text">
                <string>EXC</string>
               </property>
@@ -460,34 +460,34 @@
              </widget>
             </item>
             <item row="3" column="2">
-             <widget class="QLabel" name="lbl_AT">
+             <widget class="QLabel" name="lbl_at">
               <property name="text">
                <string>AT</string>
               </property>
              </widget>
             </item>
             <item row="1" column="3">
-             <widget class="QLineEdit" name="le_FPS"/>
+             <widget class="QLineEdit" name="le_fps"/>
             </item>
             <item row="3" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="QLineEdit" name="le_EXPO"/>
+               <widget class="QLineEdit" name="le_expo"/>
               </item>
               <item>
-               <widget class="QComboBox" name="cb_EXPO_UNIT"/>
+               <widget class="QComboBox" name="cb_expoUnit"/>
               </item>
              </layout>
             </item>
             <item row="2" column="2">
-             <widget class="QLabel" name="lbl_SLICE">
+             <widget class="QLabel" name="lbl_slice">
               <property name="text">
                <string>SLICE</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="sb_LEVEL">
+             <widget class="QSpinBox" name="sb_level">
               <property name="minimum">
                <number>0</number>
               </property>
@@ -502,15 +502,15 @@
             <item row="3" column="3">
              <layout class="QHBoxLayout" name="horizontalLayout_20">
               <item>
-               <widget class="QComboBox" name="cb_LOC_TYPE"/>
+               <widget class="QComboBox" name="cb_locType"/>
               </item>
               <item>
-               <widget class="QSpinBox" name="sb_AT"/>
+               <widget class="QSpinBox" name="sb_at"/>
               </item>
              </layout>
             </item>
             <item row="1" column="2">
-             <widget class="QLabel" name="lbl_FPS">
+             <widget class="QLabel" name="lbl_fps">
               <property name="text">
                <string>FPS (Hz)</string>
               </property>
@@ -519,22 +519,22 @@
             <item row="2" column="3">
              <layout class="QHBoxLayout" name="horizontalLayout_slice">
               <item>
-               <widget class="QSpinBox" name="sb_SLICE"/>
+               <widget class="QSpinBox" name="sb_slice"/>
               </item>
               <item>
-               <widget class="QLabel" name="lbl_SIDE">
+               <widget class="QLabel" name="lbl_side">
                 <property name="text">
                  <string>SIDE</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="cb_SIDE"/>
+               <widget class="QComboBox" name="cb_side"/>
               </item>
              </layout>
             </item>
             <item row="4" column="1">
-             <widget class="QComboBox" name="cb_EMI"/>
+             <widget class="QComboBox" name="cb_emi"/>
             </item>
            </layout>
           </widget>
@@ -543,17 +543,17 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_21">
               <item>
-               <widget class="QComboBox" name="cb_TemplateLoad"/>
+               <widget class="QComboBox" name="cb_templateLoad"/>
               </item>
               <item>
-               <widget class="QPushButton" name="btn_TemplateSave">
+               <widget class="QPushButton" name="btn_templateSave">
                 <property name="text">
                  <string>Save</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="btn_TemplateDelete">
+               <widget class="QPushButton" name="btn_templateDelete">
                 <property name="text">
                  <string>Delete</string>
                 </property>
@@ -580,28 +580,28 @@
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_4">
                 <item>
-                 <widget class="QPushButton" name="btn_MvRowsDown">
+                 <widget class="QPushButton" name="btn_mvRowsDown">
                   <property name="text">
                    <string>Shift Down</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="btn_MvRowsUp">
+                 <widget class="QPushButton" name="btn_mvRowsUp">
                   <property name="text">
                    <string>Shift Up</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="btn_InsertCustomProps">
+                 <widget class="QPushButton" name="btn_insertCustomProps">
                   <property name="text">
                    <string>Insert</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="btn_RmSelectedRows">
+                 <widget class="QPushButton" name="btn_rmSelectedRows">
                   <property name="text">
                    <string>Remove</string>
                   </property>
@@ -622,35 +622,35 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QLineEdit" name="le_filenameSN">
+            <widget class="QLineEdit" name="le_filenameSn">
              <property name="alignment">
               <set>Qt::AlignmentFlag::AlignCenter</set>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="btn_SnInc">
+            <widget class="QPushButton" name="btn_snInc">
              <property name="text">
               <string>+</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="btn_SnDec">
+            <widget class="QPushButton" name="btn_snDec">
              <property name="text">
               <string>–</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="btn_SnReset">
+            <widget class="QPushButton" name="btn_snReset">
              <property name="text">
               <string>Reset</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="btn_SnCopy">
+            <widget class="QPushButton" name="btn_snCopy">
              <property name="text">
               <string>Copy</string>
              </property>
@@ -674,7 +674,7 @@
               <widget class="QTextEdit" name="te_recDir"/>
              </item>
              <item row="0" column="2" alignment="Qt::AlignmentFlag::AlignTop">
-              <widget class="QPushButton" name="btn_BrowseRecDir">
+              <widget class="QPushButton" name="btn_browseRecDir">
                <property name="text">
                 <string>Browse</string>
                </property>
@@ -714,14 +714,14 @@
            <item row="2" column="0">
             <layout class="QHBoxLayout" name="horizontalLayout_recButtons">
              <item>
-              <widget class="QPushButton" name="btn_GenerateTags">
+              <widget class="QPushButton" name="btn_generateTags">
                <property name="text">
                 <string>Generate from Form</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="btn_WriteRec">
+              <widget class="QPushButton" name="btn_writeRec">
                <property name="text">
                 <string>Write to The File</string>
                </property>
