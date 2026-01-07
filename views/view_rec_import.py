@@ -25,7 +25,6 @@ class ViewRecImport:
 
     def setup_buttons(self):
         buttons_small = [
-            self.ui.btn_loadRecTable,
             self.ui.btn_deleteTable,
             self.ui.btn_exportSummary,
         ]

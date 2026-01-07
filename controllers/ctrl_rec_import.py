@@ -56,7 +56,7 @@ class CtrlRecImport:
 
     def connect_signals(self):
         self.ui.btn_importRecDb.clicked.connect(self.import_rec_db)
-        self.ui.btn_loadRecTable.clicked.connect(self.load_rec_table)
+        self.ui.cb_recDbTable.currentTextChanged.connect(self.load_rec_table)
         self.ui.btn_deleteTable.clicked.connect(self.delete_table)
         self.ui.btn_exportSummary.clicked.connect(self.export_summary)
 
@@ -109,9 +109,11 @@ class CtrlRecImport:
         input_dir = dlg_get_inputDir.get_path()
         if input_dir == "":
             self.ui.tb_recDb.setText("<span style='color: white;'>[MESSAGE] No directory is selected</span>")
+            print("[yellow]Import cancelled - no directory selected[/yellow]")
             return
         else:
             self.ui.tb_recDb.setText(f"<span style='color: lime;'>[INFO] Importing from {input_dir}</span>")
+            print(f"[cyan]Importing .rec files from: {input_dir}[/cyan]")
 
         # Check if the directory contains .rec files
         list_of_rec_paths = sorted(glob.glob(input_dir + "/*.rec"))
@@ -119,10 +121,12 @@ class CtrlRecImport:
             self.ui.textBroser_recDB.append(
                 "<span style='color: tomato;'>[ERROR] No .rec files are found in the selected directory</span>"
             )
+            print("[red]No .rec files found in selected directory[/red]")
             return
         else:
-            self.ui.tb_recDb.append("<span style='color: lime;'>[INFO] .rec files are found, scanning...</span>")
+            self.ui.tb_recDb.append(f"<span style='color: lime;'>[INFO] Found {len(list_of_rec_paths)} .rec files, scanning...</span>")
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
+            print(f"[cyan]Found {len(list_of_rec_paths)} .rec files, scanning...[/cyan]")
 
         list_of_metadata, rec_filenames, timestamps = self.rec_content_scanner(list_of_rec_paths)
         df_summary = self.generate_metadata_summary(list_of_metadata, rec_filenames, timestamps)
@@ -139,32 +143,38 @@ class CtrlRecImport:
                 f"<span style='color: lime;'>[INFO] New table '{table_name_to_be_written}' created in database!</span>"
             )
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
+            print(f"[green]New table '{table_name_to_be_written}' created with {len(df_summary)} records[/green]")
             conn.close()
             self.reload_rec_db_tables()
+            self.ui.cb_recDbTable.setCurrentText(table_name_to_be_written)
             return
 
         self.ui.tb_recDb.append(
             f"<span style='color: yellow;'>[Warning] Table '{table_name_to_be_written}' already exists in database, replacing...</span>"
         )
         self.ui.tb_recDb.moveCursor(QTextCursor.End)
+        print(f"[yellow]Table '{table_name_to_be_written}' already exists, replacing...[/yellow]")
         df_summary.to_sql(table_name_to_be_written, conn, if_exists="replace", index=False)
         self.ui.tb_recDb.append("<span style='color: lime;'>[INFO] Summary successfully saved to database!</span>")
         self.ui.tb_recDb.moveCursor(QTextCursor.End)
+        print(f"[green]Table '{table_name_to_be_written}' updated with {len(df_summary)} records[/green]")
         conn.close()
+        self.reload_rec_db_tables()
+        self.ui.cb_recDbTable.setCurrentText(table_name_to_be_written)
 
     def load_rec_table(self):
         self.selected_table = self.ui.cb_recDbTable.currentText()
         if self.selected_table == "":
-            self.ui.tb_recDb.append(
-                "<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>"
-            )
-            self.ui.tb_recDb.moveCursor(QTextCursor.End)
+            # Clear the table view if nothing is selected
+            self.clear_tv_rec_db()
             return
+
         self.model_recDB.setTable(self.selected_table)
         self.model_recDB.setSort(self.model_recDB.fieldIndex("Timestamp"), Qt.AscendingOrder)
         self.model_recDB.select()
         self.ui.tb_recDb.append(f"<span style='color: lime;'>[INFO] Table '{self.selected_table}' loaded!</span>")
         self.ui.tb_recDb.moveCursor(QTextCursor.End)
+        print(f"[green]Table '{self.selected_table}' loaded with {self.model_recDB.rowCount()} records[/green]")
 
     def delete_table(self):
         self.selected_table = self.ui.cb_recDbTable.currentText()
@@ -173,26 +183,41 @@ class CtrlRecImport:
                 "<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>"
             )
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
+            print("[yellow]No table selected to delete[/yellow]")
             return
 
         checkDeletion = DialogConfirm(title="Warning...", msg="Delete selected table? This cannot be undone!")
         if not checkDeletion.exec():
             self.ui.tb_recDb.append("<span style='color: white;'>[MESSAGE] Deletion Cancelled!</span>")
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
+            print("[yellow]Table deletion cancelled[/yellow]")
             return
 
-        conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
-        cursor = conn.cursor()
-        cursor.execute(f"DROP TABLE IF EXISTS {self.selected_table}")
-        conn.commit()
-        conn.close()
+        try:
+            # Clear combobox selection first to prevent auto-load trigger
+            self.ui.cb_recDbTable.setCurrentIndex(-1)
 
-        self.ui.tb_recDb.append(
-            f"<span style='color: lime;'>[INFO] Table '{self.selected_table}' deleted from database!</span>"
-        )
-        self.ui.tb_recDb.moveCursor(QTextCursor.End)
-        self.reload_rec_db_tables()
-        self.clear_tv_rec_db()
+            conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
+            cursor = conn.cursor()
+            cursor.execute(f"DROP TABLE IF EXISTS {self.selected_table}")
+            conn.commit()
+            conn.close()
+
+            self.ui.tb_recDb.append(
+                f"<span style='color: lime;'>[INFO] Table '{self.selected_table}' deleted from database!</span>"
+            )
+            self.ui.tb_recDb.moveCursor(QTextCursor.End)
+            print(f"[green]Table '{self.selected_table}' deleted from database[/green]")
+
+            # Clear the table view before reloading the list
+            self.clear_tv_rec_db()
+            self.reload_rec_db_tables()
+        except Exception as e:
+            self.ui.tb_recDb.append(
+                f"<span style='color: tomato;'>[ERROR] Failed to delete table: {e}</span>"
+            )
+            self.ui.tb_recDb.moveCursor(QTextCursor.End)
+            print(f"[red]Error deleting table: {e}[/red]")
 
     def clear_tv_rec_db(self):
         self.model_recDB.setTable("")
@@ -205,6 +230,7 @@ class CtrlRecImport:
                 "<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>"
             )
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
+            print("[yellow]No table selected to export[/yellow]")
             return
 
         dlg_get_outputDir = DialogGetPath(title="Select the output directory of the csv file of selected table!")
@@ -212,16 +238,17 @@ class CtrlRecImport:
         if output_dir == "":
             self.ui.tb_recDb.append("<span style='color: white;'>[MESSAGE] Export canceled</span>")
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
+            print("[yellow]Export cancelled[/yellow]")
             return
 
         conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
         df = pd.read_sql_query(f"SELECT * FROM {selected_table}", conn)
         conn.close()
 
-        df.to_excel(os.path.join(output_dir, f"{selected_table}.xlsx"), index=False)
+        output_path = os.path.join(output_dir, f"{selected_table}.xlsx")
+        df.to_excel(output_path, index=False)
         self.ui.tb_recDb.append(
             f"<span style='color: lime;'>[INFO] Table '{selected_table}' exported to {output_dir}</span>"
         )
         self.ui.tb_recDb.moveCursor(QTextCursor.End)
-
-        pass
+        print(f"[green]Exported {len(df)} records to {output_path}[/green]")
