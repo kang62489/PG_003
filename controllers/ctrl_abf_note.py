@@ -1,15 +1,17 @@
 ## Modules
 # Standard library imports
 import re
+import sqlite3
 from datetime import datetime
 from pathlib import Path
 
 # Third-party imports
 import pandas as pd
 import pyabf
-from PySide6.QtCore import QItemSelectionModel, Qt
+from PySide6.QtCore import Qt
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlTableModel
-from PySide6.QtWidgets import QLineEdit
+from PySide6.QtWidgets import QFileDialog, QLineEdit
+from rich import print
 
 # Local application imports
 from classes import DialogConfirm, DirWatcher
@@ -51,6 +53,7 @@ class CtrlAbfNote:
         line_edits_to_clear = self.ui.gb_cellParams.findChildren(QLineEdit)
         for line_edit in line_edits_to_clear:
             line_edit.clear()
+        print("[cyan]Cell parameters cleared[/cyan]")
 
     def setup_db(self):
         self.abf_db = QSqlDatabase("QSQLITE")
@@ -115,6 +118,7 @@ class CtrlAbfNote:
         # Check if all param values are empty
         param_values = list(data.values())[5:11]
         if all(value == "" for value in param_values):
+            print("[yellow]No cell parameters to log (all fields empty)[/yellow]")
             return
 
         # Insert into database
@@ -125,16 +129,23 @@ class CtrlAbfNote:
         self.model_abfNote.insertRecord(-1, record)
         self.ui.le_abfProtocol.setText("manual_log")
         self.model_abfNote.select()  # Refresh view
+        print(f"[green]Cell parameters logged manually for {data['Slice']} - {data['At']}[/green]")
 
     def delete_selected(self):
-        dlg_confirm = DialogConfirm(title="Checking...", msg="Delete selected rows?")
-        if not dlg_confirm.exec():
+        rows = self.sm_abfNote.selectedRows()
+        if not rows:
+            print("[yellow]No rows selected to delete[/yellow]")
             return
 
-        rows = self.sm_abfNote.selectedRows()
+        dlg_confirm = DialogConfirm(title="Checking...", msg="Delete selected rows?")
+        if not dlg_confirm.exec():
+            print("[yellow]Deletion cancelled[/yellow]")
+            return
+
         for row in reversed(rows):
             self.model_abfNote.removeRow(row.row())
         self.model_abfNote.select()
+        print(f"[green]Deleted {len(rows)} row(s)[/green]")
 
     def toggle_cell_params(self):
         # Column indices for Rt, Rm, Cm, Ra, Tau, Hold
@@ -152,11 +163,37 @@ class CtrlAbfNote:
     def export_xlsx(self):
         # Get current filter (date)
         selected_date = self.ui.de_abfDate.date().toPython().strftime("%Y_%m_%d")
-        df_note_to_export = pd.read_sql_query(f"SELECT * FROM ABF_NOTES WHERE DOR = '{selected_date}'", self.abf_db)
+
+        # Use sqlite3 connection for pandas
+        db_path = str((MODELS_DIR / "abf_note.db").resolve())
+        try:
+            with sqlite3.connect(db_path) as conn:
+                df_note_to_export = pd.read_sql_query(f"SELECT * FROM ABF_NOTES WHERE DOR = '{selected_date}'", conn)
+        except Exception as e:
+            print(f"[red]Error reading database: {e}[/red]")
+            return
+
+        # Check if dataframe is empty
+        if df_note_to_export.empty:
+            print(f"[yellow]No data to export for date: {selected_date}[/yellow]")
+            return
+
+        # Open file dialog to select save location
+        default_filename = f"abf_notes_{selected_date}.xlsx"
+        filename, _ = QFileDialog.getSaveFileName(
+            self.ui,
+            "Save Excel File",
+            default_filename,
+            "Excel Files (*.xlsx);;All Files (*)"
+        )
+
+        if not filename:
+            print("[yellow]Export cancelled[/yellow]")
+            return
 
         # Save to Excel
-        filename = f"abf_notes_{self.ui.de_abfDate.date().toPython().strftime('%Y_%m_%d')}.xlsx"
         df_note_to_export.to_excel(filename, index=False)
+        print(f"[green]Exported {len(df_note_to_export)} records to {filename}[/green]")
 
     def check_watching_dir(self):
         if self.ui.tabs.currentIndex() != 2:
@@ -167,11 +204,14 @@ class CtrlAbfNote:
         if self.watching_dir != self.ui.te_recDir.toPlainText():
             self.watching_dir = self.ui.te_recDir.toPlainText()
             self.abf_watcher.set_watched_dir(self.watching_dir)
+            print(f"[cyan]ABF watching directory changed to: {self.watching_dir}[/cyan]")
 
             match = re.search(date_pattern, self.watching_dir)
             if match:
-                self.ui.de_abfDate.setDate(datetime.strptime(match.group(), "%Y_%m_%d"))
+                extracted_date = match.group()
+                self.ui.de_abfDate.setDate(datetime.strptime(extracted_date, "%Y_%m_%d"))
                 self.ui.de_abfDate.clearFocus()
+                print(f"[cyan]Date auto-set to: {extracted_date}[/cyan]")
 
     def new_abf_detected(self):
         current_abf = self.ui.cb_currentAbf.currentText()
@@ -184,6 +224,7 @@ class CtrlAbfNote:
         )
         # if the current_abf file is already in the database, then return
         if is_record_exist and query.next():
+            print(f"[yellow]ABF file '{current_abf}' already in database[/yellow]")
             return
 
         abf_filepath = Path(self.watching_dir) / current_abf
@@ -191,10 +232,12 @@ class CtrlAbfNote:
         self.abf_protocol = abf_info.protocol
         self.ui.le_abfProtocol.setText(self.abf_protocol)
         self.abf_timestamp = abf_info.abfDateTime.strftime("%H:%M:%S")
+        print(f"[blue]New ABF detected: {current_abf} | Protocol: {self.abf_protocol} | Time: {self.abf_timestamp}[/blue]")
 
     def log_protocol(self):
         # Check if protocol field is empty (no ABF file detected yet)
         if self.ui.le_abfProtocol.text() == "":
+            print("[yellow]No protocol to log (protocol field empty)[/yellow]")
             return
 
         current_abf = self.ui.cb_currentAbf.currentText()
@@ -208,6 +251,7 @@ class CtrlAbfNote:
 
         # If real protocol already logged, skip
         if is_record_exist and query.next():
+            print(f"[yellow]Protocol for '{current_abf}' already logged[/yellow]")
             return
 
         # Log the protocol with ABF info
@@ -235,3 +279,4 @@ class CtrlAbfNote:
         # Reset UI field to show actual protocol
         self.ui.le_abfProtocol.setText(self.abf_protocol)
         self.model_abfNote.select()
+        print(f"[green]Protocol logged: {current_abf} | {self.abf_protocol} | {data['Slice']} - {data['At']}[/green]")
