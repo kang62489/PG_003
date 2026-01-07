@@ -75,4 +75,4 @@ class ViewExpInfo:
         self.ui.btn_addInjections.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
         self.ui.btn_rmInjections.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
         self.ui.btn_openExpDb.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
-        self.ui.btn_saveToDb.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)
+        self.ui.btn_saveToExpDb.setFixedHeight(UISizes.BUTTON_GENERAL_HEIGHT)

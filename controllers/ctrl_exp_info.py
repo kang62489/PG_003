@@ -30,7 +30,7 @@ class CtrlExpInfo(QObject):
         self.ui.btn_addInjections.clicked.connect(self.add_injections)
         self.ui.btn_rmInjections.clicked.connect(self.rm_injections)
         self.ui.btn_openExpDb.clicked.connect(self.open_exp_db)
-        self.ui.btn_saveToDb.clicked.connect(self.save_to_db)
+        self.ui.btn_saveToExpDb.clicked.connect(self.save_to_db)
 
         self.ui.de_dor.dateChanged.connect(self.auto_calculation)
         self.ui.de_dob.dateChanged.connect(self.auto_calculation)
@@ -46,6 +46,9 @@ class CtrlExpInfo(QObject):
         days = total_days % 7
         self.ages = f"{weeks}w{days}d"
         self.ui.le_ages.setText(self.ages)
+
+        # Also send the input date to de_abfDate
+        self.ui.de_abfDate.setDate(self.ui.de_dor.date())
 
     def add_injections(self):
         self.dlg_addTree = DialogInjManager(self.ui, self.model_injections)
@@ -88,7 +91,6 @@ class CtrlExpInfo(QObject):
     def open_exp_db(self):
         self.dlg_dbViewer = DialogExpDb(self.ui, self)
 
-    
     def save_to_db(self):
         checkSaveToDB = DialogConfirm(title="Checking...", msg="Save current expinfo to database?")
         if not checkSaveToDB.exec():
@@ -226,10 +228,7 @@ class CtrlExpInfo(QObject):
             placeholders = ", ".join(["?"] * len(data_injection))
             values = tuple(data_injection.values())
 
-            cursor.execute(
-                f"INSERT INTO INJECTION_HISTORY ({columns}) VALUES ({placeholders})",
-                values
-            )
+            cursor.execute(f"INSERT INTO INJECTION_HISTORY ({columns}) VALUES ({placeholders})", values)
             injection_count += 1
 
         if injection_count > 0:

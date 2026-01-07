@@ -190,7 +190,7 @@ class CtrlRecWriter:
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return
 
-        self.saveDialog = DialogSaveTemplate(current_template_name=self.ui.cb_TemplateLoad.currentText())
+        self.saveDialog = DialogSaveTemplate(current_template_name=self.ui.cb_templateLoad.currentText())
         if not self.saveDialog.exec():
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return

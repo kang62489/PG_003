@@ -1,10 +1,12 @@
-# Modules
+## Modules
+# Standard library imports
 import glob
 import json
 import os
 import sqlite3
 from pathlib import Path
 
+# Third-party imports
 import pandas as pd
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QTextCursor
@@ -12,6 +14,7 @@ from PySide6.QtSql import QSqlDatabase, QSqlTableModel
 from rich import print
 from tabulate import tabulate
 
+# Local application imports
 from classes import DialogConfirm, DialogGetPath, ModelDynamicList
 from util.constants import MODELS_DIR
 
@@ -30,7 +33,7 @@ class CtrlRecImport:
 
     def setup_db(self):
         self.db = QSqlDatabase("QSQLITE")
-        self.db.setDatabaseName(str((MODELS_DIR / "records.db").resolve()))
+        self.db.setDatabaseName(str((MODELS_DIR / "rec_data.db").resolve()))
         self.db.open()
 
         self.model_recDB = QSqlTableModel(db=self.db)
@@ -38,7 +41,7 @@ class CtrlRecImport:
         self.sm_recDB = self.ui.tv_recDb.selectionModel()
 
     def reload_rec_db_tables(self):
-        conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
+        conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
         cursor = conn.cursor()
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         fetched = cursor.fetchall()
@@ -127,7 +130,7 @@ class CtrlRecImport:
         self.ui.tb_recDb.moveCursor(QTextCursor.End)
 
         # Save to database
-        conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
+        conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
         # Do not use only string numbers as table name!!
         table_name_to_be_written = "REC_" + df_summary["Filename"][0].split("-")[0]
         if table_name_to_be_written not in self.list_of_recDB_tables:
@@ -178,7 +181,7 @@ class CtrlRecImport:
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
             return
 
-        conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
+        conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
         cursor = conn.cursor()
         cursor.execute(f"DROP TABLE IF EXISTS {self.selected_table}")
         conn.commit()
@@ -211,7 +214,7 @@ class CtrlRecImport:
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
             return
 
-        conn = sqlite3.connect(str((MODELS_DIR / "records.db").resolve()))
+        conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
         df = pd.read_sql_query(f"SELECT * FROM {selected_table}", conn)
         conn.close()
 

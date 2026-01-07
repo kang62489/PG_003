@@ -155,13 +155,15 @@ QPushButton#btn_deleteTable:hover {
 }
 
 QPushButton#btn_toggleBasic:checked,
-QPushButton#btn_toggleCustomized:checked {
+QPushButton#btn_toggleCustomized:checked,
+QPushButton#btn_toggleCellParams:checked {
     background-color: #5a4bad;
     color: #f9f9f9;
 }
 
 QPushButton#btn_toggleBasic:!checked,
-QPushButton#btn_toggleCustomized:!checked {
+QPushButton#btn_toggleCustomized:!checked,
+QPushButton#btn_toggleCellParams:!checked {
     background-color: #f9f9f9;
     color: #5a4bad;
 }
@@ -204,6 +206,16 @@ QPushButton#btn_saveToDb{
 QPushButton#btn_saveToDb:hover {
     color: #f9f9f9;
     background-color: green;
+}
+
+QPushButton#btn_deleteSelected {
+    color: red;
+    border-color: red;
+}
+
+QPushButton#btn_deleteSelected:hover {
+    color: #f9f9f9;
+    background-color: red;
 }
 
 /* CheckBox */

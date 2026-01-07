@@ -21,7 +21,7 @@
        <enum>QTabWidget::TabPosition::North</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::TextElideMode::ElideNone</enum>
@@ -282,7 +282,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="gb_fileIO">
+         <widget class="QGroupBox" name="gb_expDbOp">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -302,14 +302,14 @@
            <item>
             <widget class="QPushButton" name="btn_openExpDb">
              <property name="text">
-              <string>Open EXP_DATA</string>
+              <string>Open Databse EXP_INFO</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="btn_saveToDb">
+            <widget class="QPushButton" name="btn_saveToExpDb">
              <property name="text">
-              <string>Save to EXP_DATA</string>
+              <string>Save to Database EXP_INFO</string>
              </property>
             </widget>
            </item>
@@ -740,6 +740,35 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_15">
         <item>
+         <widget class="QGroupBox" name="gb_recordingTracker">
+          <property name="title">
+           <string>Recording Tracker</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_tracker">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lbl_abfDate">
+             <property name="text">
+              <string>ABF Date (DOR)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lbl_currentAbf">
+             <property name="text">
+              <string>Current ABF</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="cb_currentAbf"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QDateEdit" name="de_abfDate"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <widget class="QGroupBox" name="gb_cellIdentity">
           <property name="title">
            <string>Cell Identity</string>
@@ -856,7 +885,7 @@
              <item row="1" column="4">
               <widget class="QLabel" name="lbl_abfHold">
                <property name="text">
-                <string>Hold (mV)</string>
+                <string>Hold (pA)</string>
                </property>
               </widget>
              </item>
@@ -917,7 +946,7 @@
              <item>
               <widget class="QLineEdit" name="le_abfProtocol">
                <property name="placeholderText">
-                <string>Auto-fills from ABF or type manually</string>
+                <string/>
                </property>
               </widget>
              </item>
@@ -959,40 +988,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QTableView" name="tv_abf"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="gb_recordingTracker">
-          <property name="title">
-           <string>Recording Tracker</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_tracker">
-           <item row="0" column="0">
-            <widget class="QLabel" name="lbl_currentImageSN">
-             <property name="text">
-              <string>Current Image SN</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="le_currentImageSn">
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="lbl_currentAbf">
-             <property name="text">
-              <string>Current ABF</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QComboBox" name="cb_currentAbf"/>
+            <widget class="QTableView" name="tv_abfNote"/>
            </item>
           </layout>
          </widget>

@@ -52,7 +52,7 @@ class DialogExpDb(QDialog):
 
     def open_db(self):
         self.db = QSqlDatabase("QSQLITE")
-        self.db.setDatabaseName(str((MODELS_DIR / "exp_data.db").resolve()))
+        self.db.setDatabaseName(str((MODELS_DIR / "exp_info.db").resolve()))
         self.db.open()
 
         # Create a model for BASIC_INFO table
@@ -222,7 +222,7 @@ class DialogExpDb(QDialog):
             self.tv_basic.selectRow(row_in_basic_info)
 
         # Filled in the main window based on selected tables
-        conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
+        conn = sqlite3.connect(MODELS_DIR / "exp_info.db")
         query_basic = """
                 SELECT b.* FROM BASIC_INFO b
                 WHERE b.Animal_ID = ?
@@ -386,7 +386,7 @@ class DialogExpDb(QDialog):
             animal_ids = [model.index(row, 1).data() for row in rows]  # Column 1 is Animal_ID
 
             # Delete related injection history first
-            conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
+            conn = sqlite3.connect(MODELS_DIR / "exp_info.db")
             cursor = conn.cursor()
             for animal_id in animal_ids:
                 cursor.execute("DELETE FROM INJECTION_HISTORY WHERE Animal_ID = ?", (animal_id,))
@@ -434,7 +434,7 @@ class DialogExpDb(QDialog):
 
         for animal_id in animal_ids:
             # connect to database for retrieving the data
-            conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
+            conn = sqlite3.connect(MODELS_DIR / "exp_info.db")
             query_basic = """
                 SELECT b.* FROM BASIC_INFO b
                 WHERE b.Animal_ID = ?
@@ -515,7 +515,7 @@ class DialogExpDb(QDialog):
             return
 
         dir_output = dlg_get_outputDir.selectedFiles()[0]
-        conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
+        conn = sqlite3.connect(MODELS_DIR / "exp_info.db")
         df_basic = pd.read_sql_query("SELECT * FROM BASIC_INFO", conn)
         df_injection = pd.read_sql_query("SELECT * FROM INJECTION_HISTORY", conn)
         conn.close()
