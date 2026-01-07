@@ -10,8 +10,10 @@ from rich import print
 class DirWatcher(QFileSystemWatcher):
     """A class to watch a directory for specific filetype changes and update a target combobox"""
 
-    # Custom signal to indicate file list renewal
+    # Signal emitted when combobox is refreshed (backward compatibility)
     filelistRenewed = Signal()
+    # Signal emitted with scanned file list (for non-combobox usage)
+    fileListScanned = Signal(list)
 
     def __init__(self, filetype=".rec", target_cb=None):
         super().__init__()
@@ -28,8 +30,25 @@ class DirWatcher(QFileSystemWatcher):
 
     def scan_filetype(self):
         """Scan the watched directory for files of the specified filetype and update the target combobox"""
+        if not self.directories():
+            print("[bold red]No directory is being watched by DirWatcher[/bold red]")
+            return
+
+        watched_dir = Path(self.directories()[0])
+        if watched_dir.exists() is False:
+            if self.target_cb is not None:
+                self.target_cb.clear()
+                self.target_cb.addItem("-- Input directory does not exist --")
+            self.fileListScanned.emit([])
+            return
+
+        filtered_filenames = sorted([path.name for path in list(watched_dir.glob(f"*{self.filetype}"))])
+
+        # Always emit the scanned file list (for non-combobox usage)
+        self.fileListScanned.emit(filtered_filenames)
+
+        # Update combobox only if target_cb is assigned
         if self.target_cb is None:
-            print("[bold red]No target combobox assigned to DirWatcher[/bold red]")
             return
 
         # Remember current selection and file list before clearing
@@ -42,17 +61,6 @@ class DirWatcher(QFileSystemWatcher):
 
         # clear target combobox
         self.target_cb.clear()
-
-        if not self.directories():
-            print("[bold red]No directory is being watched by DirWatcher[/bold red]")
-            return
-
-        watched_dir = Path(self.directories()[0])
-        if watched_dir.exists() is False:
-            self.target_cb.addItem("-- Input directory does not exist --")
-            return
-
-        filtered_filenames = sorted([path.name for path in list(watched_dir.glob(f"*{self.filetype}"))])
 
         if not filtered_filenames:
             self.target_cb.addItem(f"-- No {self.filetype.replace('.', '').upper()}s in current dir --")
@@ -78,5 +86,5 @@ class DirWatcher(QFileSystemWatcher):
                 # Default to last file
                 self.target_cb.setCurrentIndex(len(filtered_filenames) - 1)
 
-            # Emit signal indicating file list has been renewed
+            # Emit signal indicating combobox has been refreshed
             self.filelistRenewed.emit()

@@ -9,8 +9,8 @@ from pathlib import Path
 from PySide6.QtCore import QSize, Qt
 
 # Application Info
-APP_NAME = "Expdata Manager"
-APP_VERSION = "4.0"
+APP_NAME = "Expdata Builder"
+APP_VERSION = "5.0.0"
 APP_AUTHOR = "Kang"
 APP_LAST_UPDATE = f"{datetime.now():%Y-%b-%d}"
 APP_STATUS_MESSAGE = f"{APP_NAME} {APP_VERSION}, Author: {APP_AUTHOR}, Last Update: {APP_LAST_UPDATE}, Made in OIST"
@@ -36,7 +36,7 @@ _general_options = _load_json_menu("menuList_general_options_set.json")
 GREEK_REPLACEMENTS = _load_json_menu("greek_replacements.json")
 
 # File Paths
-UI_FILE = UI_DIR / "Expdata Manager.ui"
+UI_FILE = UI_DIR / "expdata_builder.ui"
 STYLE_FILE = STYLES_DIR / "styles.qss"
 
 

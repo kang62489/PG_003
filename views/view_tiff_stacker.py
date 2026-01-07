@@ -17,7 +17,7 @@ class ViewTiffStacker:
 
     def setup_listview(self):
         checkbox_delegate = DelegateCheckableListItem()
-        self.ui.lv_recFiles.setItemDelegate(checkbox_delegate)
+        self.ui.lv_tiffFiles.setItemDelegate(checkbox_delegate)
 
     def setup_groupbox(self):
         self.ui.gb_concat_status.setFixedHeight(2 * UISizes.GROUP_BOX_STATUS_HEIGHT)

@@ -21,7 +21,7 @@
        <enum>QTabWidget::TabPosition::North</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>4</number>
       </property>
       <property name="elideMode">
        <enum>Qt::TextElideMode::ElideNone</enum>
@@ -34,7 +34,7 @@
       </property>
       <widget class="QWidget" name="tab_EXP">
        <attribute name="title">
-        <string>Experiment Info</string>
+        <string>EXP Info</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
@@ -1108,7 +1108,7 @@
       </widget>
       <widget class="QWidget" name="tab_CONCAT">
        <attribute name="title">
-        <string>Concatenator (Tiff)</string>
+        <string>TIFF Stacker</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_22">
         <item>
@@ -1130,7 +1130,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_23">
            <item>
-            <widget class="QTextBrowser" name="tb_concatenator"/>
+            <widget class="QTextBrowser" name="tb_stacker"/>
            </item>
           </layout>
          </widget>
@@ -1156,9 +1156,9 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_24">
              <item>
-              <widget class="QCheckBox" name="chk_includeSubfolders">
+              <widget class="QCheckBox" name="chk_includeSubDir">
                <property name="text">
-                <string>Include subfolders</string>
+                <string>Include Sub-directory</string>
                </property>
               </widget>
              </item>
@@ -1176,10 +1176,13 @@
              <property name="text">
               <string>All</string>
              </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
             </widget>
            </item>
            <item>
-            <widget class="QListView" name="lv_recFiles"/>
+            <widget class="QListView" name="lv_tiffFiles"/>
            </item>
            <item>
             <widget class="QPushButton" name="btn_startConcat">

@@ -21,11 +21,21 @@ class ThreadTiffStacker(QThread):
 
     def __init__(self, files_to_process, main_dir, max_workers=2):
         super().__init__()
-        self.files_to_process = files_to_process
+        # files_to_process can be either a list (old behavior) or dict (grouped by directory)
+        if isinstance(files_to_process, dict):
+            self.files_by_dir = files_to_process
+            self.files_to_process = []
+            for files in files_to_process.values():
+                self.files_to_process.extend(files)
+        else:
+            # Old behavior: all files in main_dir
+            self.files_by_dir = {main_dir: files_to_process}
+            self.files_to_process = files_to_process
+
         self.main_dir = main_dir
         self.max_workers = max_workers
         self.processed_count = 0
-        self.total_count = len(files_to_process)
+        self.total_count = len(self.files_to_process)
 
     def concatenate_process(self, file):
         img_dir = Path(file).parent
@@ -33,7 +43,9 @@ class ThreadTiffStacker(QThread):
         components = sorted(img_dir.glob(f"{img_basename}@*.tif"))
 
         all_files = [file] + components
-        output_path = f"{self.main_dir}/merged/m_{img_basename}.tif"
+        # Create merged folder in the file's parent directory
+        merged_dir = img_dir / "merged"
+        output_path = merged_dir / f"m_{img_basename}.tif"
         original_stat = os.stat(file)
         try:
             t_start = time()
@@ -48,11 +60,11 @@ class ThreadTiffStacker(QThread):
                 else:
                     stacked_data = np.concatenate((stacked_data, data), axis=0)
 
-            tifffile.imwrite(output_path, stacked_data, metadata=None, imagej=True)
+            tifffile.imwrite(str(output_path), stacked_data, metadata=None, imagej=True)
             del data, stacked_data
 
             elaspse = time() - t_start
-            os.utime(output_path, (original_stat.st_atime, original_stat.st_mtime))
+            os.utime(str(output_path), (original_stat.st_atime, original_stat.st_mtime))
             self.progress_update.emit(
                 f"{img_basename} is concatenated. Time used: {elaspse:.2f} seconds.",
                 "aquamarine",
@@ -66,13 +78,18 @@ class ThreadTiffStacker(QThread):
         self.progress_percentage.emit(int(self.processed_count / self.total_count * 100))
 
     def run(self):
-        if not os.path.exists(os.path.join(self.main_dir, "merged")):
-            os.makedirs(os.path.join(self.main_dir, "merged"))
+        # Create merged folders for each directory
+        from rich import print
+        for parent_dir in self.files_by_dir.keys():
+            merged_path = Path(parent_dir) / "merged"
+            if not merged_path.exists():
+                merged_path.mkdir(parents=True, exist_ok=True)
+                print(f"[cyan]Created merged folder: {merged_path}[/cyan]")
 
         for file in self.files_to_process:
-            self.progress_update.emit(f"{file}", "deepskyblue")
+            self.progress_update.emit(f"{Path(file).name}", "deepskyblue")
 
-        length_horizontal_line = len(self.files_to_process[-1]) + 1
+        length_horizontal_line = max(len(Path(f).name) for f in self.files_to_process) + 1
         self.progress_update.emit("-" * length_horizontal_line, "white")
         self.progress_update.emit(f"Total files to concatenate: {self.total_count}", "white")
 
