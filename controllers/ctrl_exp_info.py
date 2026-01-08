@@ -113,7 +113,7 @@ class CtrlExpInfo(QObject):
             "Sex": self.ui.cb_sex.currentText(),
         }
 
-        conn = sqlite3.connect(MODELS_DIR / "exp_data.db")
+        conn = sqlite3.connect(MODELS_DIR / "exp_info.db")
         cursor = conn.cursor()
         table_name = "BASIC_INFO"  # Fixed table name since cb_EXP_DB_TABLE doesn't exist in UI
 

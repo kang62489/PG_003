@@ -1,8 +1,9 @@
 {
     "VALUE_0":{
-        "NOTE":"",
-        "STIM":"",
-        "HOLD":"",
-        "ABF_NUMBER":""
+        "NOTE":"Filter6",
+        "SPIKES":"No",
+        "STIM":"0pA",
+        "HOLD":"100pA",
+        "ABF_NUMBER":"0005"
     }
 }
