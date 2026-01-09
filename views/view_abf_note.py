@@ -32,7 +32,7 @@ class ViewAbfNote:
     def setup_combobox(self):
         self.ui.cb_abfSide.addItems(MenuOptions.SIDE)
         self.ui.cb_abfAtType.addItems(MenuOptions.LOC_TYPES)
-        self.ui.cb_currentAbf.setEnabled(False)
+        self.ui.cb_currentAbf.setEnabled(True)
 
     def setup_dateedit(self):
         self.ui.de_abfDate.setDate(datetime.today())

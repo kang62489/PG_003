@@ -34,6 +34,9 @@ class CtrlAbfNote:
 
         self.connect_signals()
 
+        # Apply initial date filter (de_abfDate is set to today in ViewAbfNote)
+        self.filter_by_date()
+
     def connect_signals(self):
         self.ui.de_abfDate.dateChanged.connect(self.filter_by_date)
 
@@ -48,6 +51,9 @@ class CtrlAbfNote:
 
         # the last step of watcher is set the current index to the last one, therefore this signal should use currentIndexChanged
         self.abf_watcher.filelistRenewed.connect(self.new_abf_detected)
+
+        # Allow manual selection of ABF files to go back and log missed files
+        self.ui.cb_currentAbf.activated.connect(self.on_abf_manually_selected)
 
     def clear_cell_parameters(self):
         line_edits_to_clear = self.ui.gb_cellParams.findChildren(QLineEdit)
@@ -82,7 +88,7 @@ class CtrlAbfNote:
 
         self.model_abfNote = QSqlTableModel(db=self.abf_db)
         self.model_abfNote.setTable("ABF_NOTES")
-        self.model_abfNote.setSort(0, Qt.AscendingOrder)
+        self.model_abfNote.setSort(2, Qt.AscendingOrder)  # Sort by Timestamp (column 2)
         self.model_abfNote.select()
         self.ui.tv_abfNote.setModel(self.model_abfNote)
         self.ui.tv_abfNote.setColumnHidden(0, True)  # Hide the ID column
@@ -213,6 +219,27 @@ class CtrlAbfNote:
                 self.ui.de_abfDate.clearFocus()
                 print(f"[cyan]Date auto-set to: {extracted_date}[/cyan]")
 
+    def read_abf_info(self, abf_filename):
+        """Helper method to read protocol and timestamp from an ABF file"""
+        abf_filepath = Path(self.watching_dir) / abf_filename
+        try:
+            abf_info = pyabf.ABF(abf_filepath)
+            self.abf_protocol = abf_info.protocol
+            self.abf_timestamp = abf_info.abfDateTime.strftime("%H:%M:%S")
+            self.ui.le_abfProtocol.setText(self.abf_protocol)
+            print(f"[blue]ABF loaded: {abf_filename} | Protocol: {self.abf_protocol} | Time: {self.abf_timestamp}[/blue]")
+            return True
+        except Exception as e:
+            print(f"[red]Error reading ABF file {abf_filename}: {e}[/red]")
+            return False
+
+    def on_abf_manually_selected(self):
+        """Handle manual selection from combobox"""
+        current_abf = self.ui.cb_currentAbf.currentText()
+        if current_abf.startswith("--"):
+            return
+        self.read_abf_info(current_abf)
+
     def new_abf_detected(self):
         current_abf = self.ui.cb_currentAbf.currentText()
         if current_abf.startswith("--"):
@@ -227,12 +254,8 @@ class CtrlAbfNote:
             print(f"[yellow]ABF file '{current_abf}' already in database[/yellow]")
             return
 
-        abf_filepath = Path(self.watching_dir) / current_abf
-        abf_info = pyabf.ABF(abf_filepath)
-        self.abf_protocol = abf_info.protocol
-        self.ui.le_abfProtocol.setText(self.abf_protocol)
-        self.abf_timestamp = abf_info.abfDateTime.strftime("%H:%M:%S")
-        print(f"[blue]New ABF detected: {current_abf} | Protocol: {self.abf_protocol} | Time: {self.abf_timestamp}[/blue]")
+        # Use the refactored method to read ABF info
+        self.read_abf_info(current_abf)
 
     def log_protocol(self):
         # Check if protocol field is empty (no ABF file detected yet)
