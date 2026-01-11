@@ -60,7 +60,7 @@ class ThreadTiffStacker(QThread):
                 else:
                     stacked_data = np.concatenate((stacked_data, data), axis=0)
 
-            tifffile.imwrite(str(output_path), stacked_data, metadata=None, imagej=True)
+            tifffile.imwrite(str(output_path), stacked_data, metadata={"axes": "TYX"}, imagej=True)
             del data, stacked_data
 
             elaspse = time() - t_start
@@ -80,6 +80,7 @@ class ThreadTiffStacker(QThread):
     def run(self):
         # Create merged folders for each directory
         from rich import print
+
         for parent_dir in self.files_by_dir.keys():
             merged_path = Path(parent_dir) / "merged"
             if not merged_path.exists():
