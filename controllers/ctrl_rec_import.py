@@ -177,8 +177,9 @@ class CtrlRecImport:
         print(f"[green]Table '{self.selected_table}' loaded with {self.model_recDB.rowCount()} records[/green]")
 
     def delete_table(self):
-        self.selected_table = self.ui.cb_recDbTable.currentText()
-        if self.selected_table == "":
+        # Save table name to local variable before any UI changes
+        table_to_delete = self.ui.cb_recDbTable.currentText()
+        if table_to_delete == "":
             self.ui.tb_recDb.append(
                 "<span style='color: tomato;'>[ERROR] No table is selected or the database has no table</span>"
             )
@@ -199,15 +200,15 @@ class CtrlRecImport:
 
             conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
             cursor = conn.cursor()
-            cursor.execute(f"DROP TABLE IF EXISTS {self.selected_table}")
+            cursor.execute(f'DROP TABLE IF EXISTS "{table_to_delete}"')
             conn.commit()
             conn.close()
 
             self.ui.tb_recDb.append(
-                f"<span style='color: lime;'>[INFO] Table '{self.selected_table}' deleted from database!</span>"
+                f"<span style='color: lime;'>[INFO] Table '{table_to_delete}' deleted from database!</span>"
             )
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
-            print(f"[green]Table '{self.selected_table}' deleted from database[/green]")
+            print(f"[green]Table '{table_to_delete}' deleted from database[/green]")
 
             # Clear the table view before reloading the list
             self.clear_tv_rec_db()

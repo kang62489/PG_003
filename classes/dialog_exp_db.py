@@ -379,6 +379,48 @@ class DialogExpDb(QDialog):
             print("Delete Cancelled!")
             return
 
+        # For INJECTION_HISTORY: use direct SQL deletion with rowid from filtered query
+        if table_name == "INJECTION_HISTORY":
+            # Get the rowids from selected rows while filter is still active
+            rows = sorted(set(index.row() for index in selected_indexes))
+            rowids_to_delete = []
+
+            # Get current filter
+            current_filter = model.filter()
+
+            # Query with filter to get the exact rowids in order
+            conn = sqlite3.connect(MODELS_DIR / "exp_info.db")
+            cursor = conn.cursor()
+
+            # Build query with filter to match the model's view
+            if current_filter:
+                query = f"SELECT rowid, * FROM INJECTION_HISTORY WHERE {current_filter}"
+            else:
+                query = "SELECT rowid, * FROM INJECTION_HISTORY"
+
+            cursor.execute(query)
+            filtered_rows = cursor.fetchall()
+
+            # Get rowids for the selected row indices
+            for row in rows:
+                if row < len(filtered_rows):
+                    rowid = filtered_rows[row][0]  # First column is rowid
+                    rowids_to_delete.append(rowid)
+                    print(f"[yellow]Marking rowid {rowid} for deletion (row {row})[/yellow]")
+
+            # Delete using rowid
+            for rowid in rowids_to_delete:
+                cursor.execute("DELETE FROM INJECTION_HISTORY WHERE rowid = ?", (rowid,))
+                print(f"[yellow]Deleted rowid: {rowid}[/yellow]")
+
+            conn.commit()
+            conn.close()
+
+            # Refresh the filtered view
+            self.preview_inj()
+            print(f"[bold green]Data deleted from {table_name}![/bold green]")
+            return
+
         # For BASIC_INFO: manually delete related INJECTION_HISTORY first
         if table_name == "BASIC_INFO":
             # Get Animal_IDs to be deleted
@@ -429,8 +471,22 @@ class DialogExpDb(QDialog):
             print("No row is selected")
             return
 
-        # Get unique Animal_IDs from selected rows (column 1)
-        animal_ids = list({self.model_basic.index(idx.row(), 1).data() for idx in selected_indexes})
+        # Get unique Animal_IDs from selected rows (column 1) and sort them
+        animal_ids = sorted(list({self.model_basic.index(idx.row(), 1).data() for idx in selected_indexes}))
+
+        # Group animals by DOR to detect duplicates
+        dor_groups = {}
+        conn = sqlite3.connect(MODELS_DIR / "exp_info.db")
+        for animal_id in animal_ids:
+            dor = pd.read_sql_query("SELECT DOR FROM BASIC_INFO WHERE Animal_ID = ?", conn, params=(animal_id,))["DOR"][0]
+            if dor not in dor_groups:
+                dor_groups[dor] = []
+            dor_groups[dor].append(animal_id)
+        conn.close()
+
+        # Sort animal IDs within each DOR group
+        for dor in dor_groups:
+            dor_groups[dor].sort()
 
         for animal_id in animal_ids:
             # connect to database for retrieving the data
@@ -448,8 +504,16 @@ class DialogExpDb(QDialog):
             df_injection = pd.read_sql_query(query_injection, conn, params=(animal_id,))
             conn.close()
 
+            # Generate filename with serial if multiple animals have same DOR
+            dor = df_basic["DOR"][0]
+            if len(dor_groups[dor]) > 1:
+                serial = dor_groups[dor].index(animal_id) + 1
+                filename = f"{dor}_expInfo_{serial}.md"
+            else:
+                filename = f"{dor}_expInfo.md"
+
             with open(
-                os.path.join(dir_output, df_basic["DOR"][0] + "_expInfo.md"),
+                os.path.join(dir_output, filename),
                 "w",
                 encoding="utf-8",
             ) as f:
