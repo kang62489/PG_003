@@ -5,7 +5,9 @@
       "Bash(python:*)",
       "Bash(git mv:*)",
       "Bash(ls:*)",
-      "Bash(dir \"D:\\\\MyDB\\\\2_Programs\\\\PG_003\\\\*.py\")"
+      "Bash(dir \"D:\\\\MyDB\\\\2_Programs\\\\PG_003\\\\*.py\")",
+      "Bash(date +*)",
+      "WebSearch"
     ],
     "deny": []
   }
