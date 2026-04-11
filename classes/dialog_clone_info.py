@@ -15,9 +15,10 @@ from PySide6.QtWidgets import (
 )
 
 # Local application imports
+from util.constants import MODELS_DIR, UIAlignments
+
 from .delegate_custom import DelegateAlignRightCenter
 from .model_metadata_form import ModelMetadataForm
-from util.constants import MODELS_DIR, UIAlignments
 
 
 class DialogCloneInfo(QDialog):
@@ -25,14 +26,17 @@ class DialogCloneInfo(QDialog):
         super().__init__()
         self.setWindowTitle("Clone Information")
 
+        # Load clone list from JSON files (also update the JSON files)
         _clones_red = self._json_load_clones("menuList_clones_red.json")
         _clones_green = self._json_load_clones("menuList_clones_green.json")
 
         _clones_all = _clones_red | _clones_green
         clones_all_table = pd.DataFrame(list(_clones_all.items()), columns=["Clone Code", "Construct"])
 
+        # Setup table view
         self.tv_cloneInfo = QTableView()
         self.tv_cloneInfo.verticalHeader().setVisible(False)
+        self.tv_cloneInfo.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tv_cloneInfo.verticalHeader().setDefaultSectionSize(30)
         self.tv_cloneInfo.horizontalHeader().setDefaultAlignment(UIAlignments.CENTER)
         self.tv_cloneInfo.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
