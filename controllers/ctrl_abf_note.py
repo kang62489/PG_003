@@ -143,7 +143,7 @@ class CtrlAbfNote:
             print("[yellow]No rows selected to delete[/yellow]")
             return
 
-        dlg_confirm = DialogConfirm(title="Checking...", msg="Delete selected rows?")
+        dlg_confirm = DialogConfirm(title="Checking...", msg="Delete selected rows?", parent=self.ui)
         if not dlg_confirm.exec():
             print("[yellow]Deletion cancelled[/yellow]")
             return

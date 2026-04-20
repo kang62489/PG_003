@@ -14,6 +14,7 @@ from PySide6.QtWidgets import QApplication, QDialog
 from rich import print
 
 # Local application imports
+from functions.rec_encoding_checker import rec_encoding_checker
 from classes import (
     DialogConfirm,
     DialogGetPath,
@@ -185,7 +186,7 @@ class CtrlRecWriter:
             print("[bold red]Template doesn't exist![/bold red]")
             return
 
-        self.saveCheck = DialogConfirm(title="Checking...", msg="Save current template?")
+        self.saveCheck = DialogConfirm(title="Checking...", msg="Save current template?", parent=self.ui)
         if not self.saveCheck.exec():
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return
@@ -209,7 +210,7 @@ class CtrlRecWriter:
 
     def template_delete(self):
         filename = self.model_menuList_templates.list_of_options[self.ui.cb_templateLoad.currentIndex()]
-        self.deleteCheck = DialogConfirm(title="Checking...", msg="Delete current template?")
+        self.deleteCheck = DialogConfirm(title="Checking...", msg="Delete current template?", parent=self.ui)
 
         if self.deleteCheck.exec():
             os.remove(os.path.join(MODELS_DIR, "template_{}.json".format(filename)))
@@ -307,6 +308,14 @@ class CtrlRecWriter:
         self.rec_directory = self.ui.te_recDir.toPlainText()
         self.rec_watcher.set_watched_dir(self.rec_directory)
 
+        # Reset and reload backups scoped to the current directory
+        self.recBackups = dict()
+        backup_path = os.path.join(self.rec_directory, "rec_backups.json")
+        if os.path.isfile(backup_path):
+            encoding = rec_encoding_checker(backup_path)
+            with open(backup_path, "r", encoding=encoding) as f:
+                self.recBackups = json.load(f)
+
     def load_selected_rec_file(self):
         """Load the selected .rec file content into the preview"""
         self.rec_directory = self.ui.te_recDir.toPlainText()
@@ -377,7 +386,7 @@ class CtrlRecWriter:
         QApplication.clipboard().setText(self.ui.le_filenameSn.text())
 
     def scan_rec_commments(self, rec_filepath):
-        with open(rec_filepath, mode="r", encoding="utf-16-LE") as f:
+        with open(rec_filepath, mode="r", encoding=rec_encoding_checker(rec_filepath)) as f:
             original_content = f.read().splitlines()
             write_from_line = 0
             keep_to_line = 0
@@ -400,8 +409,10 @@ class CtrlRecWriter:
         else:
             self.recBackups[rec_filename] = [contents_to_be_backupped]
 
+        rec_filepath = os.path.join(rec_directory, rec_filename)
+        encoding = rec_encoding_checker(rec_filepath)
         backup_path = os.path.join(rec_directory, "rec_backups.json")
-        with open(backup_path, mode="w") as f:
+        with open(backup_path, mode="w", encoding=encoding) as f:
             json.dump(self.recBackups, f, indent=4)
             print("[bold green][INFO] Backup saved![/bold green]")
 
@@ -427,7 +438,7 @@ class CtrlRecWriter:
         print(f"[bold green][INFO] {self.rec_filename} is found[/bold green]")
 
         # Confirm write operation
-        dlg_checkWriteTags = DialogConfirm(title="Checking...", msg=f"Write tags to the {self.rec_filename}?")
+        dlg_checkWriteTags = DialogConfirm(title="Checking...", msg=f"Write tags to the {self.rec_filename}?", parent=self.ui)
 
         if not dlg_checkWriteTags.exec():
             print("[bold yellow][MESSAGE] Write Cancelled![/bold yellow]")
@@ -441,7 +452,7 @@ class CtrlRecWriter:
 
         # Handle case with existing tags
         if self.tags_read:
-            dlg_checkOverwriteTags = DialogConfirm(title="Checking...", msg="Overwrite existing tags?")
+            dlg_checkOverwriteTags = DialogConfirm(title="Checking...", msg="Overwrite existing tags?", parent=self.ui)
 
             if not dlg_checkOverwriteTags.exec():
                 print("[bold yellow][MESSAGE] Overwrite Cancelled![/bold yellow]")
@@ -457,7 +468,7 @@ class CtrlRecWriter:
 
         # Write tags to file (either no existing tags or overwrite confirmed)
         contents_to_be_written = self.preserved_content + self.tags_to_be_written
-        with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
+        with open(self.rec_filepath, mode="w", encoding=rec_encoding_checker(self.rec_filepath)) as f:
             f.write("\n".join(contents_to_be_written))
             print(f"[bold green][INFO] Tags were written to {self.rec_filename}![/bold green]")
 
@@ -500,13 +511,15 @@ class CtrlRecWriter:
             print("[bold red][ERROR] No backup file (JSON) is found![/bold red]")
             return
         else:
-            with open(recovery_filepath, mode="r") as f:
+            encoding = rec_encoding_checker(recovery_filepath)
+            with open(recovery_filepath, mode="r", encoding=encoding) as f:
                 self.recBackups = json.load(f)
             print("[bold green][INFO] Backup JSON file is Loaded![/bold green]")
 
         dlg_checkRecover = DialogConfirm(
             title="Checking...",
             msg=f"Recover {self.rec_filename} to the original state?",
+            parent=self.ui,
         )
         if not dlg_checkRecover.exec():
             print("[bold yellow][MESSAGE] Recovery Cancelled![/bold yellow]")
@@ -514,7 +527,7 @@ class CtrlRecWriter:
         else:
             print("[bold yellow][WARNING] Recovery Confirmed![/bold yellow]")
 
-        with open(self.rec_filepath, mode="w", encoding="utf-16-LE") as f:
+        with open(self.rec_filepath, mode="w", encoding=rec_encoding_checker(self.rec_filepath)) as f:
             if self.rec_filename in self.recBackups.keys():
                 f.write("\n".join(self.recBackups[self.rec_filename][0]))
                 print(f"[bold green][INFO] {self.rec_filename} was recovered![/bold green]")

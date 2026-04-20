@@ -217,4 +217,3 @@ class MenuOptions:
     # VIRUSES_R = _load_json_menu("menuList_virus_R.json")
     # VIRUSES_L = _load_json_menu("menuList_virus_L.json")
     CUSTOM_TEMPLATES = _load_json_menu("menuList_templates.json")
-    IMPORTED_DBS = _load_json_menu("menuList_tables_of_RecDB.json")

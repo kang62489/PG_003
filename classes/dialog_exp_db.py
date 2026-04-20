@@ -371,9 +371,10 @@ class DialogExpDb(QDialog):
                 title="⚠️ Delete Confirmation",
                 msg=f"Delete selected rows from {table_name}?\nThis will also delete related injection history!\nThis action cannot be undone!",
                 passcode="kang",
+                parent=self,
             )
         else:
-            checkDeletion = DialogConfirm(title="Checking...", msg=f"Delete selected rows from {table_name}?")
+            checkDeletion = DialogConfirm(title="Checking...", msg=f"Delete selected rows from {table_name}?", parent=self)
 
         if not checkDeletion.exec():
             print("Delete Cancelled!")

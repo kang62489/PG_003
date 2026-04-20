@@ -7,8 +7,8 @@ from PySide6.QtWidgets import QDialog, QDialogButtonBox, QLabel, QLineEdit, QVBo
 
 
 class DialogConfirm(QDialog):
-    def __init__(self, title="Dialog", msg="Question"):
-        super().__init__()
+    def __init__(self, title="Dialog", msg="Question", parent=None):
+        super().__init__(parent)
         self.setWindowTitle(title)
 
         self.lbl_message = QLabel(msg)
@@ -18,15 +18,15 @@ class DialogConfirm(QDialog):
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
 
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.lbl_message)
-        self.layout.addWidget(self.buttonBox, 0, Qt.AlignCenter)
-        self.setLayout(self.layout)
+        self.lo_main = QVBoxLayout()
+        self.lo_main.addWidget(self.lbl_message)
+        self.lo_main.addWidget(self.buttonBox, 0, Qt.AlignCenter)
+        self.setLayout(self.lo_main)
 
 
 class DialogConfirmPasscode(QDialog):
-    def __init__(self, title="Dialog", msg="Question", passcode="kang"):
-        super().__init__()
+    def __init__(self, title="Dialog", msg="Question", passcode="kang", parent=None):
+        super().__init__(parent)
         self.setWindowTitle(title)
         self.correct_passcode = passcode
 

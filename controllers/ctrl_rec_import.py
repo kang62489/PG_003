@@ -1,7 +1,6 @@
 ## Modules
 # Standard library imports
 import glob
-import json
 import os
 import sqlite3
 from pathlib import Path
@@ -16,6 +15,7 @@ from tabulate import tabulate
 
 # Local application imports
 from classes import DialogConfirm, DialogGetPath, ModelDynamicList
+from functions.rec_encoding_checker import rec_encoding_checker
 from util.constants import MODELS_DIR
 
 
@@ -28,8 +28,10 @@ class CtrlRecImport:
         self.model_tablesOfRecDB = ModelDynamicList(name="model_tablesOfRecDB")
         self.ui.cb_recDbTable.setModel(self.model_tablesOfRecDB)
 
-        self.reload_rec_db_tables()
         self.connect_signals()
+        self.refresh_rec_table_list()
+        self.ui.cb_recDbTable.setCurrentIndex(self.model_tablesOfRecDB.rowCount() - 1)
+        self.load_rec_table()
 
     def setup_db(self):
         self.db = QSqlDatabase("QSQLITE")
@@ -40,7 +42,8 @@ class CtrlRecImport:
         self.ui.tv_recDb.setModel(self.model_recDB)
         self.sm_recDB = self.ui.tv_recDb.selectionModel()
 
-    def reload_rec_db_tables(self):
+    def refresh_rec_table_list(self):
+        # 1. Fetch table names from database
         conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
         cursor = conn.cursor()
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -48,15 +51,13 @@ class CtrlRecImport:
         conn.close()
         self.list_of_recDB_tables = sorted([item[0] for item in fetched])
 
+        # 2. Refresh combobox model
         self.model_tablesOfRecDB.update_list(self.list_of_recDB_tables)
         self.model_tablesOfRecDB.layoutChanged.emit()
 
-        with open(MODELS_DIR / "menuList_tables_of_RecDB.json", "w") as f:
-            json.dump(self.list_of_recDB_tables, f, indent=4)
-
     def connect_signals(self):
         self.ui.btn_importRecDb.clicked.connect(self.import_rec_db)
-        self.ui.cb_recDbTable.currentTextChanged.connect(self.load_rec_table)
+        self.ui.cb_recDbTable.activated.connect(self.load_rec_table)
         self.ui.btn_deleteTable.clicked.connect(self.delete_table)
         self.ui.btn_exportSummary.clicked.connect(self.export_summary)
 
@@ -68,19 +69,19 @@ class CtrlRecImport:
 
         for rec_path in list_of_rec_paths:
             rec_filenames.append(Path(rec_path).stem)
-            with open(rec_path, mode="r", encoding="utf-16-LE") as f:
+            with open(rec_path, mode="r", encoding=rec_encoding_checker(rec_path)) as f:
                 original_content = f.read().splitlines()
-                list_of_original_content.append(original_content)
+            list_of_original_content.append(original_content)
 
-                for line_num, line_content in enumerate(original_content):
-                    if "Time" in line_content:
-                        timestamps.append(line_content.split(" ")[-1])
+            for line_num, line_content in enumerate(original_content):
+                if "Time" in line_content:
+                    timestamps.append(line_content.split(" ")[-1])
 
-                    if "Comment:" in line_content:
-                        extract_metadata_from = line_num + 2
-                        break
+                if "Comment:" in line_content:
+                    extract_metadata_from = line_num + 2
+                    break
 
-                list_of_metadata.append(original_content[extract_metadata_from:])
+            list_of_metadata.append(original_content[extract_metadata_from:])
 
         return list_of_metadata, rec_filenames, timestamps
 
@@ -136,7 +137,7 @@ class CtrlRecImport:
         # Save to database
         conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
         # Do not use only string numbers as table name!!
-        table_name_to_be_written = "REC_" + df_summary["Filename"][0].split("-")[0]
+        table_name_to_be_written = "REC_" + Path(input_dir).name
         if table_name_to_be_written not in self.list_of_recDB_tables:
             df_summary.to_sql(table_name_to_be_written, conn, index=False)
             self.ui.tb_recDb.append(
@@ -145,8 +146,9 @@ class CtrlRecImport:
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
             print(f"[green]New table '{table_name_to_be_written}' created with {len(df_summary)} records[/green]")
             conn.close()
-            self.reload_rec_db_tables()
+            self.refresh_rec_table_list()
             self.ui.cb_recDbTable.setCurrentText(table_name_to_be_written)
+            self.load_rec_table()
             return
 
         self.ui.tb_recDb.append(
@@ -159,8 +161,9 @@ class CtrlRecImport:
         self.ui.tb_recDb.moveCursor(QTextCursor.End)
         print(f"[green]Table '{table_name_to_be_written}' updated with {len(df_summary)} records[/green]")
         conn.close()
-        self.reload_rec_db_tables()
+        self.refresh_rec_table_list()
         self.ui.cb_recDbTable.setCurrentText(table_name_to_be_written)
+        self.load_rec_table()
 
     def load_rec_table(self):
         self.selected_table = self.ui.cb_recDbTable.currentText()
@@ -187,7 +190,7 @@ class CtrlRecImport:
             print("[yellow]No table selected to delete[/yellow]")
             return
 
-        checkDeletion = DialogConfirm(title="Warning...", msg="Delete selected table? This cannot be undone!")
+        checkDeletion = DialogConfirm(title="Warning...", msg="Delete selected table? This cannot be undone!", parent=self.ui)
         if not checkDeletion.exec():
             self.ui.tb_recDb.append("<span style='color: white;'>[MESSAGE] Deletion Cancelled!</span>")
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
@@ -195,9 +198,6 @@ class CtrlRecImport:
             return
 
         try:
-            # Clear combobox selection first to prevent auto-load trigger
-            self.ui.cb_recDbTable.setCurrentIndex(-1)
-
             conn = sqlite3.connect(str((MODELS_DIR / "rec_data.db").resolve()))
             cursor = conn.cursor()
             cursor.execute(f'DROP TABLE IF EXISTS "{table_to_delete}"')
@@ -210,9 +210,10 @@ class CtrlRecImport:
             self.ui.tb_recDb.moveCursor(QTextCursor.End)
             print(f"[green]Table '{table_to_delete}' deleted from database[/green]")
 
-            # Clear the table view before reloading the list
             self.clear_tv_rec_db()
-            self.reload_rec_db_tables()
+            self.refresh_rec_table_list()
+            self.ui.cb_recDbTable.setCurrentIndex(self.model_tablesOfRecDB.rowCount() - 1)
+            self.load_rec_table()
         except Exception as e:
             self.ui.tb_recDb.append(
                 f"<span style='color: tomato;'>[ERROR] Failed to delete table: {e}</span>"

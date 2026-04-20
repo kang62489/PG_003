@@ -1,0 +1,12 @@
+{
+    "VALUE_0":{
+        "SENSOR":"GACh3.0",
+        "CAM_TRIG_MODE":"EXT_EXP_CTRL",
+        "PUFF":"ACh",
+        "PUFF_CONC":"50\u03bcM",
+        "PUFF_DURATION":"5ms",
+        "PUFF_COUNTS":"1",
+        "PUFF_PRESSURE":"12psi=80kPA",
+        "BATHED_IN":"ACSF"
+    }
+}

@@ -92,7 +92,7 @@ class CtrlExpInfo(QObject):
         self.dlg_dbViewer = DialogExpDb(self.ui, self)
 
     def save_to_db(self):
-        checkSaveToDB = DialogConfirm(title="Checking...", msg="Save current expinfo to database?")
+        checkSaveToDB = DialogConfirm(title="Checking...", msg="Save current expinfo to database?", parent=self.ui)
         if not checkSaveToDB.exec():
             print("[bold yellow]Save Cancelled![/bold yellow]")
             return

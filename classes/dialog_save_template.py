@@ -57,7 +57,7 @@ class DialogSaveTemplate(QDialog):
             return
 
         self.dlg_overwriteCheck = DialogConfirm(
-            title="Warning", msg="Warning! Template name is exist, continue overwritting?"
+            title="Warning", msg="Warning! Template name is exist, continue overwritting?", parent=self
         )
         proceedOverwriteWithSameName = self.dlg_overwriteCheck.exec()
         if proceedOverwriteWithSameName:

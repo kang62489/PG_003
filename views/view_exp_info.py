@@ -37,7 +37,7 @@ class ViewExpInfo:
             dateEdit.setCalendarPopup(True)
 
     def setup_lineedits(self):
-        self.ui.le_project.setText("SPIKE_TRIGGERED_ACH_DOMAIN")
+        self.ui.le_project.setText("STRIATAL_ACH_DOMAIN")
 
         # Ages display (read-only, gb_animals column 3)
         self.ui.le_ages.setReadOnly(True)

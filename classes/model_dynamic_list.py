@@ -10,11 +10,11 @@ class ModelDynamicList(QAbstractListModel):
         self.list_of_options = list_of_options or []
         self.name = name
 
-    def data(self, index, role):
+    def data(self, index, role=Qt.DisplayRole):
         if role == Qt.DisplayRole:
             return self.list_of_options[index.row()]
 
-    def rowCount(self, index):
+    def rowCount(self, index=None):
         return len(self.list_of_options)
 
     def update_list(self, new_list):
