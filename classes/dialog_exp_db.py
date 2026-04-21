@@ -244,9 +244,9 @@ class DialogExpDb(QDialog):
         self.ui.de_dor.setDate(datetime.strptime(df_basic_selected["DOR"][0], "%Y_%m_%d"))
         self.ui.le_project.setText(df_basic_selected["Project_Code"][0])
         self.ui.cb_acuc.setCurrentIndex(self.ui.cb_acuc.findText(df_basic_selected["ACUC_Protocol"][0]))
-        self.ui.le_cuttingOS.setText(df_basic_selected["CuttingOS"][0].astype(str))
-        self.ui.le_holdingOS.setText(df_basic_selected["HoldingOS"][0].astype(str))
-        self.ui.le_recordingOS.setText(df_basic_selected["RecordingOS"][0].astype(str))
+        self.ui.le_cuttingOS.setText(str(df_basic_selected["CuttingOS"][0]))
+        self.ui.le_holdingOS.setText(str(df_basic_selected["HoldingOS"][0]))
+        self.ui.le_recordingOS.setText(str(df_basic_selected["RecordingOS"][0]))
 
         self.ui.le_animalId.setText(df_basic_selected["Animal_ID"][0])
         self.ui.cb_genotype.setCurrentIndex(self.ui.cb_genotype.findText(df_basic_selected["Genotype"][0]))

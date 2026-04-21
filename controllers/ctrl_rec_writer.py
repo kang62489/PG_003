@@ -43,6 +43,7 @@ class CtrlRecWriter:
         self.dateStr = datetime.today().strftime(DISPLAY_DATE_FORMAT)
 
         self.recBackups = dict()
+        self._te_tags_programmatic = False
 
         # Setup file system watcher for .rec files
         self.rec_watcher = DirWatcher(filetype=".rec", target_cb=self.ui.cb_recFiles)
@@ -93,6 +94,7 @@ class CtrlRecWriter:
 
         self.ui.btn_generateTags.clicked.connect(self.generate_tags_from_form)
         self.ui.btn_writeRec.clicked.connect(self.write_rec)
+        self.ui.te_tags.textChanged.connect(self.on_te_tags_edited)
 
     def auto_select_emi(self):
         if self.ui.cb_exc.currentText() == "HLG":
@@ -109,9 +111,22 @@ class CtrlRecWriter:
     def generate_tags_from_form(self):
         """Generate tags from form and display in te_tags"""
         tags = self.build_tags_from_form()
+        self._te_tags_programmatic = True
         self.ui.te_tags.clear()
         self.ui.te_tags.setTextColor(QColor("#1F51FF"))
         self.ui.te_tags.setPlainText("\n".join(tags))
+        self._te_tags_programmatic = False
+
+    def on_te_tags_edited(self):
+        """Change text color to purple when user manually edits te_tags"""
+        if self._te_tags_programmatic:
+            return
+        self._te_tags_programmatic = True
+        cursor = self.ui.te_tags.textCursor()
+        self.ui.te_tags.selectAll()
+        self.ui.te_tags.setTextColor(QColor("#8B00FF"))
+        self.ui.te_tags.setTextCursor(cursor)
+        self._te_tags_programmatic = False
 
     def build_tags_from_form(self):
         """Build tags list from form widgets for writing to .rec file"""
@@ -136,7 +151,7 @@ class CtrlRecWriter:
             level_str,
             self.ui.le_expo.text() + self.ui.cb_expoUnit.currentText(),
             self.ui.cb_emi.currentText(),
-            str(self.ui.sb_frames.value()),
+            str(self.ui.sb_frames.value()) + "p",
             self.ui.le_fps.text(),
             f"{self.ui.sb_slice.value()}{self.ui.cb_side.currentText()}",
             self.ui.cb_locType.currentText() + str(self.ui.sb_at.value()),
@@ -329,19 +344,23 @@ class CtrlRecWriter:
         rec_filepath = os.path.join(self.rec_directory, selected_file)
 
         if not os.path.isfile(rec_filepath):
+            self._te_tags_programmatic = True
             self.ui.te_tags.clear()
             self.ui.te_tags.setPlainText("File not found")
+            self._te_tags_programmatic = False
             return
 
         # Load and display the file content with black color (from file)
         self.ui.tabs.setCurrentIndex(1)  # Switch to rec writer tab when loading a rec file
         tags_read, _, _ = self.scan_rec_commments(rec_filepath)
+        self._te_tags_programmatic = True
         self.ui.te_tags.clear()
         self.ui.te_tags.setTextColor(QColor("#71797E"))
         if tags_read:
             self.ui.te_tags.setPlainText("\n".join(tags_read))
         else:
             self.ui.te_tags.setPlainText("(No tags written yet)")
+        self._te_tags_programmatic = False
 
     def sn_validate(self):
         self.ui.le_filenameSn.setValidator(self.validator)
@@ -491,9 +510,11 @@ class CtrlRecWriter:
             print(f"[bold green][INFO] {self.rec_filename} is found[/bold green]")
 
         print(f"[bold green][INFO] Tags were loaded from {self.rec_filename}![/bold green]")
+        self._te_tags_programmatic = True
         self.ui.te_tags.clear()
         self.tags_read, _, _ = self.scan_rec_commments(self.rec_filepath)
         self.ui.te_tags.setPlainText("\n".join(self.tags_read))
+        self._te_tags_programmatic = False
 
     def revert_rec(self):
         self.rec_directory = self.ui.te_recDir.toPlainText()
