@@ -46,7 +46,7 @@ class CtrlRecWriter:
         self._te_tags_programmatic = False
 
         # Setup file system watcher for .rec files
-        self.rec_watcher = DirWatcher(filetype=".rec", target_cb=self.ui.cb_recFiles)
+        self.rec_watcher = DirWatcher(file_ext=".rec", target_cb=self.ui.cb_recFiles)
 
         self.connect_signals()
         self.template_reload_list()
@@ -83,7 +83,7 @@ class CtrlRecWriter:
         self.ui.te_recDir.textChanged.connect(self.populate_rec_files)
         self.ui.btn_browseRecDir.clicked.connect(self.browse_rec_dir)
         self.ui.cb_recFiles.activated.connect(self.load_selected_rec_file)
-        self.rec_watcher.filelistRenewed.connect(self.load_selected_rec_file)
+        self.rec_watcher.fileListRenewed.connect(self.load_selected_rec_file)
 
         self.ui.le_filenameSn.textChanged.connect(self.sn_validate)
 

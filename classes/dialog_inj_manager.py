@@ -35,7 +35,9 @@ class DialogInjManager:
         self._json_update_clones("menuList_clones_red.json", clone_red)
         clone_green = self._json_load_clones("menuList_clones_green.json")
         self._json_update_clones("menuList_clones_green.json", clone_green)
+        clone_blue = self._json_load_clones("menuList_clones_blue.json")
+        self._json_update_clones("menuList_clones_blue.json", clone_blue)
 
-        # Combine the two colors of clone lists and then short only the clone number-color
-        clone_list = (clone_red | clone_green).keys()
+        # Combine the three colors of clone lists and then short only the clone number-color
+        clone_list = (clone_red | clone_green | clone_blue).keys()
         return clone_list

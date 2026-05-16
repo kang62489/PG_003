@@ -24,7 +24,7 @@ class CtrlAbfNote:
         self.setup_db()
 
         # Set watcher for ABF files
-        self.abf_watcher = DirWatcher(filetype=".abf", target_cb=self.ui.cb_currentAbf)
+        self.abf_watcher = DirWatcher(file_ext=".abf", target_cb=self.ui.cb_currentAbf)
         self.watching_dir = self.ui.te_recDir.toPlainText()
         self.abf_watcher.set_watched_dir(self.watching_dir)
 
@@ -50,7 +50,7 @@ class CtrlAbfNote:
         self.ui.tabs.currentChanged.connect(self.check_watching_dir)
 
         # the last step of watcher is set the current index to the last one, therefore this signal should use currentIndexChanged
-        self.abf_watcher.filelistRenewed.connect(self.new_abf_detected)
+        self.abf_watcher.fileListRenewed.connect(self.new_abf_detected)
 
         # Allow manual selection of ABF files to go back and log missed files
         self.ui.cb_currentAbf.activated.connect(self.on_abf_manually_selected)

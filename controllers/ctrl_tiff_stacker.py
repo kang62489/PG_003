@@ -17,7 +17,7 @@ class CtrlTiffStacker:
         self.ui.chk_selectAllFiles.setVisible(False)
 
         # Set up DirWatcher for monitoring TIFF files
-        self.tiff_watcher = DirWatcher(filetype=".tif", target_cb=None)
+        self.tiff_watcher = DirWatcher(file_ext=".tif", target_cb=None)
         self.watching_dir = None
         self.tiff_file_map = {}  # Maps display name -> (full_path, parent_dir)
 

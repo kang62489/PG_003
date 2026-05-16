@@ -29,8 +29,9 @@ class DialogCloneInfo(QDialog):
         # Load clone list from JSON files (also update the JSON files)
         _clones_red = self._json_load_clones("menuList_clones_red.json")
         _clones_green = self._json_load_clones("menuList_clones_green.json")
+        _clones_blue = self._json_load_clones("menuList_clones_blue.json")
 
-        _clones_all = _clones_red | _clones_green
+        _clones_all = _clones_red | _clones_green | _clones_blue
         clones_all_table = pd.DataFrame(list(_clones_all.items()), columns=["Clone Code", "Construct"])
 
         # Setup table view

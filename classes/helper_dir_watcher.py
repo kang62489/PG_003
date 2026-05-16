@@ -11,13 +11,13 @@ class DirWatcher(QFileSystemWatcher):
     """A class to watch a directory for specific filetype changes and update a target combobox"""
 
     # Signal emitted when combobox is refreshed (backward compatibility)
-    filelistRenewed = Signal()
+    fileListRenewed = Signal()
     # Signal emitted with scanned file list (for non-combobox usage)
     fileListScanned = Signal(list)
 
-    def __init__(self, filetype=".rec", target_cb=None):
+    def __init__(self, file_ext=".rec", target_cb=None):
         super().__init__()
-        self.filetype = filetype
+        self.file_ext = file_ext
         self.target_cb = target_cb
         self.directoryChanged.connect(self.scan_filetype)
 
@@ -42,7 +42,7 @@ class DirWatcher(QFileSystemWatcher):
             self.fileListScanned.emit([])
             return
 
-        filtered_filenames = sorted([path.name for path in list(watched_dir.glob(f"*{self.filetype}"))])
+        filtered_filenames = sorted([path.name for path in list(watched_dir.glob(f"*{self.file_ext}"))])
 
         # Always emit the scanned file list (for non-combobox usage)
         self.fileListScanned.emit(filtered_filenames)
@@ -63,7 +63,7 @@ class DirWatcher(QFileSystemWatcher):
         self.target_cb.clear()
 
         if not filtered_filenames:
-            self.target_cb.addItem(f"-- No {self.filetype.replace('.', '').upper()}s in current dir --")
+            self.target_cb.addItem(f"-- No {self.file_ext.replace('.', '').upper()}s in current dir --")
         else:
             self.target_cb.addItems(filtered_filenames)
 
@@ -87,4 +87,4 @@ class DirWatcher(QFileSystemWatcher):
                 self.target_cb.setCurrentIndex(len(filtered_filenames) - 1)
 
             # Emit signal indicating combobox has been refreshed
-            self.filelistRenewed.emit()
+            self.fileListRenewed.emit()

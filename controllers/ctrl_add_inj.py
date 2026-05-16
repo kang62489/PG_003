@@ -54,9 +54,12 @@ class CtrlAddInj(QObject):
         self.parent._json_update_clones("menuList_clones_red.json", self.clone_red)
         self.clone_green = self.parent._json_load_clones("menuList_clones_green.json")
         self.parent._json_update_clones("menuList_clones_green.json", self.clone_green)
-        self.clone_dict = self.clone_red | self.clone_green
+        self.clone_blue = self.parent._json_load_clones("menuList_clones_blue.json")
+        self.parent._json_update_clones("menuList_clones_blue.json", self.clone_blue)
 
-        self.clone_codes = (self.clone_red | self.clone_green).keys()
+        self.clone_dict = self.clone_red | self.clone_green | self.clone_blue
+
+        self.clone_codes = (self.clone_red | self.clone_green | self.clone_blue).keys()
         self.view_addInj.cb_clone_1.clear()
         self.view_addInj.cb_clone_1.addItems(self.clone_codes)
         self.view_addInj.cb_clone_2.clear()
