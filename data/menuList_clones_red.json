@@ -1,6 +1,7 @@
 {
     "028-RED": "hSyn-DIO-mCherry",
     "050-RED": "CAG-DIO-tdTomato",
+    "073-RED": "ihSyn-tTA-sv40/TRE-DIO-NES-jRCaMP1b-minWPRE",
     "136-RED": "ihSyn1-tTA-sv40/TRE-rACh1h-minWPRE",
     "137-RED": "ihSyn-tTA-sv40/TRE-RdLight1-minWPRE",
     "140-RED": "ChAT_enhancer-rACh1h-WPRE3-bGHpA",

@@ -103,6 +103,8 @@ class CtrlRecWriter:
             self.ui.cb_emi.setCurrentIndex(1)
         elif self.ui.cb_exc.currentText() == "LED_BLUE":
             self.ui.cb_emi.setCurrentIndex(2)
+        elif self.ui.cb_exc.currentText() == "LED_VIOLET":
+            self.ui.cb_emi.setCurrentIndex(3)
 
     def on_toggle_page(self, button_id):
         """Switch between Basic and Customized parameter pages"""

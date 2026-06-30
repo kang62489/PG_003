@@ -6,7 +6,7 @@
     "INJECTATE_TYPE": ["MIXED", "SINGLE"],
     "MIXING_RATIO": ["--- Select Ratio ---","1:1"],
     "VECTOR_LIST": ["AAV1", "0.1X_AAV1", "0.5X_AAV1", "AAV8", "AAV9", "AAV_PHP.eb"],
-    "EXCITATION": ["HLG", "LED_GREEN", "LED_BLUE", "LED_PURPLE"],
+    "EXCITATION": ["HLG", "LED_GREEN", "LED_BLUE", "LED_VIOLET"],
     "EMISSION": ["IR", "RED", "GREEN", "BLUE"],
     "EXPO_UNITS": ["ms", "us"],
     "CAM_TRIG_MODES": ["EXT_EXP_START", "EXT_EXP_CTRL"],
